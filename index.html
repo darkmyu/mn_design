@@ -3771,31 +3771,86 @@ function PetInfoStep2_Breed() {
   );
 }
 
+/* ── 휠 피커 컬럼 (생년월일 공유) ── */
+function WheelPickerCol({ items, value, onChange, suffix }) {
+  const ITEM_H = 44;
+  const ref = React.useRef(null);
+
+  // 시트 열릴 때 현재 선택값으로 즉시 스크롤
+  React.useLayoutEffect(() => {
+    if (!ref.current) return;
+    const idx = Math.max(0, items.indexOf(value));
+    ref.current.scrollTop = idx * ITEM_H;
+  }, []);
+
+  const handleScroll = () => {
+    if (!ref.current) return;
+    const idx = Math.round(ref.current.scrollTop / ITEM_H);
+    const next = items[Math.max(0, Math.min(items.length - 1, idx))];
+    if (next !== value) onChange(next);
+  };
+
+  return (
+    <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+      {/* 위 페이드 */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: ITEM_H * 2, background: 'linear-gradient(to bottom, #fff 30%, rgba(255,255,255,0))', pointerEvents: 'none', zIndex: 2 }} />
+      {/* 아래 페이드 */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: ITEM_H * 2, background: 'linear-gradient(to top, #fff 30%, rgba(255,255,255,0))', pointerEvents: 'none', zIndex: 2 }} />
+      <div
+        ref={ref}
+        onScroll={handleScroll}
+        style={{ height: ITEM_H * 5, overflowY: 'scroll', scrollSnapType: 'y mandatory', scrollbarWidth: 'none' }}
+      >
+        <div style={{ height: ITEM_H * 2 }} />
+        {items.map(item => {
+          const sel = item === value;
+          return (
+            <div key={item} style={{
+              height: ITEM_H,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              scrollSnapAlign: 'center',
+              font: `${sel ? 700 : 400} 18px/1 var(--font-sans)`,
+              color: sel ? 'var(--label-strong)' : 'var(--label-assistive)',
+              letterSpacing: '-0.012em',
+              userSelect: 'none',
+            }}>
+              {item}{suffix}
+            </div>
+          );
+        })}
+        <div style={{ height: ITEM_H * 2 }} />
+      </div>
+    </div>
+  );
+}
+
 /* ── 2-3: 생년월일 ── */
 function PetInfoStep3_Birth() {
-  const [year, setYear] = React.useState('');
+  const [year, setYear]   = React.useState('');
   const [month, setMonth] = React.useState('');
-  const [day, setDay] = React.useState('');
-  const [sheet, setSheet] = React.useState(null); // 'year' | 'month' | 'day'
+  const [day, setDay]     = React.useState('');
+  const [open, setOpen]   = React.useState(false);
 
-  const YEARS = Array.from({ length: 37 }, (_, i) => String(2026 - i));
+  const YEARS  = Array.from({ length: 37 }, (_, i) => String(2026 - i));
   const MONTHS = Array.from({ length: 12 }, (_, i) => String(i + 1));
   const dayCount = (year && month) ? new Date(Number(year), Number(month), 0).getDate() : 31;
   const DAYS = Array.from({ length: dayCount }, (_, i) => String(i + 1));
 
-  const fields = [
-    { id: 'year',  val: year,  label: '년', placeholder: '연도', items: YEARS,
-      set: v => { setYear(v); setSheet(null); } },
-    { id: 'month', val: month, label: '월', placeholder: '월',   items: MONTHS,
-      set: v => { setMonth(v); if (day && Number(day) > new Date(Number(year)||2000, Number(v), 0).getDate()) setDay(''); setSheet(null); } },
-    { id: 'day',   val: day,   label: '일', placeholder: '일',   items: DAYS,
-      set: v => { setDay(v); setSheet(null); } },
-  ];
-
   const ok = !!year && !!month && !!day;
-  const active = fields.find(f => f.id === sheet);
 
-  const sheetTitle = { year: '연도 선택', month: '월 선택', day: '일 선택' };
+  const handleOpen = () => {
+    // 처음 열 때 기본값 세팅 (스크롤 기준점)
+    if (!year)  setYear('2020');
+    if (!month) setMonth('1');
+    if (!day)   setDay('1');
+    setOpen(true);
+  };
+
+  const handleMonthChange = v => {
+    setMonth(v);
+    const maxDay = new Date(Number(year) || 2000, Number(v), 0).getDate();
+    if (day && Number(day) > maxDay) setDay(String(maxDay));
+  };
 
   return (
     <PetInfoShell subStep={3} canNext={ok}>
@@ -3805,70 +3860,57 @@ function PetInfoStep3_Birth() {
           언제 태어났나요?
         </h1>
 
-        {/* 날짜 선택 버튼 */}
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 8 }}>
-          {fields.map(f => {
-            const filled = !!f.val;
-            return (
-              <button key={f.id} onClick={() => setSheet(f.id)} style={{
-                height: 56, padding: '0 14px',
-                background: filled ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
-                border: `2px solid ${filled ? PawColors.brand : 'transparent'}`,
-                borderRadius: 16, cursor: 'pointer', boxSizing: 'border-box',
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                transition: 'all .12s',
-              }}>
-                <span style={{ font: `${filled ? 700 : 500} 16px/1 var(--font-sans)`, color: filled ? PawColors.brandInk : 'var(--label-assistive)' }}>
-                  {f.val || f.placeholder}
-                </span>
-                <span style={{ font: '600 13px/1 var(--font-sans)', color: filled ? PawColors.brand : 'var(--label-assistive)', flexShrink: 0 }}>
-                  {f.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        {/* 날짜 선택 버튼 — 하나로 통합 */}
+        <button onClick={handleOpen} style={{
+          width: '100%', height: 56, padding: '0 18px',
+          background: ok ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
+          border: `2px solid ${ok ? PawColors.brand : 'transparent'}`,
+          borderRadius: 16, cursor: 'pointer', boxSizing: 'border-box',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          transition: 'all .12s',
+        }}>
+          <span style={{ font: `${ok ? 700 : 500} 16px/1 var(--font-sans)`, color: ok ? PawColors.brandInk : 'var(--label-assistive)' }}>
+            {ok ? `${year}년 ${month}월 ${day}일` : '생년월일 선택'}
+          </span>
+          {ok
+            ? <PawIcon name="circle-check-fill" size={22} color={PawColors.brand} />
+            : <PawIcon name="chevron-down" size={18} color="var(--label-alternative)" />}
+        </button>
 
         {/* 미리보기 */}
         {ok && (
           <div style={{ marginTop: 16, padding: '14px 16px', background: PawColors.brandSoft, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, font: '700 14px/1 var(--font-sans)', color: PawColors.brandInk }}>
-            <span>🎂</span>
-            <span>{year}년 {month}월 {day}일</span>
+            <span>🎂</span><span>{year}년 {month}월 {day}일</span>
           </div>
         )}
       </div>
 
-      {/* 바텀시트 */}
-      {sheet && active && (
+      {/* 휠 피커 바텀시트 */}
+      {open && (
         <div style={{ position: 'absolute', inset: 0, zIndex: 20 }}>
-          <div onClick={() => setSheet(null)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)' }} />
-          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: '#fff', borderRadius: '20px 20px 0 0', maxHeight: '65%', display: 'flex', flexDirection: 'column' }}>
+          <div onClick={() => setOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)' }} />
+          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: '#fff', borderRadius: '20px 20px 0 0' }}>
+            {/* 핸들 */}
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
               <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--color-atomic-coolNeutral-90)' }} />
             </div>
+            {/* 헤더 */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 20px 12px' }}>
-              <span style={{ font: '800 17px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.018em' }}>
-                {sheetTitle[sheet]}
-              </span>
-              <PawIconBtn name="close" iconSize={18} onClick={() => setSheet(null)} />
+              <span style={{ font: '700 16px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.015em' }}>생년월일 선택</span>
+              <button onClick={() => setOpen(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', font: '700 15px/1 var(--font-sans)', color: PawColors.brand, padding: '4px 0' }}>완료</button>
             </div>
-            <div style={{ flex: 1, overflowY: 'auto', padding: '0 12px 24px' }}>
-              {active.items.map(item => {
-                const selected = active.val === item;
-                return (
-                  <button key={item} onClick={() => active.set(item)} style={{
-                    width: '100%', padding: '14px 16px', borderRadius: 12, border: 'none', cursor: 'pointer', textAlign: 'left',
-                    background: selected ? PawColors.brandSoft : 'transparent',
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    font: `${selected ? 700 : 500} 15px/1 var(--font-sans)`,
-                    color: selected ? PawColors.brandInk : 'var(--label-normal)',
-                    letterSpacing: '-0.01em',
-                  }}>
-                    {item}{active.label}
-                    {selected && <PawIcon name="check" size={18} color={PawColors.brand} />}
-                  </button>
-                );
-              })}
+
+            {/* 휠 컬럼 3개 */}
+            <div style={{ position: 'relative', display: 'flex', padding: '0 20px 40px' }}>
+              {/* 중앙 선택 하이라이트 */}
+              <div style={{
+                position: 'absolute', top: 44 * 2, left: 20, right: 20, height: 44,
+                background: 'var(--color-atomic-coolNeutral-98)', borderRadius: 12,
+                pointerEvents: 'none', zIndex: 1,
+              }} />
+              <WheelPickerCol items={YEARS}  value={year}  onChange={setYear}         suffix="년" />
+              <WheelPickerCol items={MONTHS} value={month} onChange={handleMonthChange} suffix="월" />
+              <WheelPickerCol items={DAYS}   value={day}   onChange={setDay}           suffix="일" />
             </div>
           </div>
         </div>
