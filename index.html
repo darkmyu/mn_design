@@ -275,7 +275,7 @@
 
   /* background — surfaces */
   --background-normal-normal:      var(--color-atomic-coolNeutral-99); /* page bg in lightest variant */
-  --background-normal-alternative: var(--color-atomic-coolNeutral-98); /* subtle alt rows */
+  --background-normal-alternative: var(--color-bg-muted); /* subtle alt rows */
   --background-elevated-normal:    var(--color-atomic-common-100);     /* cards */
   --background-elevated-alternative: var(--color-atomic-coolNeutral-99);
   --background-overlay-strong:     rgba(0, 0, 0, 0.28);                /* modal scrims */
@@ -284,13 +284,13 @@
   /* line — borders */
   --line-normal-normal:      rgba(112, 115, 124, 0.22);   /* default border (== coolNeutral-50 @ 22%) */
   --line-normal-neutral:     rgba(112, 115, 124, 0.16);   /* lighter divider */
-  --line-normal-alternative: var(--color-atomic-coolNeutral-96);
-  --line-solid-normal:       var(--color-atomic-coolNeutral-97);
-  --line-solid-neutral:      var(--color-atomic-coolNeutral-98);
+  --line-normal-alternative: var(--color-surface-raised);
+  --line-solid-normal:       var(--color-surface-raised);
+  --line-solid-neutral:      var(--color-bg-muted);
 
   /* interaction — pressable shells */
-  --interaction-inactive: var(--color-atomic-coolNeutral-70);
-  --interaction-disable:  var(--color-atomic-coolNeutral-98);
+  --interaction-inactive: var(--color-icon-inactive);
+  --interaction-disable:  var(--color-bg-muted);
 
   /* status */
   --status-positive: var(--color-atomic-green-50);  /* #00BF40 */
@@ -393,6 +393,54 @@
 }
 
 /* ─────────────────────────────────────────────────────────
+   몽냥 Design Tokens — 실제 디자인 화면에서 사용하는 색상
+   ───────────────────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --color-brand-primary:          #FF6B3D;
+  --color-brand-surface:          #FFF1EB;
+  --color-brand-emphasis:         #7A2B0F;
+
+  /* Text */
+  --color-text-strong:            var(--label-strong);
+  --color-text-default:           var(--label-normal);
+  --color-text-subtle:            var(--label-alternative);
+  --color-text-assistive:         var(--label-assistive);
+  --color-text-disabled:          var(--label-disable);
+
+  /* Icon */
+  --color-icon-inactive:          #989BA2;
+
+  /* Background */
+  --color-bg-default:             var(--background-elevated-normal);
+  --color-bg-subtle:              var(--background-normal-normal);
+  --color-bg-muted:               var(--color-atomic-coolNeutral-98);
+  --color-surface-raised:         var(--color-atomic-coolNeutral-97);
+  --color-surface-track:          var(--color-atomic-coolNeutral-95);
+
+  /* Border */
+  --color-border-default:         var(--line-normal-neutral);
+  --color-border-subtle:          var(--line-normal-normal);
+  --color-border-strong:          var(--color-atomic-coolNeutral-90);
+
+  /* Status */
+  --color-status-info:            var(--primary-normal);
+  --color-status-error:           var(--status-destructive);
+
+  /* Social */
+  --color-social-kakao:           #FEE500;
+  --color-social-naver:           #03C75A;
+  --color-social-google:          #FFFFFF;
+  --color-social-apple:           #000000;
+
+  /* Gender */
+  --color-gender-male:            #4A9EFF;
+  --color-gender-male-surface:    #EDF5FF;
+  --color-gender-female:          #F472B6;
+  --color-gender-female-surface:  #FFF0F7;
+}
+
+/* ─────────────────────────────────────────────────────────
    SEMANTIC TYPE CLASSES — apply directly with class="ds-title-1" etc.
    ───────────────────────────────────────────────────────── */
 .ds-display-1 { font: var(--display-1-weight) var(--display-1-size)/var(--display-1-lh) var(--font-sans); letter-spacing: var(--display-1-tracking); }
@@ -414,7 +462,7 @@
 .ds-caption-2 { font: var(--caption-2-weight) var(--caption-2-size)/var(--caption-2-lh) var(--font-sans); letter-spacing: var(--caption-2-tracking); }
 
 /* HTML-element defaults so unmarked content still tracks the system */
-html, body { font-family: var(--font-sans); color: var(--label-normal); -webkit-font-smoothing: antialiased; }
+html, body { font-family: var(--font-sans); color: var(--color-text-default); -webkit-font-smoothing: antialiased; }
 h1 { font: var(--title-1-weight) var(--title-1-size)/var(--title-1-lh) var(--font-sans); letter-spacing: var(--title-1-tracking); }
 h2 { font: var(--title-2-weight) var(--title-2-size)/var(--title-2-lh) var(--font-sans); letter-spacing: var(--title-2-tracking); }
 h3 { font: var(--title-3-weight) var(--title-3-size)/var(--title-3-lh) var(--font-sans); letter-spacing: var(--title-3-tracking); }
@@ -426,14 +474,14 @@ code, pre { font-family: var(--font-mono); }
 
 </style>
 <style>
-  html, body { margin: 0; padding: 0; background: #f0eee9; color: var(--label-normal); }
+  html, body { margin: 0; padding: 0; background: #f0eee9; color: var(--color-text-default); }
   body { font-family: var(--font-sans); }
   button { font-family: var(--font-sans); }
 
   /* Mobile screen frame — sits inside each DCArtboard */
   .ph {
     width: 100%; height: 100%;
-    background: var(--background-elevated-normal);
+    background: var(--color-bg-default);
     overflow: hidden;
     display: flex; flex-direction: column;
     position: relative;
@@ -572,6 +620,7 @@ function dcFlatten(children) {
   const out = [];
   React.Children.forEach(children, (c) => {
     if (c && c.type === React.Fragment) out.push(...dcFlatten(c.props.children));
+    else if (c && c.props && c.props['data-dc-group'] != null) out.push(...dcFlatten(c.props.children));
     else out.push(c);
   });
   return out;
@@ -1536,24 +1585,23 @@ Object.assign(window, { PETS_DATA: { PHOTOS, SPECIES, MY_PETS, TIMELINE, USERS }
 // Adapted from Wanted mobile kit-shared, tuned for the pet-photo app context.
 
 const PawColors = {
-  bg:        'var(--background-normal-normal)',
-  surface:   'var(--background-elevated-normal)',
-  surfaceAlt:'var(--background-elevated-alternative)',
-  line:      'var(--line-normal-normal)',
-  lineSoft:  'var(--line-normal-neutral)',
-  label:     'var(--label-normal)',
-  labelStrong:'var(--label-strong)',
-  labelAlt:  'var(--label-alternative)',
-  labelHint: 'var(--label-assistive)',
-  labelDis:  'var(--label-disable)',
-  primary:   'var(--primary-normal)',
-  primaryHover: 'var(--primary-hover)',
-  white:     'var(--static-white)',
-  black:     'var(--static-black)',
-  // pawlog brand accent — friendlier than pure Wanted blue
-  brand:     '#FF6B3D',          // warm coral (paw-print friendly)
-  brandSoft: '#FFF1EB',
-  brandInk:  '#7A2B0F',
+  bg:          'var(--color-bg-subtle)',
+  surface:     'var(--color-bg-default)',
+  surfaceAlt:  'var(--color-bg-muted)',
+  line:        'var(--color-border-subtle)',
+  lineSoft:    'var(--color-border-default)',
+  label:       'var(--color-text-default)',
+  labelStrong: 'var(--color-text-strong)',
+  labelAlt:    'var(--color-text-subtle)',
+  labelHint:   'var(--color-text-assistive)',
+  labelDis:    'var(--color-text-disabled)',
+  primary:     'var(--color-status-info)',
+  primaryHover:'var(--primary-hover)',
+  white:       'var(--static-white)',
+  black:       'var(--static-black)',
+  brand:       'var(--color-brand-primary)',
+  brandSoft:   'var(--color-brand-surface)',
+  brandInk:    'var(--color-brand-emphasis)',
 };
 
 const ICON_PATH = '../assets/icons/';
@@ -1593,7 +1641,7 @@ function PawButton({ variant = 'primary', size = 'md', icon, iconTrailing, full,
       disabled={disabled}
       style={{
         height: s.h, padding: `0 ${s.px}px`, borderRadius: s.radius,
-        background: disabled ? 'var(--interaction-disable)' : v.bg,
+        background: disabled ? 'var(--color-bg-muted)' : v.bg,
         color: disabled ? PawColors.labelDis : v.color,
         border: v.border,
         font: `700 ${s.font}px/1 var(--font-sans)`,
@@ -1635,7 +1683,7 @@ function PawChip({ tone = 'neutral', selected, leadingDot, leadingIcon, children
   const sizes = { sm: { h: 24, px: 8, font: 11 }, md: { h: 28, px: 10, font: 12 }, lg: { h: 32, px: 12, font: 13 } };
   const sz = sizes[size];
   const tones = {
-    neutral:  { bg: 'var(--color-atomic-coolNeutral-98)',  fg: PawColors.label, border: 'none' },
+    neutral:  { bg: 'var(--color-bg-muted)',  fg: PawColors.label, border: 'none' },
     outline:  { bg: PawColors.surface, fg: PawColors.label, border: `1px solid ${PawColors.line}` },
     brand:    { bg: PawColors.brand, fg: '#fff', border: 'none' },
     brandSoft:{ bg: PawColors.brandSoft, fg: PawColors.brand, border: 'none' },
@@ -1669,7 +1717,7 @@ function PawAvatar({ src, name = '?', size = 40, square, ring, ringColor }) {
   const hue = colors[(name.charCodeAt(0) || 65) % colors.length];
   const box = (
     src ? (
-      <div style={{ width: size, height: size, borderRadius: square ? 12 : 999, overflow: 'hidden', background: 'var(--color-atomic-coolNeutral-97)', flexShrink: 0 }}>
+      <div style={{ width: size, height: size, borderRadius: square ? 12 : 999, overflow: 'hidden', background: 'var(--color-surface-raised)', flexShrink: 0 }}>
         <img src={src} width={size} height={size} style={{ display: 'block', objectFit: 'cover' }} />
       </div>
     ) : (
@@ -1773,8 +1821,8 @@ function PawTopBar({ variant = 'home', title, sub, onBack, right, left, dark }) 
     display: 'flex', alignItems: 'center', gap: 4,
     padding: '8px 6px',
     height: 52,
-    background: variant === 'transparent' ? 'transparent' : 'var(--background-elevated-normal)',
-    borderBottom: variant === 'transparent' ? 'none' : '1px solid var(--line-normal-neutral)',
+    background: variant === 'transparent' ? 'transparent' : 'var(--color-bg-default)',
+    borderBottom: variant === 'transparent' ? 'none' : '1px solid var(--color-border-default)',
     color: dark ? '#fff' : 'inherit',
   };
   if (variant === 'home') {
@@ -1784,8 +1832,8 @@ function PawTopBar({ variant = 'home', title, sub, onBack, right, left, dark }) 
           padding: '0 12px',
           font: '900 22px/1 var(--font-sans)',
           letterSpacing: '-0.03em',
-          color: 'var(--label-strong)',
-        }}>몽냥<span style={{color:'var(--primary-normal)',marginLeft:1}}>.</span></span>
+          color: 'var(--color-text-strong)',
+        }}>몽냥<span style={{color:'var(--color-status-info)',marginLeft:1}}>.</span></span>
         <div style={{ flex: 1 }} />
         {right}
       </div>
@@ -1805,8 +1853,8 @@ function PawTopBar({ variant = 'home', title, sub, onBack, right, left, dark }) 
     <div style={wrap}>
       {onBack ? <PawIconBtn name="chevron-left" onClick={onBack} /> : <div style={{ width: 40 }} />}
       <div style={{ flex: 1, textAlign: 'center', overflow: 'hidden' }}>
-        {title && <div style={{ font: '700 16px/1.3 var(--font-sans)', letterSpacing: '-0.012em', color: 'var(--label-strong)', textOverflow:'ellipsis', overflow:'hidden', whiteSpace:'nowrap' }}>{title}</div>}
-        {sub && <div style={{ font: '500 11px/1.2 var(--font-sans)', color: 'var(--label-alternative)', marginTop: 2 }}>{sub}</div>}
+        {title && <div style={{ font: '700 16px/1.3 var(--font-sans)', letterSpacing: '-0.012em', color: 'var(--color-text-strong)', textOverflow:'ellipsis', overflow:'hidden', whiteSpace:'nowrap' }}>{title}</div>}
+        {sub && <div style={{ font: '500 11px/1.2 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 2 }}>{sub}</div>}
       </div>
       <div style={{ minWidth: 40, display: 'flex', justifyContent: 'flex-end' }}>{right}</div>
     </div>
@@ -1825,8 +1873,8 @@ function PawTabBar({ active = 'home', onChange, onUpload }) {
   return (
     <div style={{
       display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)',
-      background: 'var(--background-elevated-normal)',
-      borderTop: '1px solid var(--line-normal-neutral)',
+      background: 'var(--color-bg-default)',
+      borderTop: '1px solid var(--color-border-default)',
       paddingBottom: 6, paddingTop: 4,
     }}>
       {tabs.map(t => {
@@ -1855,7 +1903,7 @@ function PawTabBar({ active = 'home', onChange, onUpload }) {
             background: 'transparent', border: 'none', cursor: 'pointer',
             padding: '8px 0 4px',
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
-            color: on ? 'var(--label-strong)' : 'var(--label-alternative)',
+            color: on ? 'var(--color-text-strong)' : 'var(--color-text-subtle)',
             position: 'relative',
           }}>
             <span style={{ position: 'relative' }}>
@@ -1886,14 +1934,14 @@ function PawSpeciesTabs({ active, onChange, items }) {
     <div style={{
       display: 'flex', gap: 6, padding: '10px 14px 12px',
       overflowX: 'auto',
-      background: 'var(--background-elevated-normal)',
+      background: 'var(--color-bg-default)',
     }}>
       {items.map(t => {
         const on = t.id === active;
         return (
           <button key={t.id} onClick={() => onChange?.(t.id)} style={{
-            background: on ? 'var(--label-strong)' : 'var(--color-atomic-coolNeutral-98)',
-            color: on ? '#fff' : 'var(--label-alternative)',
+            background: on ? 'var(--color-text-strong)' : 'var(--color-bg-muted)',
+            color: on ? '#fff' : 'var(--color-text-subtle)',
             border: 'none',
             height: 32, padding: '0 14px', borderRadius: 999,
             font: `${on ? 700 : 600} 13px/1 var(--font-sans)`,
@@ -2000,18 +2048,18 @@ function PawSectionHeader({ title, sub, action, onAction }) {
           margin: 0,
           font: '800 17px/1.3 var(--font-sans)',
           letterSpacing: '-0.018em',
-          color: 'var(--label-strong)',
+          color: 'var(--color-text-strong)',
         }}>{title}</h3>
         {sub && <p style={{
           margin: '2px 0 0',
           font: '500 12px/1.4 var(--font-sans)',
-          color: 'var(--label-alternative)',
+          color: 'var(--color-text-subtle)',
         }}>{sub}</p>}
       </div>
       {action && (
         <button onClick={onAction} style={{
           background: 'transparent', border: 'none',
-          color: 'var(--label-alternative)',
+          color: 'var(--color-text-subtle)',
           font: '600 12px/1 var(--font-sans)',
           display: 'inline-flex', alignItems: 'center', gap: 2, cursor: 'pointer',
         }}>{action}<PawIcon name="chevron-right" size={14} /></button>
@@ -2042,10 +2090,10 @@ function H1_SpeciesOnboarding() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#fff' }}>
       {/* progress */}
       <div style={{ padding: '14px 20px 8px' }}>
-        <div style={{ height: 4, background: 'var(--color-atomic-coolNeutral-95)', borderRadius: 999, overflow: 'hidden' }}>
+        <div style={{ height: 4, background: 'var(--color-surface-track)', borderRadius: 999, overflow: 'hidden' }}>
           <div style={{ width: '66%', height: '100%', background: PawColors.brand }} />
         </div>
-        <div style={{ font: '500 11px/1.4 var(--font-sans)', color: 'var(--label-alternative)', marginTop: 8, letterSpacing: '0.02em' }}>STEP 2 / 3</div>
+        <div style={{ font: '500 11px/1.4 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 8, letterSpacing: '0.02em' }}>STEP 2 / 3</div>
       </div>
 
       <div style={{ padding: '12px 20px 20px', flex: 1, overflowY: 'auto' }}>
@@ -2053,12 +2101,12 @@ function H1_SpeciesOnboarding() {
           margin: 0,
           font: '800 24px/1.32 var(--font-sans)',
           letterSpacing: '-0.024em',
-          color: 'var(--label-strong)',
+          color: 'var(--color-text-strong)',
         }}>어떤 친구와<br/>함께 하고 계세요?</h1>
         <p style={{
           margin: '8px 0 0',
           font: '500 14px/1.5 var(--font-sans)',
-          color: 'var(--label-alternative)',
+          color: 'var(--color-text-subtle)',
           letterSpacing: '-0.005em',
         }}>선택한 종 기반으로 피드와 추천 친구를<br/>맞춤 구성해 드려요. <b style={{color:PawColors.brand}}>최대 3개</b>까지</p>
 
@@ -2071,7 +2119,7 @@ function H1_SpeciesOnboarding() {
             return (
               <button key={sp.id} onClick={() => toggle(sp.id)} style={{
                 aspectRatio: '1 / 1.05',
-                background: on ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
+                background: on ? PawColors.brandSoft : 'var(--color-bg-muted)',
                 border: `1.5px solid ${on ? PawColors.brand : 'transparent'}`,
                 borderRadius: 16,
                 cursor: 'pointer',
@@ -2082,12 +2130,12 @@ function H1_SpeciesOnboarding() {
                 <span style={{ font: '30px/1 -apple-system, "Segoe UI Emoji"' }}>{sp.icon}</span>
                 <span style={{
                   font: `${on ? 700 : 600} 13px/1.2 var(--font-sans)`,
-                  color: on ? PawColors.brandInk : 'var(--label-strong)',
+                  color: on ? PawColors.brandInk : 'var(--color-text-strong)',
                   letterSpacing: '-0.012em',
                 }}>{sp.name}</span>
                 <span style={{
                   font: '500 10px/1 var(--font-sans)',
-                  color: on ? PawColors.brand : 'var(--label-assistive)',
+                  color: on ? PawColors.brand : 'var(--color-text-assistive)',
                   letterSpacing: '0.02em',
                 }}>{sp.count} 보호자</span>
                 {on && (
@@ -2107,20 +2155,20 @@ function H1_SpeciesOnboarding() {
 
         <div style={{
           marginTop: 22, padding: '12px 14px',
-          background: 'var(--color-atomic-coolNeutral-98)', borderRadius: 12,
+          background: 'var(--color-bg-muted)', borderRadius: 12,
           display: 'flex', alignItems: 'flex-start', gap: 10,
         }}>
           <span style={{ flexShrink:0, width:28, height:28, borderRadius:999, background:PawColors.brandSoft, color:PawColors.brand, display:'inline-flex', alignItems:'center', justifyContent:'center'}}>
             <PawIcon name="sparkle-fill" size={16} />
           </span>
-          <p style={{ margin: 0, font: '500 12px/1.5 var(--font-sans)', color: 'var(--label-alternative)' }}>
-            희귀동물 보호자라면 <b style={{color:'var(--label-strong)'}}>기타</b>를 선택해 주세요. <br/>
+          <p style={{ margin: 0, font: '500 12px/1.5 var(--font-sans)', color: 'var(--color-text-subtle)' }}>
+            희귀동물 보호자라면 <b style={{color:'var(--color-text-strong)'}}>기타</b>를 선택해 주세요. <br/>
             구체적인 종은 다음 단계에서 등록할 수 있어요.
           </p>
         </div>
       </div>
 
-      <div style={{ padding: '12px 20px 20px', borderTop: '1px solid var(--line-normal-neutral)', background: '#fff' }}>
+      <div style={{ padding: '12px 20px 20px', borderTop: '1px solid var(--color-border-default)', background: '#fff' }}>
         <PawButton full size="lg" disabled={picked.length === 0}>
           다음 ({picked.length}/3)
         </PawButton>
@@ -2181,7 +2229,7 @@ function H1_DiscoverBySpecies() {
 
       <div style={{ flex: 1, overflowY: 'auto', paddingTop: 8 }}>
         <PawMasonry items={items} likedSet={liked} onLike={toggleLike} gap={6} />
-        <div style={{ padding: '20px 16px 32px', textAlign: 'center', font: '500 12px/1 var(--font-sans)', color: 'var(--label-assistive)' }}>
+        <div style={{ padding: '20px 16px 32px', textAlign: 'center', font: '500 12px/1 var(--font-sans)', color: 'var(--color-text-assistive)' }}>
           {tab === 'cat' ? '인기 고양이 사진을 더 보려면 당겨주세요' : '여기까지 모두 봤어요'}
         </div>
       </div>
@@ -2214,7 +2262,7 @@ function H1_CommunityHome() {
       </div>
 
       {/* Stats + join */}
-      <div style={{ padding: '14px 16px 12px', display: 'flex', alignItems: 'center', gap: 12, borderBottom: '1px solid var(--line-normal-neutral)' }}>
+      <div style={{ padding: '14px 16px 12px', display: 'flex', alignItems: 'center', gap: 12, borderBottom: '1px solid var(--color-border-default)' }}>
         <div style={{ flex: 1, display: 'flex', gap: 14 }}>
           <Stat n="7,234" l="보호자" />
           <Stat n="34.2K" l="사진" />
@@ -2234,20 +2282,20 @@ function H1_CommunityHome() {
             </div>
           ))}
         </div>
-        <span style={{ font: '500 12px/1.4 var(--font-sans)', color: 'var(--label-alternative)' }}>
-          <b style={{color:'var(--label-strong)'}}>이서연</b>님 외 6명이 오늘 함께해요
+        <span style={{ font: '500 12px/1.4 var(--font-sans)', color: 'var(--color-text-subtle)' }}>
+          <b style={{color:'var(--color-text-strong)'}}>이서연</b>님 외 6명이 오늘 함께해요
         </span>
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 2, padding: '8px 12px 0', borderBottom: '1px solid var(--line-normal-neutral)' }}>
+      <div style={{ display: 'flex', gap: 2, padding: '8px 12px 0', borderBottom: '1px solid var(--color-border-default)' }}>
         {['인기 사진', '최신', '질문', '보호자'].map((t, i) => {
           const on = i === 0;
           return (
             <div key={t} style={{
               padding: '10px 14px',
               font: `${on ? 700 : 500} 13px/1 var(--font-sans)`,
-              color: on ? 'var(--label-strong)' : 'var(--label-alternative)',
+              color: on ? 'var(--color-text-strong)' : 'var(--color-text-subtle)',
               borderBottom: on ? `2px solid ${PawColors.labelStrong}` : '2px solid transparent',
               marginBottom: -1,
             }}>{t}</div>
@@ -2264,11 +2312,11 @@ function H1_CommunityHome() {
 function Stat({ n, l, hot }) {
   return (
     <div>
-      <div style={{ font: '800 16px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.018em' }}>
+      <div style={{ font: '800 16px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.018em' }}>
         {n}
         {hot && <span style={{ color: PawColors.brand, marginLeft: 2 }}>↑</span>}
       </div>
-      <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-alternative)', marginTop: 4 }}>{l}</div>
+      <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 4 }}>{l}</div>
     </div>
   );
 }
@@ -2294,10 +2342,10 @@ function H1_SuggestUsers() {
       <div style={{ flex: 1, overflowY: 'auto' }}>
         {/* Intro */}
         <div style={{ padding: '12px 20px 6px' }}>
-          <h2 style={{ margin: 0, font: '800 18px/1.3 var(--font-sans)', letterSpacing:'-0.018em', color:'var(--label-strong)'}}>
+          <h2 style={{ margin: 0, font: '800 18px/1.3 var(--font-sans)', letterSpacing:'-0.018em', color:'var(--color-text-strong)'}}>
             <span style={{color: PawColors.brand}}>몽이</span>와 잘 통할 친구들
           </h2>
-          <p style={{ margin: '4px 0 0', font: '500 13px/1.5 var(--font-sans)', color: 'var(--label-alternative)'}}>
+          <p style={{ margin: '4px 0 0', font: '500 13px/1.5 var(--font-sans)', color: 'var(--color-text-subtle)'}}>
             같은 골든리트리버 보호자부터 추천해 드려요
           </p>
         </div>
@@ -2305,8 +2353,8 @@ function H1_SuggestUsers() {
         {buckets.map(b => (
           <div key={b.id} style={{ marginTop: 16 }}>
             <div style={{ padding: '10px 20px 6px', display: 'flex', alignItems: 'baseline', gap: 6 }}>
-              <h4 style={{ margin: 0, font: '700 14px/1.3 var(--font-sans)', color:'var(--label-strong)', letterSpacing:'-0.012em' }}>{b.title}</h4>
-              <span style={{ font: '500 11px/1 var(--font-sans)', color:'var(--label-assistive)' }}>{b.sub}</span>
+              <h4 style={{ margin: 0, font: '700 14px/1.3 var(--font-sans)', color:'var(--color-text-strong)', letterSpacing:'-0.012em' }}>{b.title}</h4>
+              <span style={{ font: '500 11px/1 var(--font-sans)', color:'var(--color-text-assistive)' }}>{b.sub}</span>
             </div>
             {b.users.map((u, idx) => (
               <UserRow key={u.id+'-'+idx} u={u} following={following.has(u.id)} onToggle={() => toggle(u.id)} />
@@ -2326,12 +2374,12 @@ function UserRow({ u, following, onToggle }) {
       <PawAvatar name={u.real} size={44} ring={u.mutual} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-          <span style={{ font: '700 14px/1.3 var(--font-sans)', color:'var(--label-strong)', letterSpacing:'-0.012em' }}>{u.handle}</span>
+          <span style={{ font: '700 14px/1.3 var(--font-sans)', color:'var(--color-text-strong)', letterSpacing:'-0.012em' }}>{u.handle}</span>
           {u.mutual && <PawChip tone="brandSoft" size="sm">맞팔</PawChip>}
         </div>
-        <div style={{ font: '500 12px/1.4 var(--font-sans)', color:'var(--label-alternative)', marginTop: 2 }}>
+        <div style={{ font: '500 12px/1.4 var(--font-sans)', color:'var(--color-text-subtle)', marginTop: 2 }}>
           <span>{u.pets.join(' · ')}</span>
-          <span style={{ margin: '0 4px', color:'var(--label-assistive)' }}>·</span>
+          <span style={{ margin: '0 4px', color:'var(--color-text-assistive)' }}>·</span>
           <span>팔로워 {u.followers}</span>
         </div>
       </div>
@@ -2362,23 +2410,23 @@ function H1_BreedTagPage() {
               flexShrink: 0,
             }}>🐕</div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-assistive)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>Breed Tag</div>
-              <h1 style={{ margin: '3px 0 4px', font: '800 22px/1.2 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--label-strong)' }}>
+              <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-assistive)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>Breed Tag</div>
+              <h1 style={{ margin: '3px 0 4px', font: '800 22px/1.2 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--color-text-strong)' }}>
                 #골든리트리버
               </h1>
-              <div style={{ font: '500 12px/1.4 var(--font-sans)', color: 'var(--label-alternative)' }}>
+              <div style={{ font: '500 12px/1.4 var(--font-sans)', color: 'var(--color-text-subtle)' }}>
                 Golden Retriever · 대형견 · 미국·영국 원산
               </div>
             </div>
           </div>
           <div style={{
             display: 'flex', gap: 16, marginTop: 18, padding: '12px 14px',
-            background: 'var(--color-atomic-coolNeutral-98)', borderRadius: 14,
+            background: 'var(--color-bg-muted)', borderRadius: 14,
           }}>
             <Stat n="218K" l="사진" />
-            <div style={{ width: 1, background: 'var(--line-normal-neutral)' }} />
+            <div style={{ width: 1, background: 'var(--color-border-default)' }} />
             <Stat n="32.4K" l="보호자" />
-            <div style={{ width: 1, background: 'var(--line-normal-neutral)' }} />
+            <div style={{ width: 1, background: 'var(--color-border-default)' }} />
             <Stat n="+12%" l="이번주" hot />
           </div>
           <div style={{ marginTop: 14, display: 'flex', gap: 8 }}>
@@ -2394,12 +2442,12 @@ function H1_BreedTagPage() {
             <div key={u.id} style={{
               flexShrink: 0, width: 112,
               padding: '14px 10px',
-              background: 'var(--color-atomic-coolNeutral-98)', borderRadius: 14,
+              background: 'var(--color-bg-muted)', borderRadius: 14,
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
             }}>
               <PawAvatar name={u.real} size={52} ring />
-              <div style={{ font: '700 12px/1.3 var(--font-sans)', color:'var(--label-strong)', textAlign:'center' }}>{u.handle}</div>
-              <div style={{ font: '500 11px/1 var(--font-sans)', color:'var(--label-assistive)' }}>팔로워 {u.followers}</div>
+              <div style={{ font: '700 12px/1.3 var(--font-sans)', color:'var(--color-text-strong)', textAlign:'center' }}>{u.handle}</div>
+              <div style={{ font: '500 11px/1 var(--font-sans)', color:'var(--color-text-assistive)' }}>팔로워 {u.followers}</div>
               <PawButton size="sm" variant="primaryDark" style={{ height: 28, padding: '0 12px', font: '700 11px/1 var(--font-sans)' }}>팔로우</PawButton>
             </div>
           ))}
@@ -2448,8 +2496,8 @@ function H2_PetRegister() {
       <PawTopBar variant="title" title="반려동물 등록" onBack={() => {}} right={<PawIconBtn name="close" />} />
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 20px' }}>
-        <p style={{ margin: '6px 0 18px', font:'500 13px/1.5 var(--font-sans)', color:'var(--label-alternative)' }}>
-          등록하면 해당 친구의 <b style={{color:'var(--label-strong)'}}>전용 성장 타임라인</b>이 자동으로 시작돼요
+        <p style={{ margin: '6px 0 18px', font:'500 13px/1.5 var(--font-sans)', color:'var(--color-text-subtle)' }}>
+          등록하면 해당 친구의 <b style={{color:'var(--color-text-strong)'}}>전용 성장 타임라인</b>이 자동으로 시작돼요
         </p>
 
         {/* Photo upload */}
@@ -2486,27 +2534,27 @@ function H2_PetRegister() {
               return (
                 <button key={o.id} onClick={() => setSpecies(o.id)} style={{
                   padding: '12px 0',
-                  background: on ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
+                  background: on ? PawColors.brandSoft : 'var(--color-bg-muted)',
                   border: `1.5px solid ${on ? PawColors.brand : 'transparent'}`,
                   borderRadius: 12,
                   cursor: 'pointer',
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
                 }}>
                   <span style={{ font: '22px/1 -apple-system, "Segoe UI Emoji"' }}>{o.icon}</span>
-                  <span style={{ font: `${on ? 700 : 600} 12px/1 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--label-normal)' }}>{o.name}</span>
+                  <span style={{ font: `${on ? 700 : 600} 12px/1 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--color-text-default)' }}>{o.name}</span>
                 </button>
               );
             })}
           </div>
         </Field>
 
-        <Field label="품종" right={<span style={{ font:'500 11px/1 var(--font-sans)', color:'var(--label-assistive)' }}>몰라도 OK</span>}>
+        <Field label="품종" right={<span style={{ font:'500 11px/1 var(--font-sans)', color:'var(--color-text-assistive)' }}>몰라도 OK</span>}>
           <button style={{
             ...inputStyle(), display:'flex', alignItems:'center', justifyContent:'space-between',
             background:'#fff', cursor:'pointer'
           }}>
-            <span style={{ color: 'var(--label-strong)', font: '600 14px/1 var(--font-sans)' }}>{breed}</span>
-            <PawIcon name="chevron-down" size={16} color="var(--label-alternative)" />
+            <span style={{ color: 'var(--color-text-strong)', font: '600 14px/1 var(--font-sans)' }}>{breed}</span>
+            <PawIcon name="chevron-down" size={16} color="var(--color-text-subtle)" />
           </button>
         </Field>
 
@@ -2517,13 +2565,13 @@ function H2_PetRegister() {
               ...inputStyle(), display:'flex', alignItems:'center', gap:8,
               background:'#fff', cursor:'pointer'
             }}>
-              <PawIcon name="calendar" size={16} color="var(--label-alternative)" />
-              <span style={{ color: 'var(--label-strong)', font: '600 14px/1 var(--font-sans)' }}>{bday}</span>
+              <PawIcon name="calendar" size={16} color="var(--color-text-subtle)" />
+              <span style={{ color: 'var(--color-text-strong)', font: '600 14px/1 var(--font-sans)' }}>{bday}</span>
             </button>
             <button style={{
               padding: '0 14px', height: 48, borderRadius: 12, cursor:'pointer',
-              background: 'var(--color-atomic-coolNeutral-98)', border:'none',
-              font: '600 13px/1 var(--font-sans)', color:'var(--label-alternative)',
+              background: 'var(--color-bg-muted)', border:'none',
+              font: '600 13px/1 var(--font-sans)', color:'var(--color-text-subtle)',
             }}>입양일</button>
           </div>
         </Field>
@@ -2539,8 +2587,8 @@ function H2_PetRegister() {
               return (
                 <button key={g.id} onClick={() => setGender(g.id)} style={{
                   flex: 1, height: 44, borderRadius: 12,
-                  background: on ? 'var(--label-strong)' : 'var(--color-atomic-coolNeutral-98)',
-                  color: on ? '#fff' : 'var(--label-normal)',
+                  background: on ? 'var(--color-text-strong)' : 'var(--color-bg-muted)',
+                  color: on ? '#fff' : 'var(--color-text-default)',
                   border: 'none', cursor: 'pointer',
                   font: `${on ? 700 : 600} 13px/1 var(--font-sans)`,
                 }}>{g.label}</button>
@@ -2550,7 +2598,7 @@ function H2_PetRegister() {
         </Field>
       </div>
 
-      <div style={{ padding: '12px 20px 20px', borderTop: '1px solid var(--line-normal-neutral)', background: '#fff' }}>
+      <div style={{ padding: '12px 20px 20px', borderTop: '1px solid var(--color-border-default)', background: '#fff' }}>
         <PawButton full size="lg">타임라인 시작하기</PawButton>
       </div>
     </div>
@@ -2561,7 +2609,7 @@ function Field({ label, right, children }) {
   return (
     <div style={{ marginBottom: 18 }}>
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
-        <label style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>{label}</label>
+        <label style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>{label}</label>
         {right}
       </div>
       {children}
@@ -2571,9 +2619,9 @@ function Field({ label, right, children }) {
 function inputStyle() {
   return {
     width: '100%', height: 48, padding: '0 14px',
-    background: 'var(--color-atomic-coolNeutral-98)',
+    background: 'var(--color-bg-muted)',
     border: 'none', borderRadius: 12,
-    font: '600 14px/1 var(--font-sans)', color: 'var(--label-strong)',
+    font: '600 14px/1 var(--font-sans)', color: 'var(--color-text-strong)',
     outline: 'none', boxSizing: 'border-box',
   };
 }
@@ -2595,17 +2643,17 @@ function H2_PetTimeline() {
           <PetGlyph pet={pet} size={72} ring />
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <h1 style={{ margin: 0, font: '800 22px/1.2 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--label-strong)' }}>{pet.name}</h1>
+              <h1 style={{ margin: 0, font: '800 22px/1.2 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--color-text-strong)' }}>{pet.name}</h1>
               <PawChip tone="brandSoft" size="sm">{pet.breed}</PawChip>
             </div>
-            <div style={{ display: 'flex', gap: 8, marginTop: 6, font: '500 12px/1 var(--font-sans)', color: 'var(--label-alternative)' }}>
+            <div style={{ display: 'flex', gap: 8, marginTop: 6, font: '500 12px/1 var(--font-sans)', color: 'var(--color-text-subtle)' }}>
               <span>{pet.age}</span><span>·</span>
               <span>입양 {pet.born}</span>
             </div>
             <div style={{ display: 'flex', gap: 14, marginTop: 10 }}>
-              <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)' }}>251 <span style={{ font: '500 11px/1', color: 'var(--label-alternative)' }}>장</span></span>
-              <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)' }}>12 <span style={{ font: '500 11px/1', color: 'var(--label-alternative)' }}>개월</span></span>
-              <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)' }}>3 <span style={{ font: '500 11px/1', color: 'var(--label-alternative)' }}>마일스톤</span></span>
+              <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)' }}>251 <span style={{ font: '500 11px/1', color: 'var(--color-text-subtle)' }}>장</span></span>
+              <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)' }}>12 <span style={{ font: '500 11px/1', color: 'var(--color-text-subtle)' }}>개월</span></span>
+              <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)' }}>3 <span style={{ font: '500 11px/1', color: 'var(--color-text-subtle)' }}>마일스톤</span></span>
             </div>
           </div>
         </div>
@@ -2617,8 +2665,8 @@ function H2_PetTimeline() {
             return (
               <button key={m.id} onClick={() => setMode(m.id)} style={{
                 flex: 1, height: 38, borderRadius: 10,
-                background: on ? 'var(--label-strong)' : 'var(--color-atomic-coolNeutral-98)',
-                color: on ? '#fff' : 'var(--label-alternative)',
+                background: on ? 'var(--color-text-strong)' : 'var(--color-bg-muted)',
+                color: on ? '#fff' : 'var(--color-text-subtle)',
                 border: 'none', cursor: 'pointer',
                 font: `${on ? 700 : 600} 13px/1 var(--font-sans)`,
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
@@ -2630,8 +2678,8 @@ function H2_PetTimeline() {
         {/* Year ribbon */}
         <div style={{ padding: '0 16px 6px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
           <div>
-            <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-assistive)', letterSpacing: '0.04em' }}>2024 — 2025</div>
-            <div style={{ font: '800 20px/1.2 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.018em', marginTop: 4 }}>몽이의 첫 1년</div>
+            <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-assistive)', letterSpacing: '0.04em' }}>2024 — 2025</div>
+            <div style={{ font: '800 20px/1.2 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.018em', marginTop: 4 }}>몽이의 첫 1년</div>
           </div>
           <PawChip tone="brandSoft" size="md" leadingIcon="sparkle-fill">자동 회고</PawChip>
         </div>
@@ -2649,7 +2697,7 @@ function H2_PetTimeline() {
 }
 
 function TimelineRow({ m, i, last }) {
-  const milestoneColor = m.milestone ? PawColors.brand : 'var(--line-normal-normal)';
+  const milestoneColor = m.milestone ? PawColors.brand : 'var(--color-border-subtle)';
   return (
     <div style={{ display: 'flex', gap: 12 }}>
       {/* rail */}
@@ -2660,13 +2708,13 @@ function TimelineRow({ m, i, last }) {
           border: `2px solid ${milestoneColor}`,
           marginTop: 18, zIndex: 1,
         }} />
-        {!last && <div style={{ flex: 1, width: 2, background: 'var(--line-normal-neutral)', marginTop: -2 }} />}
+        {!last && <div style={{ flex: 1, width: 2, background: 'var(--color-border-default)', marginTop: -2 }} />}
       </div>
       {/* card */}
       <div style={{ flex: 1, paddingBottom: 14 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 6 }}>
-          <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>{m.ym}</span>
-          <span style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-alternative)' }}>{m.label}</span>
+          <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>{m.ym}</span>
+          <span style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-subtle)' }}>{m.label}</span>
           {m.milestone && <PawChip tone="brand" size="sm">★ {m.milestone}</PawChip>}
         </div>
         <div style={{
@@ -2690,8 +2738,8 @@ function TimelineRow({ m, i, last }) {
                 }} />
               ))}
             </div>
-            <div style={{ font: '500 12px/1.3 var(--font-sans)', color: 'var(--label-alternative)' }}>
-              <b style={{color:'var(--label-strong)'}}>{m.count}</b>장 · {m.milestone || '평범한 한 달'}
+            <div style={{ font: '500 12px/1.3 var(--font-sans)', color: 'var(--color-text-subtle)' }}>
+              <b style={{color:'var(--color-text-strong)'}}>{m.count}</b>장 · {m.milestone || '평범한 한 달'}
             </div>
           </div>
         </div>
@@ -2727,8 +2775,8 @@ function H2_MonthDetail() {
       <div style={{ flex: 1, overflowY: 'auto' }}>
         {/* Story */}
         <div style={{ padding: '18px 20px 8px' }}>
-          <h3 style={{ margin: 0, font: '800 17px/1.3 var(--font-sans)', letterSpacing:'-0.018em', color:'var(--label-strong)' }}>이번 달의 이야기</h3>
-          <p style={{ margin: '8px 0 0', font: '500 14px/1.6 var(--font-sans)', color: 'var(--label-normal)' }}>
+          <h3 style={{ margin: 0, font: '800 17px/1.3 var(--font-sans)', letterSpacing:'-0.018em', color:'var(--color-text-strong)' }}>이번 달의 이야기</h3>
+          <p style={{ margin: '8px 0 0', font: '500 14px/1.6 var(--font-sans)', color: 'var(--color-text-default)' }}>
             처음으로 바다를 만난 6월. 발끝이 모래에 닿는 순간 머뭇거리던 표정을 잊을 수 없어요.
             물이 무서워서 바위 뒤에 숨었지만, 결국엔 파도를 따라 달리기 시작했어요. <span style={{color:PawColors.brand,fontWeight:700}}>+ 더 보기</span>
           </p>
@@ -2741,10 +2789,10 @@ function H2_MonthDetail() {
             { i: 'bubble-fill',  l: '댓글',        v: '84' },
             { i: 'location',     l: '장소',        v: '6곳' },
           ].map(s => (
-            <div key={s.l} style={{ flex:1, padding:'12px 12px', background:'var(--color-atomic-coolNeutral-98)', borderRadius:12 }}>
+            <div key={s.l} style={{ flex:1, padding:'12px 12px', background:'var(--color-bg-muted)', borderRadius:12 }}>
               <PawIcon name={s.i} size={16} color={PawColors.brand} />
-              <div style={{ font:'800 18px/1.2 var(--font-sans)', color:'var(--label-strong)', marginTop:4, letterSpacing:'-0.018em' }}>{s.v}</div>
-              <div style={{ font:'500 11px/1 var(--font-sans)', color:'var(--label-alternative)', marginTop:3 }}>{s.l}</div>
+              <div style={{ font:'800 18px/1.2 var(--font-sans)', color:'var(--color-text-strong)', marginTop:4, letterSpacing:'-0.018em' }}>{s.v}</div>
+              <div style={{ font:'500 11px/1 var(--font-sans)', color:'var(--color-text-subtle)', marginTop:3 }}>{s.l}</div>
             </div>
           ))}
         </div>
@@ -2774,10 +2822,10 @@ function H2_ThenVsNow() {
       <div style={{ flex: 1, overflowY: 'auto', padding: '8px 16px 20px' }}>
         <div style={{ textAlign: 'center', padding: '12px 0 18px' }}>
           <PawChip tone="brand" size="md" leadingIcon="sparkle-fill">매일 자동 생성</PawChip>
-          <h1 style={{ margin: '12px 0 4px', font: '800 22px/1.2 var(--font-sans)', letterSpacing:'-0.024em', color:'var(--label-strong)' }}>
+          <h1 style={{ margin: '12px 0 4px', font: '800 22px/1.2 var(--font-sans)', letterSpacing:'-0.024em', color:'var(--color-text-strong)' }}>
             몽이의 1년 전 오늘
           </h1>
-          <p style={{ margin: 0, font: '500 13px/1.5 var(--font-sans)', color: 'var(--label-alternative)' }}>
+          <p style={{ margin: 0, font: '500 13px/1.5 var(--font-sans)', color: 'var(--color-text-subtle)' }}>
             2025년 5월 17일 → 2026년 5월 17일
           </p>
         </div>
@@ -2789,7 +2837,7 @@ function H2_ThenVsNow() {
           ].map((c, i) => (
             <div key={i} style={{
               background: '#fff', borderRadius: 18, overflow: 'hidden',
-              border: '1px solid var(--line-normal-normal)',
+              border: '1px solid var(--color-border-subtle)',
               boxShadow: i === 1 ? '0 8px 24px rgba(255,107,61,0.18)' : 'none',
               transform: i === 1 ? 'translateY(-4px)' : 'none',
             }}>
@@ -2804,8 +2852,8 @@ function H2_ThenVsNow() {
                 }}>{c.label}</div>
               </div>
               <div style={{ padding: '10px 12px 14px' }}>
-                <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-alternative)', letterSpacing: '0.02em' }}>{c.date}</div>
-                <div style={{ font: '700 14px/1.3 var(--font-sans)', color: 'var(--label-strong)', marginTop: 4, letterSpacing: '-0.012em' }}>{c.sub}</div>
+                <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-subtle)', letterSpacing: '0.02em' }}>{c.date}</div>
+                <div style={{ font: '700 14px/1.3 var(--font-sans)', color: 'var(--color-text-strong)', marginTop: 4, letterSpacing: '-0.012em' }}>{c.sub}</div>
               </div>
             </div>
           ))}
@@ -2815,9 +2863,9 @@ function H2_ThenVsNow() {
         <div style={{
           marginTop: 22, padding: 18,
           background: '#fff', borderRadius: 20,
-          border: '1px solid var(--line-normal-normal)',
+          border: '1px solid var(--color-border-subtle)',
         }}>
-          <h4 style={{ margin: 0, font: '800 15px/1.3 var(--font-sans)', color:'var(--label-strong)', letterSpacing:'-0.012em' }}>그동안의 변화</h4>
+          <h4 style={{ margin: 0, font: '800 15px/1.3 var(--font-sans)', color:'var(--color-text-strong)', letterSpacing:'-0.012em' }}>그동안의 변화</h4>
           <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
               { l: '체중',         f: '6.4 kg',    t: '28.2 kg',   d: '+340%' },
@@ -2826,9 +2874,9 @@ function H2_ThenVsNow() {
               { l: '받은 좋아요',  f: '—',         t: '12.4K',     d: 'NEW' },
             ].map(r => (
               <div key={r.l} style={{ display: 'grid', gridTemplateColumns: '90px 1fr 1fr auto', gap: 8, alignItems: 'center' }}>
-                <div style={{ font: '600 12px/1 var(--font-sans)', color: 'var(--label-alternative)' }}>{r.l}</div>
-                <div style={{ font: '500 13px/1 var(--font-sans)', color: 'var(--label-assistive)', textDecoration: 'line-through' }}>{r.f}</div>
-                <div style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)' }}>{r.t}</div>
+                <div style={{ font: '600 12px/1 var(--font-sans)', color: 'var(--color-text-subtle)' }}>{r.l}</div>
+                <div style={{ font: '500 13px/1 var(--font-sans)', color: 'var(--color-text-assistive)', textDecoration: 'line-through' }}>{r.f}</div>
+                <div style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)' }}>{r.t}</div>
                 <div style={{
                   font: '700 11px/1 var(--font-sans)',
                   color: PawColors.brand,
@@ -2977,12 +3025,12 @@ function H3_FeedWithFab() {
       <PawTopBar variant="home" right={<><PawIconBtn name="search" /><PawIconBtn name="bell" /></>} />
 
       {/* Filter chips row */}
-      <div style={{ display: 'flex', gap: 6, padding: '10px 14px', background: '#fff', borderBottom:'1px solid var(--line-normal-neutral)' }}>
+      <div style={{ display: 'flex', gap: 6, padding: '10px 14px', background: '#fff', borderBottom:'1px solid var(--color-border-default)' }}>
         {[{l:'팔로잉',on:true},{l:'발견'},{l:'내 동네'},{l:'친구 추천'}].map(c => (
           <button key={c.l} style={{
             height: 30, padding: '0 12px', borderRadius: 999,
-            background: c.on ? 'var(--label-strong)' : 'var(--color-atomic-coolNeutral-98)',
-            color: c.on ? '#fff' : 'var(--label-alternative)',
+            background: c.on ? 'var(--color-text-strong)' : 'var(--color-bg-muted)',
+            color: c.on ? '#fff' : 'var(--color-text-subtle)',
             border: 'none', cursor: 'pointer',
             font: `${c.on ? 700 : 600} 12px/1 var(--font-sans)`,
           }}>{c.l}</button>
@@ -3064,7 +3112,7 @@ function StoryCircle({ name, emoji, color, active, you }) {
           </div>
         </div>
       </div>
-      <span style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-alternative)' }}>{name}</span>
+      <span style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-subtle)' }}>{name}</span>
     </div>
   );
 }
@@ -3202,7 +3250,7 @@ function H3_AiAnalyzing() {
           }}>
             <div style={{
               position: 'absolute', top: -28, left: -2,
-              padding: '4px 10px', borderRadius: 8, background: '#FF6B3D', color: '#fff',
+              padding: '4px 10px', borderRadius: 8, background: 'var(--color-brand-primary)', color: '#fff',
               font: '700 11px/1 var(--font-sans)',
               display: 'inline-flex', alignItems: 'center', gap: 4,
             }}>
@@ -3219,7 +3267,7 @@ function H3_AiAnalyzing() {
             color: '#fff', font: '700 12px/1 var(--font-sans)',
           }}>
             <span style={{
-              width:6, height:6, borderRadius:999, background:'#FF6B3D',
+              width:6, height:6, borderRadius:999, background:'var(--color-brand-primary)',
               animation: 'paw-pulse 1.2s ease-in-out infinite',
             }} />
             AI 분석 중
@@ -3227,10 +3275,10 @@ function H3_AiAnalyzing() {
         </div>
 
         {/* Detected list */}
-        <h3 style={{ margin: 0, font: '800 17px/1.3 var(--font-sans)', letterSpacing:'-0.018em', color:'var(--label-strong)' }}>
+        <h3 style={{ margin: 0, font: '800 17px/1.3 var(--font-sans)', letterSpacing:'-0.018em', color:'var(--color-text-strong)' }}>
           이 친구를 인식했어요
         </h3>
-        <p style={{ margin: '6px 0 14px', font: '500 13px/1.5 var(--font-sans)', color: 'var(--label-alternative)' }}>
+        <p style={{ margin: '6px 0 14px', font: '500 13px/1.5 var(--font-sans)', color: 'var(--color-text-subtle)' }}>
           맞으면 자동으로 태그하고, 다르다면 수정할 수 있어요.
         </p>
 
@@ -3242,20 +3290,20 @@ function H3_AiAnalyzing() {
         </div>
 
         {/* Skeleton — more loading */}
-        <div style={{ marginTop: 14, padding: '12px 14px', background: 'var(--color-atomic-coolNeutral-98)', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ marginTop: 14, padding: '12px 14px', background: 'var(--color-bg-muted)', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
           <span style={{
             width: 16, height: 16, borderRadius: 999,
-            border: '2px solid var(--color-atomic-coolNeutral-90)',
+            border: '2px solid var(--color-border-strong)',
             borderTopColor: PawColors.brand,
             animation: 'paw-spin 0.8s linear infinite',
           }} />
-          <span style={{ font: '500 12px/1.4 var(--font-sans)', color: 'var(--label-alternative)' }}>
-            나머지 2장 분석 중... <b style={{color:'var(--label-strong)'}}>약 3초</b>
+          <span style={{ font: '500 12px/1.4 var(--font-sans)', color: 'var(--color-text-subtle)' }}>
+            나머지 2장 분석 중... <b style={{color:'var(--color-text-strong)'}}>약 3초</b>
           </span>
         </div>
       </div>
 
-      <div style={{ padding: '12px 16px 18px', borderTop: '1px solid var(--line-normal-neutral)', display: 'flex', gap: 8 }}>
+      <div style={{ padding: '12px 16px 18px', borderTop: '1px solid var(--color-border-default)', display: 'flex', gap: 8 }}>
         <PawButton variant="secondary" size="lg">직접 추가</PawButton>
         <PawButton variant="primary" size="lg" full iconTrailing="arrow-right">태그 확정</PawButton>
       </div>
@@ -3273,7 +3321,7 @@ function DetectRow({ species, name, sub, pct, primary }) {
     <div style={{
       display: 'flex', alignItems: 'center', gap: 12,
       padding: '12px 14px',
-      background: primary ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
+      background: primary ? PawColors.brandSoft : 'var(--color-bg-muted)',
       borderRadius: 12,
     }}>
       <span style={{
@@ -3283,17 +3331,17 @@ function DetectRow({ species, name, sub, pct, primary }) {
         font: '20px/1 -apple-system, "Segoe UI Emoji"',
       }}>{species}</span>
       <div style={{ flex: 1 }}>
-        <div style={{ font: '700 14px/1.2 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>{name}</div>
-        <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-alternative)', marginTop: 3 }}>{sub}</div>
+        <div style={{ font: '700 14px/1.2 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>{name}</div>
+        <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 3 }}>{sub}</div>
       </div>
       <div style={{
         font: '700 12px/1 var(--font-sans)',
-        color: primary ? PawColors.brand : 'var(--label-alternative)',
+        color: primary ? PawColors.brand : 'var(--color-text-subtle)',
         padding: '5px 10px',
         background: primary ? '#fff' : 'transparent',
         borderRadius: 999,
       }}>{pct}%</div>
-      <PawIcon name={primary ? 'circle-check-fill' : 'plus'} size={20} color={primary ? PawColors.brand : 'var(--label-alternative)'} />
+      <PawIcon name={primary ? 'circle-check-fill' : 'plus'} size={20} color={primary ? PawColors.brand : 'var(--color-text-subtle)'} />
     </div>
   );
 }
@@ -3344,7 +3392,7 @@ function H3_UploadConfirm() {
         {/* Pet picker (which pet is this?) — auto-detected highlighted */}
         <div style={{ marginTop: 16 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
-            <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>어떤 친구</span>
+            <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>어떤 친구</span>
             <PawChip tone="brandSoft" size="sm" leadingIcon="sparkle-fill">AI 자동</PawChip>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
@@ -3353,15 +3401,15 @@ function H3_UploadConfirm() {
               return (
                 <button key={p.id} onClick={() => setActivePet(p.id)} style={{
                   flex: 1, padding: '10px 8px',
-                  background: on ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
+                  background: on ? PawColors.brandSoft : 'var(--color-bg-muted)',
                   border: `1.5px solid ${on ? PawColors.brand : 'transparent'}`,
                   borderRadius: 12, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: 8,
                 }}>
                   <PetGlyph pet={p} size={36} />
                   <div style={{ textAlign: 'left' }}>
-                    <div style={{ font: `${on ? 700 : 600} 13px/1.2 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--label-strong)', letterSpacing: '-0.012em' }}>{p.name}</div>
-                    <div style={{ font: '500 10px/1 var(--font-sans)', color: 'var(--label-assistive)', marginTop: 3 }}>{p.breed}</div>
+                    <div style={{ font: `${on ? 700 : 600} 13px/1.2 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>{p.name}</div>
+                    <div style={{ font: '500 10px/1 var(--font-sans)', color: 'var(--color-text-assistive)', marginTop: 3 }}>{p.breed}</div>
                   </div>
                 </button>
               );
@@ -3372,7 +3420,7 @@ function H3_UploadConfirm() {
         {/* Tags — auto-tagged chips */}
         <div style={{ marginTop: 16 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
-            <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>태그</span>
+            <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>태그</span>
             <PawChip tone="brandSoft" size="sm" leadingIcon="sparkle-fill">AI 자동</PawChip>
             <span style={{ flex: 1 }} />
             <button style={{ font:'600 12px/1 var(--font-sans)', color:PawColors.brand, background:'transparent', border:'none', cursor:'pointer' }}>+ 추가</button>
@@ -3382,8 +3430,8 @@ function H3_UploadConfirm() {
               <span key={i} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 4,
                 padding: '0 4px 0 10px', height: 30,
-                background: t.tone === 'brand' ? PawColors.brand : t.tone === 'brandSoft' ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
-                color: t.tone === 'brand' ? '#fff' : t.tone === 'brandSoft' ? PawColors.brand : 'var(--label-normal)',
+                background: t.tone === 'brand' ? PawColors.brand : t.tone === 'brandSoft' ? PawColors.brandSoft : 'var(--color-bg-muted)',
+                color: t.tone === 'brand' ? '#fff' : t.tone === 'brandSoft' ? PawColors.brand : 'var(--color-text-default)',
                 borderRadius: 999,
                 font: '700 12px/1 var(--font-sans)',
               }}>
@@ -3403,7 +3451,7 @@ function H3_UploadConfirm() {
 
         {/* Caption */}
         <div style={{ marginTop: 16 }}>
-          <div style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em', marginBottom: 8 }}>캡션</div>
+          <div style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em', marginBottom: 8 }}>캡션</div>
           <textarea
             value={caption}
             onChange={e => setCaption(e.target.value)}
@@ -3411,21 +3459,21 @@ function H3_UploadConfirm() {
             style={{
               width: '100%',
               padding: '12px 14px',
-              background: 'var(--color-atomic-coolNeutral-98)',
+              background: 'var(--color-bg-muted)',
               border: 'none', borderRadius: 12,
               font: '500 14px/1.5 var(--font-sans)',
-              color: 'var(--label-strong)',
+              color: 'var(--color-text-strong)',
               outline: 'none', resize: 'none', boxSizing: 'border-box',
             }}
           />
-          <div style={{ display: 'flex', justifyContent: 'flex-end', font: '500 11px/1 var(--font-sans)', color: 'var(--label-assistive)', marginTop: 4 }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-assistive)', marginTop: 4 }}>
             {caption.length} / 500
           </div>
         </div>
 
         {/* Privacy */}
         <div style={{ marginTop: 8 }}>
-          <div style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em', marginBottom: 8 }}>공개 범위</div>
+          <div style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em', marginBottom: 8 }}>공개 범위</div>
           <div style={{ display: 'flex', gap: 6 }}>
             {[
               { id: 'public',    l: '전체',    i: 'eye' },
@@ -3436,8 +3484,8 @@ function H3_UploadConfirm() {
               return (
                 <button key={o.id} onClick={() => setPrivacy(o.id)} style={{
                   flex: 1, height: 40, borderRadius: 10, cursor: 'pointer',
-                  background: on ? 'var(--label-strong)' : 'var(--color-atomic-coolNeutral-98)',
-                  color: on ? '#fff' : 'var(--label-alternative)',
+                  background: on ? 'var(--color-text-strong)' : 'var(--color-bg-muted)',
+                  color: on ? '#fff' : 'var(--color-text-subtle)',
                   border: 'none',
                   font: `${on ? 700 : 600} 12px/1 var(--font-sans)`,
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 5,
@@ -3524,10 +3572,10 @@ function H3_UploadDone() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 6px 10px' }}>
               <PetGlyph pet={{emoji:'🐕',color:'#FFE6CF'}} size={32} />
               <div style={{ flex: 1 }}>
-                <div style={{ font: '700 13px/1.2 var(--font-sans)', color: 'var(--label-strong)' }}>몽이 · 한강공원</div>
-                <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-alternative)', marginTop: 3 }}>방금 · 시바 · 강아지</div>
+                <div style={{ font: '700 13px/1.2 var(--font-sans)', color: 'var(--color-text-strong)' }}>몽이 · 한강공원</div>
+                <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 3 }}>방금 · 시바 · 강아지</div>
               </div>
-              <PawIcon name="more-horizontal" size={20} color="var(--label-alternative)" />
+              <PawIcon name="more-horizontal" size={20} color="var(--color-text-subtle)" />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 4, borderRadius: 12, overflow: 'hidden' }}>
@@ -3545,8 +3593,8 @@ function H3_UploadDone() {
               <div style={{ flex: 1 }} />
               <PawIcon name="bookmark" size={22} />
             </div>
-            <div style={{ padding: '0 6px 4px', font: '500 12px/1.4 var(--font-sans)', color: 'var(--label-normal)' }}>
-              <b style={{color:'var(--label-strong)'}}>몽이아빠</b> 주말 한강공원 산책! 첫 잔디 데뷔 🐾
+            <div style={{ padding: '0 6px 4px', font: '500 12px/1.4 var(--font-sans)', color: 'var(--color-text-default)' }}>
+              <b style={{color:'var(--color-text-strong)'}}>몽이아빠</b> 주말 한강공원 산책! 첫 잔디 데뷔 🐾
             </div>
           </div>
         </div>
@@ -3561,7 +3609,7 @@ function H3_UploadDone() {
       <div style={{
         position: 'absolute', left: 16, right: 16, bottom: 80,
         padding: '14px 16px',
-        background: 'var(--label-strong)', color: '#fff',
+        background: 'var(--color-text-strong)', color: '#fff',
         borderRadius: 14,
         display: 'flex', alignItems: 'center', gap: 12,
         boxShadow: '0 10px 32px rgba(0,0,0,0.25)',
@@ -3619,16 +3667,16 @@ function PetInfoShell({ subStep, total = 5, children, onNext, canNext, nextLabel
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#fff' }}>
       {/* 헤더 */}
       <div style={{ padding: '14px 20px 8px' }}>
-        <div style={{ height: 4, background: 'var(--color-atomic-coolNeutral-95)', borderRadius: 999, overflow: 'hidden' }}>
+        <div style={{ height: 4, background: 'var(--color-surface-track)', borderRadius: 999, overflow: 'hidden' }}>
           <div style={{ width: '66%', height: '100%', background: PawColors.brand, borderRadius: 999 }} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }}>
-          <span style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-alternative)', letterSpacing: '0.02em' }}>STEP 2 / 3</span>
+          <span style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-subtle)', letterSpacing: '0.02em' }}>STEP 2 / 3</span>
           <div style={{ display: 'flex', gap: 5 }}>
             {Array.from({ length: total }).map((_, i) => (
               <div key={i} style={{
                 width: i < subStep ? 18 : 6, height: 6, borderRadius: 999,
-                background: i < subStep ? PawColors.brand : 'var(--color-atomic-coolNeutral-90)',
+                background: i < subStep ? PawColors.brand : 'var(--color-border-strong)',
                 transition: 'all .2s',
               }} />
             ))}
@@ -3640,7 +3688,7 @@ function PetInfoShell({ subStep, total = 5, children, onNext, canNext, nextLabel
         {children}
       </div>
       {/* 하단 버튼 */}
-      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--line-normal-neutral)', background: '#fff' }}>
+      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: '#fff' }}>
         <PawButton full size="lg" disabled={!canNext}>{nextLabel}</PawButton>
       </div>
     </div>
@@ -3653,8 +3701,8 @@ function PetInfoStep1_Name() {
   return (
     <PetInfoShell subStep={1} canNext={petName.length >= 1}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px 24px 40px' }}>
-        <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--label-alternative)', marginBottom: 10 }}>반려동물 이름</div>
-        <h1 style={{ margin: '0 0 32px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--label-strong)' }}>
+        <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginBottom: 10 }}>반려동물 이름</div>
+        <h1 style={{ margin: '0 0 32px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--color-text-strong)' }}>
           우리 아이의 이름은 뭔가요?
         </h1>
         <div style={{ position: 'relative' }}>
@@ -3662,10 +3710,10 @@ function PetInfoStep1_Name() {
             value={petName} onChange={e => setPetName(e.target.value)} maxLength={20}
             style={{
               width: '100%', height: 56, padding: '0 50px 0 18px',
-              background: 'var(--color-atomic-coolNeutral-98)',
+              background: 'var(--color-bg-muted)',
               border: `2px solid ${petName.length >= 1 ? PawColors.brand : 'transparent'}`,
               borderRadius: 16, outline: 'none', boxSizing: 'border-box',
-              font: '600 16px/1 var(--font-sans)', color: 'var(--label-strong)',
+              font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-strong)',
               transition: 'border-color .12s',
             }}
           />
@@ -3675,7 +3723,7 @@ function PetInfoStep1_Name() {
             </span>
           )}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 6, font: '500 11px/1 var(--font-sans)', color: petName.length >= 1 ? PawColors.brand : 'var(--label-assistive)' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 6, font: '500 11px/1 var(--font-sans)', color: petName.length >= 1 ? PawColors.brand : 'var(--color-text-assistive)' }}>
           {petName.length}/20
         </div>
       </div>
@@ -3693,8 +3741,8 @@ function PetInfoStep2_Breed() {
   return (
     <PetInfoShell subStep={2} canNext={!!breed}>
       <div style={{ padding: '20px 24px 0', flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-        <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--label-alternative)', marginBottom: 10 }}>품종</div>
-        <h1 style={{ margin: '0 0 28px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--label-strong)' }}>
+        <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginBottom: 10 }}>품종</div>
+        <h1 style={{ margin: '0 0 28px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--color-text-strong)' }}>
           어떤 친구인가요?
         </h1>
 
@@ -3705,13 +3753,13 @@ function PetInfoStep2_Breed() {
             return (
               <button key={s.id} onClick={() => { setSpecies(s.id); setBreed(''); }} style={{
                 padding: '20px 0', borderRadius: 18, cursor: 'pointer',
-                background: on ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
+                background: on ? PawColors.brandSoft : 'var(--color-bg-muted)',
                 border: `2px solid ${on ? PawColors.brand : 'transparent'}`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
                 transition: 'all .12s',
               }}>
                 <span style={{ font: '40px/1 -apple-system, "Segoe UI Emoji"' }}>{s.emoji}</span>
-                <span style={{ font: `${on ? 800 : 700} 14px/1 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--label-strong)' }}>{s.label}</span>
+                <span style={{ font: `${on ? 800 : 700} 14px/1 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--color-text-strong)' }}>{s.label}</span>
               </button>
             );
           })}
@@ -3720,18 +3768,18 @@ function PetInfoStep2_Breed() {
         {/* 품종 선택 버튼 */}
         <button onClick={() => setSheetOpen(true)} style={{
           width: '100%', height: 56, padding: '0 18px',
-          background: breed ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
+          background: breed ? PawColors.brandSoft : 'var(--color-bg-muted)',
           border: `2px solid ${breed ? PawColors.brand : 'transparent'}`,
           borderRadius: 16, cursor: 'pointer', boxSizing: 'border-box',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           transition: 'all .12s',
         }}>
-          <span style={{ font: `${breed ? 700 : 500} 16px/1 var(--font-sans)`, color: breed ? PawColors.brandInk : 'var(--label-assistive)' }}>
+          <span style={{ font: `${breed ? 700 : 500} 16px/1 var(--font-sans)`, color: breed ? PawColors.brandInk : 'var(--color-text-assistive)' }}>
             {breed || '품종을 선택해주세요'}
           </span>
           {breed
             ? <PawIcon name="circle-check-fill" size={22} color={PawColors.brand} />
-            : <PawIcon name="chevron-down" size={18} color="var(--label-alternative)" />}
+            : <PawIcon name="chevron-down" size={18} color="var(--color-text-subtle)" />}
         </button>
       </div>
 
@@ -3741,10 +3789,10 @@ function PetInfoStep2_Breed() {
           <div onClick={() => setSheetOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)' }} />
           <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: '#fff', borderRadius: '20px 20px 0 0', maxHeight: '70%', display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
-              <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--color-atomic-coolNeutral-90)' }} />
+              <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--color-border-strong)' }} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 20px 12px' }}>
-              <span style={{ font: '800 17px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.018em' }}>
+              <span style={{ font: '800 17px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.018em' }}>
                 {species === 'dog' ? '강아지' : '고양이'} 품종 선택
               </span>
               <PawIconBtn name="close" iconSize={18} onClick={() => setSheetOpen(false)} />
@@ -3756,7 +3804,7 @@ function PetInfoStep2_Breed() {
                   background: breed === b ? PawColors.brandSoft : 'transparent',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   font: `${breed === b ? 700 : 500} 15px/1 var(--font-sans)`,
-                  color: breed === b ? PawColors.brandInk : 'var(--label-normal)',
+                  color: breed === b ? PawColors.brandInk : 'var(--color-text-default)',
                   letterSpacing: '-0.01em',
                 }}>
                   {b}
@@ -3810,7 +3858,7 @@ function WheelPickerCol({ items, value, onChange, suffix }) {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               scrollSnapAlign: 'center',
               font: `${sel ? 700 : 400} 18px/1 var(--font-sans)`,
-              color: sel ? 'var(--label-strong)' : 'var(--label-assistive)',
+              color: sel ? 'var(--color-text-strong)' : 'var(--color-text-assistive)',
               letterSpacing: '-0.012em',
               userSelect: 'none',
             }}>
@@ -3855,26 +3903,26 @@ function PetInfoStep3_Birth() {
   return (
     <PetInfoShell subStep={3} canNext={ok}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px 24px 40px' }}>
-        <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--label-alternative)', marginBottom: 10 }}>생년월일</div>
-        <h1 style={{ margin: '0 0 32px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--label-strong)' }}>
+        <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginBottom: 10 }}>생년월일</div>
+        <h1 style={{ margin: '0 0 32px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--color-text-strong)' }}>
           언제 태어났나요?
         </h1>
 
         {/* 날짜 선택 버튼 — 하나로 통합 */}
         <button onClick={handleOpen} style={{
           width: '100%', height: 56, padding: '0 18px',
-          background: ok ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
+          background: ok ? PawColors.brandSoft : 'var(--color-bg-muted)',
           border: `2px solid ${ok ? PawColors.brand : 'transparent'}`,
           borderRadius: 16, cursor: 'pointer', boxSizing: 'border-box',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           transition: 'all .12s',
         }}>
-          <span style={{ font: `${ok ? 700 : 500} 16px/1 var(--font-sans)`, color: ok ? PawColors.brandInk : 'var(--label-assistive)' }}>
+          <span style={{ font: `${ok ? 700 : 500} 16px/1 var(--font-sans)`, color: ok ? PawColors.brandInk : 'var(--color-text-assistive)' }}>
             {ok ? `${year}년 ${month}월 ${day}일` : '생년월일 선택'}
           </span>
           {ok
             ? <PawIcon name="circle-check-fill" size={22} color={PawColors.brand} />
-            : <PawIcon name="chevron-down" size={18} color="var(--label-alternative)" />}
+            : <PawIcon name="chevron-down" size={18} color="var(--color-text-subtle)" />}
         </button>
 
         {/* 미리보기 */}
@@ -3892,11 +3940,11 @@ function PetInfoStep3_Birth() {
           <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: '#fff', borderRadius: '20px 20px 0 0' }}>
             {/* 핸들 */}
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
-              <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--color-atomic-coolNeutral-90)' }} />
+              <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--color-border-strong)' }} />
             </div>
             {/* 헤더 */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 20px 12px' }}>
-              <span style={{ font: '700 16px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.015em' }}>생년월일 선택</span>
+              <span style={{ font: '700 16px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.015em' }}>생년월일 선택</span>
               <button onClick={() => setOpen(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', font: '700 15px/1 var(--font-sans)', color: PawColors.brand, padding: '4px 0' }}>완료</button>
             </div>
 
@@ -3905,7 +3953,7 @@ function PetInfoStep3_Birth() {
               {/* 중앙 선택 하이라이트 */}
               <div style={{
                 position: 'absolute', top: 44 * 2, left: 20, right: 20, height: 44,
-                background: 'var(--color-atomic-coolNeutral-98)', borderRadius: 12,
+                background: 'var(--color-bg-muted)', borderRadius: 12,
                 pointerEvents: 'none', zIndex: 1,
               }} />
               <WheelPickerCol items={YEARS}  value={year}  onChange={setYear}         suffix="년" />
@@ -3923,13 +3971,13 @@ function PetInfoStep3_Birth() {
 function PetInfoStep4_Gender() {
   const [gender, setGender] = React.useState(null);
   const options = [
-    { id: 'male',   label: '남아', desc: '수컷이에요', accent: '#4A9EFF', soft: '#EDF5FF',
+    { id: 'male',   label: '남아', desc: '수컷이에요', accent: 'var(--color-gender-male)', soft: 'var(--color-gender-male-surface)',
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="10" cy="14" r="6"/><line x1="14.9" y1="9.1" x2="21" y2="3"/><polyline points="17 3 21 3 21 7"/>
         </svg>
       )},
-    { id: 'female', label: '여아', desc: '암컷이에요', accent: '#F472B6', soft: '#FFF0F7',
+    { id: 'female', label: '여아', desc: '암컷이에요', accent: 'var(--color-gender-female)', soft: 'var(--color-gender-female-surface)',
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/>
@@ -3939,8 +3987,8 @@ function PetInfoStep4_Gender() {
   return (
     <PetInfoShell subStep={4} canNext={!!gender}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '20px 24px 40px' }}>
-        <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--label-alternative)', marginBottom: 10 }}>성별</div>
-        <h1 style={{ margin: '0 0 32px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--label-strong)' }}>
+        <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginBottom: 10 }}>성별</div>
+        <h1 style={{ margin: '0 0 32px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--color-text-strong)' }}>
           성별이 무엇인가요?
         </h1>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -3950,7 +3998,7 @@ function PetInfoStep4_Gender() {
               <button key={g.id} onClick={() => setGender(g.id)} style={{
                 width: '100%', padding: '18px 20px',
                 borderRadius: 20, cursor: 'pointer',
-                background: on ? g.soft : 'var(--color-atomic-coolNeutral-98)',
+                background: on ? g.soft : 'var(--color-bg-muted)',
                 border: `2px solid ${on ? g.accent : 'transparent'}`,
                 display: 'flex', alignItems: 'center', gap: 16,
                 transition: 'all .15s', textAlign: 'left',
@@ -3959,7 +4007,7 @@ function PetInfoStep4_Gender() {
                 <span style={{
                   width: 52, height: 52, borderRadius: 16, flexShrink: 0,
                   background: on ? g.accent : '#fff',
-                  border: `1.5px solid ${on ? 'transparent' : 'var(--line-normal-neutral)'}`,
+                  border: `1.5px solid ${on ? 'transparent' : 'var(--color-border-default)'}`,
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                   color: on ? '#fff' : g.accent,
                   boxShadow: on ? `0 4px 14px ${g.accent}44` : 'none',
@@ -3967,13 +4015,13 @@ function PetInfoStep4_Gender() {
                 }}>{g.icon}</span>
                 {/* 텍스트 */}
                 <div style={{ flex: 1 }}>
-                  <div style={{ font: '800 18px/1 var(--font-sans)', letterSpacing: '-0.018em', color: 'var(--label-strong)' }}>{g.label}</div>
-                  <div style={{ font: '500 13px/1 var(--font-sans)', color: 'var(--label-alternative)', marginTop: 5 }}>{g.desc}</div>
+                  <div style={{ font: '800 18px/1 var(--font-sans)', letterSpacing: '-0.018em', color: 'var(--color-text-strong)' }}>{g.label}</div>
+                  <div style={{ font: '500 13px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 5 }}>{g.desc}</div>
                 </div>
                 {/* 라디오 */}
                 <span style={{
                   width: 22, height: 22, borderRadius: 999, flexShrink: 0,
-                  border: `2px solid ${on ? g.accent : 'var(--line-normal-neutral)'}`,
+                  border: `2px solid ${on ? g.accent : 'var(--color-border-default)'}`,
                   background: on ? g.accent : 'transparent',
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'all .15s',
@@ -3999,7 +4047,7 @@ function PetInfoStep5_Photo() {
     { label: '성별',    value: '남아' },
   ];
   const EditIcon = () => (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--label-assistive)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-assistive)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
     </svg>
@@ -4007,13 +4055,13 @@ function PetInfoStep5_Photo() {
   return (
     <PetInfoShell subStep={5} canNext={true} nextLabel="등록 완료">
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px 24px 32px' }}>
-        <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--label-alternative)', marginBottom: 10 }}>최종 확인</div>
-        <h1 style={{ margin: '0 0 24px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--label-strong)' }}>
+        <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginBottom: 10 }}>최종 확인</div>
+        <h1 style={{ margin: '0 0 24px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--color-text-strong)' }}>
           정보를 확인해주세요
         </h1>
 
         {/* 프로필 카드 */}
-        <div style={{ borderRadius: 22, overflow: 'hidden', border: '1px solid var(--line-normal-neutral)' }}>
+        <div style={{ borderRadius: 22, overflow: 'hidden', border: '1px solid var(--color-border-default)' }}>
 
           {/* 사진 업로드 + 이름 헤더 */}
           <div style={{ padding: '24px 20px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, background: PawColors.brandSoft }}>
@@ -4033,10 +4081,10 @@ function PetInfoStep5_Photo() {
                 {picked ? '변경' : '사진 추가'}
               </span>
             </button>
-            <div style={{ font: '800 18px/1 var(--font-sans)', letterSpacing: '-0.02em', color: 'var(--label-strong)' }}>
+            <div style={{ font: '800 18px/1 var(--font-sans)', letterSpacing: '-0.02em', color: 'var(--color-text-strong)' }}>
               몽이
             </div>
-            <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-assistive)' }}>
+            <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-assistive)' }}>
               사진은 선택사항이에요
             </div>
           </div>
@@ -4046,12 +4094,12 @@ function PetInfoStep5_Photo() {
             {rows.map((row, i) => (
               <div key={i} style={{
                 display: 'flex', alignItems: 'center', padding: '14px 20px',
-                borderBottom: i < rows.length - 1 ? '1px solid var(--line-normal-neutral)' : 'none',
+                borderBottom: i < rows.length - 1 ? '1px solid var(--color-border-default)' : 'none',
               }}>
-                <span style={{ width: 72, font: '500 13px/1 var(--font-sans)', color: 'var(--label-alternative)', flexShrink: 0 }}>
+                <span style={{ width: 72, font: '500 13px/1 var(--font-sans)', color: 'var(--color-text-subtle)', flexShrink: 0 }}>
                   {row.label}
                 </span>
-                <span style={{ flex: 1, font: '600 15px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.01em' }}>
+                <span style={{ flex: 1, font: '600 15px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.01em' }}>
                   {row.value}
                 </span>
                 <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 2px', display: 'flex', alignItems: 'center' }}>
@@ -4062,7 +4110,7 @@ function PetInfoStep5_Photo() {
           </div>
         </div>
 
-        <p style={{ margin: '14px 0 0', font: '500 12px/1.5 var(--font-sans)', color: 'var(--label-assistive)', textAlign: 'center' }}>
+        <p style={{ margin: '14px 0 0', font: '500 12px/1.5 var(--font-sans)', color: 'var(--color-text-assistive)', textAlign: 'center' }}>
           등록 후에도 프로필에서 수정할 수 있어요
         </p>
       </div>
@@ -4090,17 +4138,17 @@ function OnboardingPetInfo() {
 
       {/* 진행 바 */}
       <div style={{ padding: '14px 20px 8px' }}>
-        <div style={{ height: 4, background: 'var(--color-atomic-coolNeutral-95)', borderRadius: 999, overflow: 'hidden' }}>
+        <div style={{ height: 4, background: 'var(--color-surface-track)', borderRadius: 999, overflow: 'hidden' }}>
           <div style={{ width: '66%', height: '100%', background: PawColors.brand, borderRadius: 999 }} />
         </div>
-        <div style={{ font: '500 11px/1.4 var(--font-sans)', color: 'var(--label-alternative)', marginTop: 8, letterSpacing: '0.02em' }}>STEP 2 / 3</div>
+        <div style={{ font: '500 11px/1.4 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 8, letterSpacing: '0.02em' }}>STEP 2 / 3</div>
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 20px' }}>
-        <h1 style={{ margin: 0, font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--label-strong)' }}>
+        <h1 style={{ margin: 0, font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--color-text-strong)' }}>
           반려동물을 소개해줘요
         </h1>
-        <p style={{ margin: '8px 0 0', font: '500 14px/1.5 var(--font-sans)', color: 'var(--label-alternative)', letterSpacing: '-0.005em' }}>
+        <p style={{ margin: '8px 0 0', font: '500 14px/1.5 var(--font-sans)', color: 'var(--color-text-subtle)', letterSpacing: '-0.005em' }}>
           나중에 프로필에서 언제든 수정할 수 있어요
         </p>
 
@@ -4109,7 +4157,7 @@ function OnboardingPetInfo() {
           <div style={{ position: 'relative' }}>
             <div style={{
               width: 88, height: 88, borderRadius: 999,
-              background: 'var(--color-atomic-coolNeutral-96)',
+              background: 'var(--color-surface-raised)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               font: '44px/1 -apple-system, "Segoe UI Emoji"',
             }}>
@@ -4127,8 +4175,8 @@ function OnboardingPetInfo() {
             </button>
             <span style={{
               position: 'absolute', top: -6, right: -6,
-              font: '500 10px/1 var(--font-sans)', color: 'var(--label-assistive)',
-              background: 'var(--color-atomic-coolNeutral-97)', borderRadius: 999,
+              font: '500 10px/1 var(--font-sans)', color: 'var(--color-text-assistive)',
+              background: 'var(--color-surface-raised)', borderRadius: 999,
               padding: '3px 6px',
             }}>선택</span>
           </div>
@@ -4136,7 +4184,7 @@ function OnboardingPetInfo() {
 
         {/* 동물 종 */}
         <div style={{ marginBottom: 20 }}>
-          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>
+          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
             동물 종 <span style={{ color: PawColors.brand }}>*</span>
           </label>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -4145,13 +4193,13 @@ function OnboardingPetInfo() {
               return (
                 <button key={s.id} onClick={() => { setSpecies(s.id); setBreed(''); }} style={{
                   padding: '18px 0', borderRadius: 16, cursor: 'pointer',
-                  background: on ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
+                  background: on ? PawColors.brandSoft : 'var(--color-bg-muted)',
                   border: `2px solid ${on ? PawColors.brand : 'transparent'}`,
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
                   transition: 'all .12s',
                 }}>
                   <span style={{ font: '36px/1 -apple-system, "Segoe UI Emoji"' }}>{s.emoji}</span>
-                  <span style={{ font: `${on ? 800 : 700} 14px/1 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--label-strong)', letterSpacing: '-0.012em' }}>
+                  <span style={{ font: `${on ? 800 : 700} 14px/1 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
                     {s.label}
                   </span>
                 </button>
@@ -4162,40 +4210,40 @@ function OnboardingPetInfo() {
 
         {/* 품종 */}
         <div style={{ marginBottom: 20 }}>
-          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>
+          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
             품종 <span style={{ color: PawColors.brand }}>*</span>
           </label>
           <button onClick={() => setSheetOpen(true)} style={{
             width: '100%', height: 52, padding: '0 14px',
-            background: 'var(--color-atomic-coolNeutral-98)',
+            background: 'var(--color-bg-muted)',
             border: `1.5px solid ${breed ? PawColors.brand : 'transparent'}`,
             borderRadius: 14, cursor: 'pointer', boxSizing: 'border-box',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             transition: 'border-color .12s',
           }}>
-            <span style={{ font: `${breed ? 600 : 500} 15px/1 var(--font-sans)`, color: breed ? 'var(--label-strong)' : 'var(--label-assistive)' }}>
+            <span style={{ font: `${breed ? 600 : 500} 15px/1 var(--font-sans)`, color: breed ? 'var(--color-text-strong)' : 'var(--color-text-assistive)' }}>
               {breed || '품종을 선택해주세요'}
             </span>
-            <PawIcon name="chevron-down" size={16} color="var(--label-alternative)" />
+            <PawIcon name="chevron-down" size={16} color="var(--color-text-subtle)" />
           </button>
         </div>
 
         {/* 이름 */}
         <div style={{ marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 8 }}>
-            <label style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>
+            <label style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
               이름 <span style={{ color: PawColors.brand }}>*</span>
             </label>
-            <span style={{ font: '500 11px/1 var(--font-sans)', color: petName.length > 0 ? PawColors.brand : 'var(--label-assistive)' }}>{petName.length}/20</span>
+            <span style={{ font: '500 11px/1 var(--font-sans)', color: petName.length > 0 ? PawColors.brand : 'var(--color-text-assistive)' }}>{petName.length}/20</span>
           </div>
           <input
             value={petName} onChange={e => setPetName(e.target.value)} maxLength={20}
             style={{
               width: '100%', height: 52, padding: '0 14px',
-              background: 'var(--color-atomic-coolNeutral-98)',
+              background: 'var(--color-bg-muted)',
               border: `1.5px solid ${petName.length >= 1 ? PawColors.brand : 'transparent'}`,
               borderRadius: 14, outline: 'none', boxSizing: 'border-box',
-              font: '500 15px/1 var(--font-sans)', color: 'var(--label-strong)',
+              font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-strong)',
               transition: 'border-color .12s',
             }}
           />
@@ -4203,7 +4251,7 @@ function OnboardingPetInfo() {
 
         {/* 성별 */}
         <div style={{ marginBottom: 20 }}>
-          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>
+          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
             성별 <span style={{ color: PawColors.brand }}>*</span>
           </label>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
@@ -4212,8 +4260,8 @@ function OnboardingPetInfo() {
               return (
                 <button key={g.id} onClick={() => setGender(g.id)} style={{
                   height: 52, borderRadius: 14, cursor: 'pointer', border: 'none',
-                  background: on ? 'var(--label-strong)' : 'var(--color-atomic-coolNeutral-98)',
-                  color: on ? '#fff' : 'var(--label-normal)',
+                  background: on ? 'var(--color-text-strong)' : 'var(--color-bg-muted)',
+                  color: on ? '#fff' : 'var(--color-text-default)',
                   font: `${on ? 700 : 600} 15px/1 var(--font-sans)`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                   transition: 'all .12s',
@@ -4228,7 +4276,7 @@ function OnboardingPetInfo() {
 
         {/* 생년월일 */}
         <div style={{ marginBottom: 8 }}>
-          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>
+          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
             생년월일 <span style={{ color: PawColors.brand }}>*</span>
           </label>
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 8 }}>
@@ -4245,10 +4293,10 @@ function OnboardingPetInfo() {
                 inputMode="numeric"
                 style={{
                   height: 52, padding: '0 14px', textAlign: 'center',
-                  background: 'var(--color-atomic-coolNeutral-98)',
+                  background: 'var(--color-bg-muted)',
                   border: `1.5px solid ${f.val.length === f.max ? PawColors.brand : 'transparent'}`,
                   borderRadius: 14, outline: 'none', boxSizing: 'border-box',
-                  font: '600 15px/1 var(--font-sans)', color: 'var(--label-strong)',
+                  font: '600 15px/1 var(--font-sans)', color: 'var(--color-text-strong)',
                   transition: 'border-color .12s',
                 }}
               />
@@ -4258,7 +4306,7 @@ function OnboardingPetInfo() {
       </div>
 
       {/* 하단 버튼 */}
-      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--line-normal-neutral)', background: '#fff' }}>
+      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: '#fff' }}>
         <PawButton full size="lg" disabled={!canNext}>몽냥 시작하기</PawButton>
       </div>
 
@@ -4275,11 +4323,11 @@ function OnboardingPetInfo() {
           }}>
             {/* 핸들 */}
             <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
-              <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--color-atomic-coolNeutral-90)' }} />
+              <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--color-border-strong)' }} />
             </div>
             {/* 헤더 */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 20px 12px' }}>
-              <span style={{ font: '800 17px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.018em' }}>
+              <span style={{ font: '800 17px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.018em' }}>
                 {species === 'dog' ? '강아지' : '고양이'} 품종 선택
               </span>
               <PawIconBtn name="close" iconSize={18} onClick={() => setSheetOpen(false)} />
@@ -4292,7 +4340,7 @@ function OnboardingPetInfo() {
                   border: 'none', cursor: 'pointer', textAlign: 'left',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   font: `${breed === b ? 700 : 500} 15px/1 var(--font-sans)`,
-                  color: breed === b ? PawColors.brandInk : 'var(--label-normal)',
+                  color: breed === b ? PawColors.brandInk : 'var(--color-text-default)',
                   letterSpacing: '-0.01em',
                   transition: 'background .1s',
                 }}>
@@ -4324,10 +4372,10 @@ function OnboardingNoPetProfile() {
 
       {/* 진행 바 */}
       <div style={{ padding: '14px 20px 8px' }}>
-        <div style={{ height: 4, background: 'var(--color-atomic-coolNeutral-95)', borderRadius: 999, overflow: 'hidden' }}>
+        <div style={{ height: 4, background: 'var(--color-surface-track)', borderRadius: 999, overflow: 'hidden' }}>
           <div style={{ width: '66%', height: '100%', background: PawColors.brand, borderRadius: 999 }} />
         </div>
-        <div style={{ font: '500 11px/1.4 var(--font-sans)', color: 'var(--label-alternative)', marginTop: 8, letterSpacing: '0.02em' }}>STEP 2 / 3</div>
+        <div style={{ font: '500 11px/1.4 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 8, letterSpacing: '0.02em' }}>STEP 2 / 3</div>
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 20px' }}>
@@ -4335,12 +4383,12 @@ function OnboardingNoPetProfile() {
           margin: 0,
           font: '800 24px/1.35 var(--font-sans)',
           letterSpacing: '-0.024em',
-          color: 'var(--label-strong)',
+          color: 'var(--color-text-strong)',
         }}>프로필을 만들어볼게요</h1>
         <p style={{
           margin: '8px 0 0',
           font: '500 14px/1.5 var(--font-sans)',
-          color: 'var(--label-alternative)',
+          color: 'var(--color-text-subtle)',
           letterSpacing: '-0.005em',
         }}>나중에 설정에서 언제든 바꿀 수 있어요</p>
 
@@ -4349,10 +4397,10 @@ function OnboardingNoPetProfile() {
           <div style={{ position: 'relative' }}>
             <div style={{
               width: 96, height: 96, borderRadius: 999,
-              background: 'var(--color-atomic-coolNeutral-96)',
+              background: 'var(--color-surface-raised)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <PawIcon name="person" size={44} color="var(--color-atomic-coolNeutral-80)" />
+              <PawIcon name="person" size={44} color="var(--color-icon-inactive)" />
             </div>
             <button style={{
               position: 'absolute', right: 0, bottom: 0,
@@ -4370,8 +4418,8 @@ function OnboardingNoPetProfile() {
         {/* 닉네임 */}
         <div style={{ marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
-            <label style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>이름</label>
-            <span style={{ font: '500 11px/1 var(--font-sans)', color: nicknameOk ? PawColors.brand : 'var(--label-assistive)' }}>
+            <label style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>이름</label>
+            <span style={{ font: '500 11px/1 var(--font-sans)', color: nicknameOk ? PawColors.brand : 'var(--color-text-assistive)' }}>
               {nickname.length}/30
             </span>
           </div>
@@ -4383,10 +4431,10 @@ function OnboardingNoPetProfile() {
               maxLength={30}
               style={{
                 width: '100%', height: 56, padding: '0 44px 0 14px',
-                background: 'var(--color-atomic-coolNeutral-98)',
-                border: `2px solid ${nicknameOk ? PawColors.brand : nickname.length > 0 && !nicknameValid ? 'var(--status-destructive)' : 'transparent'}`,
+                background: 'var(--color-bg-muted)',
+                border: `2px solid ${nicknameOk ? PawColors.brand : nickname.length > 0 && !nicknameValid ? 'var(--color-status-error)' : 'transparent'}`,
                 borderRadius: 16, outline: 'none', boxSizing: 'border-box',
-                font: '600 16px/1 var(--font-sans)', color: 'var(--label-strong)',
+                font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-strong)',
                 transition: 'border-color .12s',
               }}
             />
@@ -4397,7 +4445,7 @@ function OnboardingNoPetProfile() {
             )}
           </div>
           {nickname.length > 0 && !nicknameValid && (
-            <div style={{ marginTop: 5, font: '500 11px/1.4 var(--font-sans)', color: 'var(--status-destructive)' }}>
+            <div style={{ marginTop: 5, font: '500 11px/1.4 var(--font-sans)', color: 'var(--color-status-error)' }}>
               한글, 영문, 숫자만 사용이 가능해요.
             </div>
           )}
@@ -4406,17 +4454,17 @@ function OnboardingNoPetProfile() {
         {/* 고유명 (핸들) */}
         <div style={{ marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
-            <label style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>
+            <label style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
               고유명
             </label>
-            <span style={{ font: '500 11px/1 var(--font-sans)', color: handleOk ? PawColors.brand : 'var(--label-assistive)' }}>
+            <span style={{ font: '500 11px/1 var(--font-sans)', color: handleOk ? PawColors.brand : 'var(--color-text-assistive)' }}>
               {handle.length}/30
             </span>
           </div>
           <div style={{ position: 'relative' }}>
             <span style={{
               position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-              font: '600 16px/1 var(--font-sans)', color: 'var(--label-alternative)',
+              font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-subtle)',
               pointerEvents: 'none',
             }}>@</span>
             <input
@@ -4426,10 +4474,10 @@ function OnboardingNoPetProfile() {
               maxLength={30}
               style={{
                 width: '100%', height: 56, padding: '0 44px 0 30px',
-                background: 'var(--color-atomic-coolNeutral-98)',
-                border: `2px solid ${handleOk ? PawColors.brand : handle.length > 0 && !handleOk ? 'var(--status-destructive)' : 'transparent'}`,
+                background: 'var(--color-bg-muted)',
+                border: `2px solid ${handleOk ? PawColors.brand : handle.length > 0 && !handleOk ? 'var(--color-status-error)' : 'transparent'}`,
                 borderRadius: 16, outline: 'none', boxSizing: 'border-box',
-                font: '600 16px/1 var(--font-sans)', color: 'var(--label-strong)',
+                font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-strong)',
                 letterSpacing: '0.005em',
                 transition: 'border-color .12s',
               }}
@@ -4441,7 +4489,7 @@ function OnboardingNoPetProfile() {
             )}
           </div>
           {handle.length > 0 && !handleOk && (
-            <div style={{ marginTop: 5, font: '500 11px/1.4 var(--font-sans)', color: 'var(--status-destructive)' }}>
+            <div style={{ marginTop: 5, font: '500 11px/1.4 var(--font-sans)', color: 'var(--color-status-error)' }}>
               영문 소문자, 숫자, _(밑줄), -(하이픈), .(점)만 사용할 수 있어요
             </div>
           )}
@@ -4450,31 +4498,31 @@ function OnboardingNoPetProfile() {
         {/* 미리보기 카드 */}
         <div style={{
             padding: '14px 16px', borderRadius: 16,
-            background: 'var(--color-atomic-coolNeutral-98)',
+            background: 'var(--color-bg-muted)',
             display: 'flex', alignItems: 'center', gap: 12,
-            border: '1px solid var(--line-normal-neutral)',
+            border: '1px solid var(--color-border-default)',
           }}>
             <div style={{
               width: 44, height: 44, borderRadius: 999,
-              background: 'var(--color-atomic-coolNeutral-90)',
+              background: 'var(--color-border-strong)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}>
-              <PawIcon name="person" size={22} color="var(--color-atomic-coolNeutral-70)" />
+              <PawIcon name="person" size={22} color="var(--color-icon-inactive)" />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ font: '700 14px/1.2 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.012em' }}>
+              <div style={{ font: '700 14px/1.2 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
                 {nickname || '몽냥'}
               </div>
-              <div style={{ font: '500 12px/1 var(--font-sans)', color: 'var(--label-assistive)', marginTop: 3 }}>
+              <div style={{ font: '500 12px/1 var(--font-sans)', color: 'var(--color-text-assistive)', marginTop: 3 }}>
                 @{handle || 'mongnyang'}
               </div>
             </div>
-            <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-assistive)' }}>미리보기</div>
+            <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-assistive)' }}>미리보기</div>
         </div>
       </div>
 
       {/* 하단 버튼 */}
-      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--line-normal-neutral)', background: '#fff' }}>
+      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: '#fff' }}>
         <PawButton full size="lg" disabled={!canNext}>
           몽냥 시작하기
         </PawButton>
@@ -4495,10 +4543,10 @@ function OnboardingHasPet() {
 
       {/* 진행 바 */}
       <div style={{ padding: '14px 20px 8px' }}>
-        <div style={{ height: 4, background: 'var(--color-atomic-coolNeutral-95)', borderRadius: 999, overflow: 'hidden' }}>
+        <div style={{ height: 4, background: 'var(--color-surface-track)', borderRadius: 999, overflow: 'hidden' }}>
           <div style={{ width: '33%', height: '100%', background: PawColors.brand, borderRadius: 999 }} />
         </div>
-        <div style={{ font: '500 11px/1.4 var(--font-sans)', color: 'var(--label-alternative)', marginTop: 8, letterSpacing: '0.02em' }}>STEP 1 / 3</div>
+        <div style={{ font: '500 11px/1.4 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 8, letterSpacing: '0.02em' }}>STEP 1 / 3</div>
       </div>
 
       {/* 본문 */}
@@ -4507,12 +4555,12 @@ function OnboardingHasPet() {
           margin: 0,
           font: '800 24px/1.35 var(--font-sans)',
           letterSpacing: '-0.024em',
-          color: 'var(--label-strong)',
+          color: 'var(--color-text-strong)',
         }}>지금 반려동물과<br/>함께하고 계신가요?</h1>
         <p style={{
           margin: '8px 0 0',
           font: '500 14px/1.5 var(--font-sans)',
-          color: 'var(--label-alternative)',
+          color: 'var(--color-text-subtle)',
           letterSpacing: '-0.005em',
         }}>맞춤 피드와 추천을 위해 확인해요</p>
 
@@ -4522,7 +4570,7 @@ function OnboardingHasPet() {
           {/* 있어요 */}
           <button onClick={() => setSelected('yes')} style={{
             width: '100%', padding: '22px 20px',
-            background: selected === 'yes' ? PawColors.brandSoft : 'var(--color-atomic-coolNeutral-98)',
+            background: selected === 'yes' ? PawColors.brandSoft : 'var(--color-bg-muted)',
             border: `2px solid ${selected === 'yes' ? PawColors.brand : 'transparent'}`,
             borderRadius: 20, cursor: 'pointer', textAlign: 'left',
             display: 'flex', alignItems: 'center', gap: 16,
@@ -4530,7 +4578,7 @@ function OnboardingHasPet() {
           }}>
             <div style={{
               width: 60, height: 60, borderRadius: 18, flexShrink: 0,
-              background: selected === 'yes' ? '#fff' : 'var(--color-atomic-coolNeutral-95)',
+              background: selected === 'yes' ? '#fff' : 'var(--color-surface-track)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               font: '32px/1 -apple-system, "Segoe UI Emoji"',
               transition: 'background .12s',
@@ -4539,18 +4587,18 @@ function OnboardingHasPet() {
               <div style={{
                 font: '800 17px/1.2 var(--font-sans)',
                 letterSpacing: '-0.018em',
-                color: selected === 'yes' ? PawColors.brandInk : 'var(--label-strong)',
+                color: selected === 'yes' ? PawColors.brandInk : 'var(--color-text-strong)',
               }}>네, 있어요!</div>
               <div style={{
                 font: '500 13px/1.4 var(--font-sans)',
-                color: selected === 'yes' ? PawColors.brand : 'var(--label-alternative)',
+                color: selected === 'yes' ? PawColors.brand : 'var(--color-text-subtle)',
                 marginTop: 4,
               }}>반려동물 정보를 등록하고<br/>맞춤 피드를 받아요</div>
             </div>
             <div style={{
               width: 22, height: 22, borderRadius: 999, flexShrink: 0,
               background: selected === 'yes' ? PawColors.brand : '#fff',
-              border: `2px solid ${selected === 'yes' ? PawColors.brand : 'var(--line-normal-normal)'}`,
+              border: `2px solid ${selected === 'yes' ? PawColors.brand : 'var(--color-border-subtle)'}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'all .12s',
             }}>
@@ -4561,15 +4609,15 @@ function OnboardingHasPet() {
           {/* 없어요 */}
           <button onClick={() => setSelected('no')} style={{
             width: '100%', padding: '22px 20px',
-            background: selected === 'no' ? 'var(--color-atomic-coolNeutral-98)' : 'var(--color-atomic-coolNeutral-98)',
-            border: `2px solid ${selected === 'no' ? 'var(--label-strong)' : 'transparent'}`,
+            background: selected === 'no' ? 'var(--color-bg-muted)' : 'var(--color-bg-muted)',
+            border: `2px solid ${selected === 'no' ? 'var(--color-text-strong)' : 'transparent'}`,
             borderRadius: 20, cursor: 'pointer', textAlign: 'left',
             display: 'flex', alignItems: 'center', gap: 16,
             transition: 'all .12s ease-out',
           }}>
             <div style={{
               width: 60, height: 60, borderRadius: 18, flexShrink: 0,
-              background: selected === 'no' ? 'var(--color-atomic-coolNeutral-90)' : 'var(--color-atomic-coolNeutral-95)',
+              background: selected === 'no' ? 'var(--color-border-strong)' : 'var(--color-surface-track)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               font: '32px/1 -apple-system, "Segoe UI Emoji"',
               transition: 'background .12s',
@@ -4578,18 +4626,18 @@ function OnboardingHasPet() {
               <div style={{
                 font: '800 17px/1.2 var(--font-sans)',
                 letterSpacing: '-0.018em',
-                color: 'var(--label-strong)',
+                color: 'var(--color-text-strong)',
               }}>아직 없어요</div>
               <div style={{
                 font: '500 13px/1.4 var(--font-sans)',
-                color: 'var(--label-alternative)',
+                color: 'var(--color-text-subtle)',
                 marginTop: 4,
               }}>닉네임 설정 후<br/>다양한 동물 사진을 구경해요</div>
             </div>
             <div style={{
               width: 22, height: 22, borderRadius: 999, flexShrink: 0,
-              background: selected === 'no' ? 'var(--label-strong)' : '#fff',
-              border: `2px solid ${selected === 'no' ? 'var(--label-strong)' : 'var(--line-normal-normal)'}`,
+              background: selected === 'no' ? 'var(--color-text-strong)' : '#fff',
+              border: `2px solid ${selected === 'no' ? 'var(--color-text-strong)' : 'var(--color-border-subtle)'}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'all .12s',
             }}>
@@ -4602,11 +4650,11 @@ function OnboardingHasPet() {
         {selected === 'no' && (
           <div style={{
             marginTop: 16, padding: '12px 14px',
-            background: 'var(--color-atomic-coolNeutral-98)', borderRadius: 12,
+            background: 'var(--color-bg-muted)', borderRadius: 12,
             display: 'flex', alignItems: 'flex-start', gap: 8,
           }}>
-            <PawIcon name="circle-info-fill" size={16} color="var(--label-assistive)" style={{ marginTop: 1, flexShrink: 0 }} />
-            <p style={{ margin: 0, font: '500 12px/1.5 var(--font-sans)', color: 'var(--label-alternative)' }}>
+            <PawIcon name="circle-info-fill" size={16} color="var(--color-text-assistive)" style={{ marginTop: 1, flexShrink: 0 }} />
+            <p style={{ margin: 0, font: '500 12px/1.5 var(--font-sans)', color: 'var(--color-text-subtle)' }}>
               나중에 반려동물이 생기면 프로필에서<br/>언제든지 등록할 수 있어요
             </p>
           </div>
@@ -4614,7 +4662,7 @@ function OnboardingHasPet() {
       </div>
 
       {/* 하단 버튼 */}
-      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--line-normal-neutral)', background: '#fff' }}>
+      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: '#fff' }}>
         <PawButton full size="lg" disabled={!selected}>
           {selected === 'yes' ? '반려동물 정보 입력하기' : selected === 'no' ? '프로필 정보 입력하기' : '선택해 주세요'}
         </PawButton>
@@ -4631,8 +4679,8 @@ function OnboardingHasPet() {
 function LegalSection({ title, children }) {
   return (
     <div style={{ marginBottom: 28 }}>
-      <div style={{ font: '700 14px/1.3 var(--font-sans)', color: 'var(--label-strong)', letterSpacing: '-0.01em', marginBottom: 8 }}>{title}</div>
-      <div style={{ font: '400 13px/1.7 var(--font-sans)', color: 'var(--label-normal)', letterSpacing: '-0.005em' }}>{children}</div>
+      <div style={{ font: '700 14px/1.3 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.01em', marginBottom: 8 }}>{title}</div>
+      <div style={{ font: '400 13px/1.7 var(--font-sans)', color: 'var(--color-text-default)', letterSpacing: '-0.005em' }}>{children}</div>
     </div>
   );
 }
@@ -4642,7 +4690,7 @@ function TermsScreen() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#fff' }}>
       <PawTopBar variant="title" title="이용약관" onBack={() => {}} />
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px 20px 48px' }}>
-        <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-assistive)', marginBottom: 24 }}>
+        <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-assistive)', marginBottom: 24 }}>
           시행일: 2025년 1월 1일 · 최종 수정: 2025년 3월 15일
         </div>
 
@@ -4703,7 +4751,7 @@ function PrivacyScreen() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#fff' }}>
       <PawTopBar variant="title" title="개인정보처리방침" onBack={() => {}} />
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px 20px 48px' }}>
-        <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--label-assistive)', marginBottom: 24 }}>
+        <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-assistive)', marginBottom: 24 }}>
           시행일: 2025년 1월 1일 · 최종 수정: 2025년 3월 15일
         </div>
 
@@ -4790,7 +4838,7 @@ function WelcomeScreen() {
         <div style={{
           font: '900 56px/1 var(--font-sans)',
           letterSpacing: '-0.04em',
-          color: 'var(--label-strong)',
+          color: 'var(--color-text-strong)',
           display: 'flex', alignItems: 'baseline', gap: 2,
         }}>
           몽냥<span style={{ color: PawColors.brand }}>.</span>
@@ -4801,20 +4849,20 @@ function WelcomeScreen() {
       <div style={{
         padding: '24px 24px 40px',
         background: '#fff',
-        borderTop: '1px solid var(--line-normal-neutral)',
+        borderTop: '1px solid var(--color-border-default)',
         display: 'flex', flexDirection: 'column', gap: 10,
       }}>
         <div style={{
           textAlign: 'center', marginBottom: 4,
           font: '600 13px/1 var(--font-sans)',
-          color: 'var(--label-alternative)',
+          color: 'var(--color-text-subtle)',
           letterSpacing: '-0.005em',
         }}>소셜 계정으로 바로 시작하기</div>
 
         {/* 카카오 */}
         <button style={{
           width: '100%', height: 52, borderRadius: 14, border: 'none', cursor: 'pointer',
-          background: '#FEE500', color: '#191600',
+          background: 'var(--color-social-kakao)', color: '#191600',
           font: '700 15px/1 var(--font-sans)', letterSpacing: '-0.01em',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
           position: 'relative',
@@ -4828,7 +4876,7 @@ function WelcomeScreen() {
         {/* 네이버 */}
         <button style={{
           width: '100%', height: 52, borderRadius: 14, border: 'none', cursor: 'pointer',
-          background: '#03C75A', color: '#fff',
+          background: 'var(--color-social-naver)', color: '#fff',
           font: '700 15px/1 var(--font-sans)', letterSpacing: '-0.01em',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
         }}>
@@ -4841,8 +4889,8 @@ function WelcomeScreen() {
         {/* 구글 */}
         <button style={{
           width: '100%', height: 52, borderRadius: 14, cursor: 'pointer',
-          background: '#fff', color: '#3C4043',
-          border: '1.5px solid var(--line-normal-normal)',
+          background: 'var(--color-social-google)', color: '#3C4043',
+          border: '1.5px solid var(--color-border-subtle)',
           font: '700 15px/1 var(--font-sans)', letterSpacing: '-0.01em',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
         }}>
@@ -4858,7 +4906,7 @@ function WelcomeScreen() {
         {/* 애플 */}
         <button style={{
           width: '100%', height: 52, borderRadius: 14, border: 'none', cursor: 'pointer',
-          background: '#000', color: '#fff',
+          background: 'var(--color-social-apple)', color: '#fff',
           font: '700 15px/1 var(--font-sans)', letterSpacing: '-0.01em',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
         }}>
@@ -4871,19 +4919,19 @@ function WelcomeScreen() {
         {/* 비로그인 구경하기 */}
         <button style={{
           width: '100%', height: 48, borderRadius: 14, border: 'none', cursor: 'pointer',
-          background: 'transparent', color: 'var(--label-alternative)',
+          background: 'transparent', color: 'var(--color-text-subtle)',
           font: '600 14px/1 var(--font-sans)', letterSpacing: '-0.005em',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
           marginTop: 2,
         }}>
           로그인 없이 구경하기
-          <PawIcon name="chevron-right" size={14} color="var(--label-alternative)" />
+          <PawIcon name="chevron-right" size={14} color="var(--color-text-subtle)" />
         </button>
 
         <p style={{
           margin: '2px 0 0', textAlign: 'center',
           font: '500 11px/1.5 var(--font-sans)',
-          color: 'var(--label-assistive)',
+          color: 'var(--color-text-assistive)',
         }}>
           시작하면 <span style={{ textDecoration: 'underline' }}>이용약관</span> 및 <span style={{ textDecoration: 'underline' }}>개인정보처리방침</span>에 동의한 것으로 간주해요
         </p>
@@ -4892,91 +4940,216 @@ function WelcomeScreen() {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 컬러 팔레트 화면
+// ─────────────────────────────────────────────────────────────────────────────
+function ColorPaletteScreen() {
+  function PalSection({ title, sub, children }) {
+    return (
+      <div style={{ marginBottom: 40 }}>
+        <div style={{ marginBottom: 14 }}>
+          <span style={{ font: '700 11px/1 var(--font-sans)', letterSpacing: '0.08em', color: 'var(--color-text-assistive)', textTransform: 'uppercase' }}>{title}</span>
+          {sub && <span style={{ font: '400 11px/1 var(--font-sans)', color: 'var(--color-text-assistive)', marginLeft: 8 }}>— {sub}</span>}
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>{children}</div>
+      </div>
+    );
+  }
+
+  function Swatch({ bg, token, hex, light }) {
+    return (
+      <div style={{ width: 215, flexShrink: 0 }}>
+        <div style={{
+          height: 56, borderRadius: 10,
+          background: bg,
+          border: light ? '1px solid #E1E2E4' : 'none',
+          marginBottom: 8,
+          boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+        }} />
+        <div style={{
+          font: '600 11px/1.4 "SF Mono", "JetBrains Mono", monospace',
+          color: 'var(--color-text-strong)',
+          letterSpacing: '0.01em',
+          whiteSpace: 'nowrap',
+        }}>{token}</div>
+        {hex && <div style={{ font: '400 10px/1.3 var(--font-sans)', color: 'var(--color-text-assistive)', marginTop: 2 }}>{hex}</div>}
+      </div>
+    );
+  }
+
+
+  return (
+    <div style={{ width: '100%', height: '100%', background: '#fff', fontFamily: 'var(--font-sans)', padding: '40px 40px 64px', boxSizing: 'border-box' }}>
+
+      {/* 헤더 */}
+      <div style={{ marginBottom: 44, paddingBottom: 24, borderBottom: '1px solid #E1E2E4' }}>
+        <div style={{ font: '900 30px/1 var(--font-sans)', letterSpacing: '-0.04em', color: 'var(--color-text-strong)', marginBottom: 6 }}>
+          몽냥<span style={{ color: 'var(--color-brand-primary)' }}>.</span>
+        </div>
+        <div style={{ font: '500 12px/1 var(--font-sans)', color: 'var(--color-text-assistive)', letterSpacing: '0.04em' }}>COLOR PALETTE · DESIGN TOKENS</div>
+      </div>
+
+      {/* 브랜드 */}
+      <PalSection title="Brand" sub="--color-brand-*">
+        <Swatch bg="#FF6B3D" token="--color-brand-primary"  hex="#FF6B3D" />
+        <Swatch bg="#FFF1EB" token="--color-brand-surface"  hex="#FFF1EB" light />
+        <Swatch bg="#7A2B0F" token="--color-brand-emphasis" hex="#7A2B0F" />
+      </PalSection>
+
+      {/* 텍스트 */}
+      <PalSection title="Text" sub="--color-text-*">
+        <Swatch bg="#171719"                    token="--color-text-strong"      hex="#171719" />
+        <Swatch bg="rgba(46,47,51,0.88)"        token="--color-text-default"     hex="rgba(46,47,51,.88)" />
+        <Swatch bg="rgba(55,56,60,0.61)"        token="--color-text-subtle"      hex="rgba(55,56,60,.61)" />
+        <Swatch bg="rgba(55,56,60,0.28)"        token="--color-text-assistive"   hex="rgba(55,56,60,.28)" light />
+        <Swatch bg="rgba(55,56,60,0.16)"        token="--color-text-disabled"    hex="rgba(55,56,60,.16)" light />
+      </PalSection>
+
+      {/* 아이콘 */}
+      <PalSection title="Icon" sub="--color-icon-*">
+        <Swatch bg="#989BA2" token="--color-icon-inactive" hex="#989BA2" />
+      </PalSection>
+
+      {/* 배경 */}
+      <PalSection title="Background" sub="--color-bg-* / --color-surface-*">
+        <Swatch bg="#ffffff"  token="--color-bg-default"      hex="#FFFFFF" light />
+        <Swatch bg="#F7F7F8"  token="--color-bg-subtle"       hex="#F7F7F8" light />
+        <Swatch bg="#F4F4F5"  token="--color-bg-muted"        hex="#F4F4F5" light />
+        <Swatch bg="#EAEBEC"  token="--color-surface-raised"  hex="#EAEBEC" light />
+        <Swatch bg="#DBDCDF"  token="--color-surface-track"   hex="#DBDCDF" light />
+      </PalSection>
+
+      {/* 테두리 */}
+      <PalSection title="Border" sub="--color-border-*">
+        <Swatch bg="rgba(112,115,124,0.22)" token="--color-border-default" hex="rgba(112,115,124,.22)" light />
+        <Swatch bg="rgba(112,115,124,0.16)" token="--color-border-subtle"  hex="rgba(112,115,124,.16)" light />
+        <Swatch bg="#C2C4C8"                token="--color-border-strong"  hex="#C2C4C8" light />
+      </PalSection>
+
+      {/* 상태 */}
+      <PalSection title="Status" sub="--color-status-*">
+        <Swatch bg="#0066FF" token="--color-status-info"  hex="#0066FF" />
+        <Swatch bg="#E52222" token="--color-status-error" hex="#E52222" />
+      </PalSection>
+
+      {/* 소셜 로그인 */}
+      <PalSection title="Social" sub="--color-social-*">
+        <Swatch bg="#FEE500" token="--color-social-kakao"  hex="#FEE500" light />
+        <Swatch bg="#03C75A" token="--color-social-naver"  hex="#03C75A" />
+        <Swatch bg="#FFFFFF" token="--color-social-google" hex="#FFFFFF" light />
+        <Swatch bg="#000000" token="--color-social-apple"  hex="#000000" />
+      </PalSection>
+
+      {/* 성별 */}
+      <PalSection title="Gender" sub="--color-gender-*">
+        <Swatch bg="#4A9EFF" token="--color-gender-male"         hex="#4A9EFF" />
+        <Swatch bg="#EDF5FF" token="--color-gender-male-surface" hex="#EDF5FF" light />
+        <Swatch bg="#F472B6" token="--color-gender-female"         hex="#F472B6" />
+        <Swatch bg="#FFF0F7" token="--color-gender-female-surface" hex="#FFF0F7" light />
+      </PalSection>
+
+    </div>
+  );
+}
+
 function App() {
   return (
     <DesignCanvas>
-      {/* ── 행 1: 로그인 ─────────────────────────────────────────── */}
-      <DCSection id="welcome-login" title="① 로그인"
-        subtitle="소셜 로그인(카카오·네이버·구글·애플) · 로그인 없이 구경 · 약관 링크">
-        <DCArtboard id="welcome-1" label="로그인" width={W} height={H}>
-          <Phone><WelcomeScreen /></Phone>
-        </DCArtboard>
-        <DCArtboard id="welcome-terms" label="이용약관" width={W} height={H}>
-          <Phone><TermsScreen /></Phone>
-        </DCArtboard>
-        <DCArtboard id="welcome-privacy" label="개인정보처리방침" width={W} height={H}>
-          <Phone><PrivacyScreen /></Phone>
-        </DCArtboard>
-      </DCSection>
+      <div data-dc-group style={{ display: 'flex', flexDirection: 'row', gap: 80, alignItems: 'flex-start' }}>
 
-      <DCFlowArrow mt={8} mb={8} branches={[
-        { label: '소셜 로그인 탭', color: PawColors.brand, note: '이용약관·개인정보방침은 로그인 화면에서 진입' },
-      ]} />
+        {/* ── 좌측: 컬러 팔레트 ─────────────────────────────────── */}
+        <div data-dc-group>
+          <DCSection id="palette" title="컬러 팔레트" subtitle="실제 디자인에서 사용 중인 색상 토큰">
+            <DCArtboard id="palette-1" label="Color Palette" width={1000} height={1900}>
+              <ColorPaletteScreen />
+            </DCArtboard>
+          </DCSection>
+        </div>
 
-      {/* ── 행 2: 온보딩 1단계 ───────────────────────────────────── */}
-      <DCSection id="welcome-step1" title="② 온보딩 1단계 · 반려동물 유무"
-        subtitle="반려동물 있음 → 반려동물 정보 입력 / 없음 → 프로필 설정">
-        <DCArtboard id="welcome-2" label="반려동물 유무 선택" width={W} height={H}>
-          <Phone><OnboardingHasPet /></Phone>
-        </DCArtboard>
-      </DCSection>
+        {/* ── 우측: 전체 온보딩 플로우 ──────────────────────────── */}
+        <div data-dc-group style={{ display: 'flex', flexDirection: 'column' }}>
 
-      <DCFlowArrow mt={8} mb={8} branches={[
-        { label: '반려동물 있음 →', color: PawColors.brand },
-        { label: '← 반려동물 없음', color: '#6B7280' },
-      ]} />
+          {/* 행 1: 로그인 */}
+          <DCSection id="welcome-login" title="① 로그인"
+            subtitle="소셜 로그인(카카오·네이버·구글·애플) · 로그인 없이 구경 · 약관 링크">
+            <DCArtboard id="welcome-1" label="로그인" width={W} height={H}>
+              <Phone><WelcomeScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="welcome-terms" label="이용약관" width={W} height={H}>
+              <Phone><TermsScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="welcome-privacy" label="개인정보처리방침" width={W} height={H}>
+              <Phone><PrivacyScreen /></Phone>
+            </DCArtboard>
+          </DCSection>
 
-      {/* ── 행 3-A: [있음] 반려동물 정보 입력 ───────────────────── */}
-      <DCSection id="welcome-step2a" title="③-A  [있음] 반려동물 정보 입력"
-        subtitle="이름 → 품종 → 생년월일 → 성별 순으로 4단계 입력">
-        <DCArtboard id="welcome-3a-1" label="1/5 · 이름" width={W} height={H}>
-          <Phone><PetInfoStep1_Name /></Phone>
-        </DCArtboard>
-        <DCArtboard id="welcome-3a-2" label="2/5 · 품종" width={W} height={H}>
-          <Phone><PetInfoStep2_Breed /></Phone>
-        </DCArtboard>
-        <DCArtboard id="welcome-3a-3" label="3/5 · 생년월일" width={W} height={H}>
-          <Phone><PetInfoStep3_Birth /></Phone>
-        </DCArtboard>
-        <DCArtboard id="welcome-3a-4" label="4/5 · 성별" width={W} height={H}>
-          <Phone><PetInfoStep4_Gender /></Phone>
-        </DCArtboard>
-        <DCArtboard id="welcome-3a-5" label="5/5 · 사진 업로드 · 정보 확인" width={W} height={H}>
-          <Phone><PetInfoStep5_Photo /></Phone>
-        </DCArtboard>
-      </DCSection>
+          <DCFlowArrow mt={8} mb={8} branches={[
+            { label: '소셜 로그인 탭', color: '#FF6B3D', note: '이용약관·개인정보방침은 로그인 화면에서 진입' },
+          ]} />
 
-      {/* ── 행 3-B: [없음] 프로필 설정 ──────────────────────────── */}
-      <DCSection id="welcome-step2b" title="③-B  [없음] 프로필 설정"
-        subtitle="이름 · 고유명 입력 후 가입 완료">
-        <DCArtboard id="welcome-3b" label="프로필 설정" width={W} height={H}>
-          <Phone><OnboardingNoPetProfile /></Phone>
-        </DCArtboard>
-      </DCSection>
+          {/* 행 2: 온보딩 1단계 */}
+          <DCSection id="welcome-step1" title="② 온보딩 1단계 · 반려동물 유무"
+            subtitle="반려동물 있음 → 반려동물 정보 입력 / 없음 → 프로필 설정">
+            <DCArtboard id="welcome-2" label="반려동물 유무 선택" width={W} height={H}>
+              <Phone><OnboardingHasPet /></Phone>
+            </DCArtboard>
+          </DCSection>
 
-      {/* ─────────────────────────────────────────────────────────── */}
-      {/* H1 — 종 기반 커뮤니티                                       */}
-      {/* ─────────────────────────────────────────────────────────── */}
-      <DCSection id="h1" title="H1 · 같은 종이면 통한다"
-        subtitle="가설: 동물 종/품종을 1급 시민으로 두면 발견·추천 정확도가 올라가 D30 리텐션이 강해진다. KR: 팔로우 전환율 40% / 7일 내.">
-        <DCArtboard id="h1-1" label="1 · 종 선택 온보딩" width={W} height={H}>
-          <Phone><H1_SpeciesOnboarding /></Phone>
-        </DCArtboard>
-        <DCArtboard id="h1-2" label="2 · 종별 발견 피드" width={W} height={H}>
-          <Phone><H1_DiscoverBySpecies /></Phone>
-        </DCArtboard>
-        <DCArtboard id="h1-3" label="3 · 종 커뮤니티 홈" width={W} height={H}>
-          <Phone><H1_CommunityHome /></Phone>
-        </DCArtboard>
-        <DCArtboard id="h1-4" label="4 · 추천 보호자" width={W} height={H}>
-          <Phone><H1_SuggestUsers /></Phone>
-        </DCArtboard>
-        <DCArtboard id="h1-5" label="5 · 품종 태그 페이지" width={W} height={H}>
-          <Phone><H1_BreedTagPage /></Phone>
-        </DCArtboard>
-      </DCSection>
+          <DCFlowArrow mt={8} mb={8} branches={[
+            { label: '반려동물 있음 →', color: '#FF6B3D' },
+            { label: '← 반려동물 없음', color: '#6B7280' },
+          ]} />
 
+          {/* 행 3-A: [있음] 반려동물 정보 입력 */}
+          <DCSection id="welcome-step2a" title="③-A  [있음] 반려동물 정보 입력"
+            subtitle="이름 → 품종 → 생년월일 → 성별 순으로 4단계 입력">
+            <DCArtboard id="welcome-3a-1" label="1/5 · 이름" width={W} height={H}>
+              <Phone><PetInfoStep1_Name /></Phone>
+            </DCArtboard>
+            <DCArtboard id="welcome-3a-2" label="2/5 · 품종" width={W} height={H}>
+              <Phone><PetInfoStep2_Breed /></Phone>
+            </DCArtboard>
+            <DCArtboard id="welcome-3a-3" label="3/5 · 생년월일" width={W} height={H}>
+              <Phone><PetInfoStep3_Birth /></Phone>
+            </DCArtboard>
+            <DCArtboard id="welcome-3a-4" label="4/5 · 성별" width={W} height={H}>
+              <Phone><PetInfoStep4_Gender /></Phone>
+            </DCArtboard>
+            <DCArtboard id="welcome-3a-5" label="5/5 · 사진 업로드 · 정보 확인" width={W} height={H}>
+              <Phone><PetInfoStep5_Photo /></Phone>
+            </DCArtboard>
+          </DCSection>
 
+          {/* 행 3-B: [없음] 프로필 설정 */}
+          <DCSection id="welcome-step2b" title="③-B  [없음] 프로필 설정"
+            subtitle="이름 · 고유명 입력 후 가입 완료">
+            <DCArtboard id="welcome-3b" label="프로필 설정" width={W} height={H}>
+              <Phone><OnboardingNoPetProfile /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          {/* H1 — 종 기반 커뮤니티 */}
+          <DCSection id="h1" title="H1 · 같은 종이면 통한다"
+            subtitle="가설: 동물 종/품종을 1급 시민으로 두면 발견·추천 정확도가 올라가 D30 리텐션이 강해진다. KR: 팔로우 전환율 40% / 7일 내.">
+            <DCArtboard id="h1-1" label="1 · 종 선택 온보딩" width={W} height={H}>
+              <Phone><H1_SpeciesOnboarding /></Phone>
+            </DCArtboard>
+            <DCArtboard id="h1-2" label="2 · 종별 발견 피드" width={W} height={H}>
+              <Phone><H1_DiscoverBySpecies /></Phone>
+            </DCArtboard>
+            <DCArtboard id="h1-3" label="3 · 종 커뮤니티 홈" width={W} height={H}>
+              <Phone><H1_CommunityHome /></Phone>
+            </DCArtboard>
+            <DCArtboard id="h1-4" label="4 · 추천 보호자" width={W} height={H}>
+              <Phone><H1_SuggestUsers /></Phone>
+            </DCArtboard>
+            <DCArtboard id="h1-5" label="5 · 품종 태그 페이지" width={W} height={H}>
+              <Phone><H1_BreedTagPage /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+        </div>
+      </div>
     </DesignCanvas>
   );
 }
