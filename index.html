@@ -1909,7 +1909,7 @@ function PawTopBar({ variant = 'home', title, sub, onBack, right, left, dark }) 
           font: '900 22px/1 var(--font-sans)',
           letterSpacing: '-0.03em',
           color: 'var(--color-text-strong)',
-        }}>몽냥<span style={{color:'var(--color-status-info)',marginLeft:1}}>.</span></span>
+        }}>몽냥<span style={{color:'var(--color-brand-primary)',marginLeft:1}}>.</span></span>
         <div style={{ flex: 1 }} />
         {right}
       </div>
@@ -1941,10 +1941,10 @@ function PawTopBar({ variant = 'home', title, sub, onBack, right, left, dark }) 
 function PawTabBar({ active = 'home', onChange, onUpload }) {
   const tabs = [
     { id: 'home',     icon: 'home',    iconOn: 'home-fill',    label: '홈' },
-    { id: 'discover', icon: 'search',  iconOn: 'search-thick', label: '발견' },
+    { id: 'discover', icon: 'search',  iconOn: 'search-thick', label: '검색' },
     { id: 'upload',   icon: 'plus',    iconOn: 'plus',         label: '업로드', center: true },
-    { id: 'noti',     icon: 'bell',    iconOn: 'bell-fill',    label: '알림', badge: 5 },
-    { id: 'me',       icon: 'person',  iconOn: 'person-fill',  label: '마이' },
+    { id: 'noti',     icon: 'bubble',  iconOn: 'bubble-fill',  label: '커뮤니티' },
+    { id: 'me',       icon: 'person',  iconOn: 'person-fill',  label: 'MY' },
   ];
   return (
     <div style={{
@@ -1969,7 +1969,7 @@ function PawTabBar({ active = 'home', onChange, onUpload }) {
                 color: '#fff',
                 boxShadow: '0 6px 16px rgba(255,107,61,0.35)',
               }}>
-                <PawIcon name="plus" size={26} />
+                <PawIcon name="plus" size={23} />
               </span>
             </button>
           );
@@ -1983,7 +1983,7 @@ function PawTabBar({ active = 'home', onChange, onUpload }) {
             position: 'relative',
           }}>
             <span style={{ position: 'relative' }}>
-              <PawIcon name={on ? t.iconOn : t.icon} size={24} />
+              <PawIcon name={on ? t.iconOn : t.icon} size={21} />
               {t.badge ? (
                 <span style={{
                   position: 'absolute', top: -2, right: -6,
@@ -2035,7 +2035,7 @@ function PawSpeciesTabs({ active, onChange, items }) {
 }
 
 // Masonry — two-column Pinterest-style grid
-function PawMasonry({ items, gap = 6, onTap, onLike, likedSet }) {
+function PawMasonry({ items, gap = 6, onTap, onLike, likedSet, bare }) {
   // distribute by running column heights
   const cols = [[], []];
   const heights = [0, 0];
@@ -2049,7 +2049,7 @@ function PawMasonry({ items, gap = 6, onTap, onLike, likedSet }) {
       {cols.map((col, ci) => (
         <div key={ci} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap }}>
           {col.map(p => (
-            <PhotoTile key={p.id} p={p} onTap={onTap} onLike={onLike} liked={likedSet?.has(p.id)} />
+            <PhotoTile key={p.id} p={p} onTap={onTap} onLike={onLike} liked={likedSet?.has(p.id)} bare={bare} />
           ))}
         </div>
       ))}
@@ -2057,7 +2057,7 @@ function PawMasonry({ items, gap = 6, onTap, onLike, likedSet }) {
   );
 }
 
-function PhotoTile({ p, onTap, onLike, liked }) {
+function PhotoTile({ p, onTap, onLike, liked, bare }) {
   const [burst, setBurst] = React.useState(false);
   const handleDouble = e => {
     e.stopPropagation();
@@ -2077,29 +2077,31 @@ function PhotoTile({ p, onTap, onLike, liked }) {
     >
       <PawPhoto uid={p.uid} fav={p.fav} radius={0} style={{ aspectRatio: p.ar, borderRadius: 0 }} />
       {/* bottom gradient + meta */}
-      <div style={{
-        position: 'absolute', left: 0, right: 0, bottom: 0,
-        padding: '24px 8px 8px',
-        background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 100%)',
-        display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
-        color: '#fff',
-        font: '600 11px/1 var(--font-sans)',
-        letterSpacing: '-0.005em',
-      }}>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-          <span style={{
-            width: 16, height: 16, borderRadius: 999,
-            background: p.fav,
-            border: '1.5px solid #fff',
-            display: 'inline-block',
-          }} />
-          {p.pet}
-        </span>
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
-          <PawIcon name={liked ? 'heart-fill' : 'heart'} size={12} color={liked ? PawColors.brand : '#fff'} />
-          {p.likes + (liked ? 1 : 0)}
-        </span>
-      </div>
+      {!bare && (
+        <div style={{
+          position: 'absolute', left: 0, right: 0, bottom: 0,
+          padding: '24px 8px 8px',
+          background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.45) 100%)',
+          display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+          color: '#fff',
+          font: '600 11px/1 var(--font-sans)',
+          letterSpacing: '-0.005em',
+        }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+            <span style={{
+              width: 16, height: 16, borderRadius: 999,
+              background: p.fav,
+              border: '1.5px solid #fff',
+              display: 'inline-block',
+            }} />
+            {p.pet}
+          </span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+            <PawIcon name={liked ? 'heart-fill' : 'heart'} size={12} color={liked ? PawColors.brand : '#fff'} />
+            {p.likes + (liked ? 1 : 0)}
+          </span>
+        </div>
+      )}
       {burst && (
         <span style={{
           position: 'absolute', left: '50%', top: '50%',
@@ -5140,6 +5142,537 @@ function ColorPaletteScreen() {
   );
 }
 
+function HomeScreen() {
+  const { PHOTOS } = PETS_DATA;
+  const [liked, setLiked] = React.useState(new Set());
+
+  const toggleLike = id => setLiked(prev => {
+    const n = new Set(prev);
+    n.has(id) ? n.delete(id) : n.add(id);
+    return n;
+  });
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+
+      {/* TopBar */}
+      <PawTopBar variant="home" right={
+        <div style={{ display: 'flex', paddingRight: 4 }}>
+          <PawIconBtn name="search" iconSize={22} />
+          <PawIconBtn name="bell" iconSize={22} />
+        </div>
+      } />
+
+      {/* 스크롤 영역 */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+
+        {/* ── Masonry 피드 ── */}
+        <PawMasonry items={PHOTOS} onLike={toggleLike} likedSet={liked} gap={6} bare />
+        <div style={{ height: 16 }} />
+      </div>
+
+      {/* TabBar */}
+      <PawTabBar active="home" />
+    </div>
+  );
+}
+
+function MyScreen() {
+  const { PHOTOS, MY_PETS } = PETS_DATA;
+  const [liked, setLiked] = React.useState(new Set());
+  const [tab, setTab] = React.useState('mine');
+
+  const toggleLike = id => setLiked(prev => {
+    const n = new Set(prev);
+    n.has(id) ? n.delete(id) : n.add(id);
+    return n;
+  });
+
+  const likedPhotos = PHOTOS.filter(p => liked.has(p.id));
+  const feedPhotos = tab === 'mine' ? PHOTOS.slice(0, 12) : likedPhotos;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+
+      {/* TopBar */}
+      <PawTopBar variant="title" title="MY" right={
+        <PawIconBtn name="setting" iconSize={22} />
+      } />
+
+      {/* Scrollable content */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+
+        {/* ── 프로필 섹션 ── */}
+        <div style={{ background: PawColors.surface, padding: '20px 20px 16px' }}>
+
+          {/* 아바타 + 통계 */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 14 }}>
+            <PawAvatar name="김지원" size={72} ring />
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'space-around' }}>
+              {[
+                { label: '게시물', val: '47' },
+                { label: '팔로워', val: '12.4K' },
+                { label: '팔로잉', val: '284' },
+              ].map(s => (
+                <div key={s.label} style={{ textAlign: 'center' }}>
+                  <div style={{ font: '800 18px/1 var(--font-sans)', letterSpacing: '-0.02em', color: PawColors.labelStrong }}>{s.val}</div>
+                  <div style={{ font: '500 11px/1 var(--font-sans)', color: PawColors.labelHint, marginTop: 3 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 이름 + 핸들 + 바이오 */}
+          <div style={{ marginBottom: 14 }}>
+            <div style={{ font: '700 15px/1.3 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>몽이아빠 🐕</div>
+            <div style={{ font: '500 12px/1 var(--font-sans)', color: PawColors.labelHint, marginTop: 2 }}>@mongi_dad</div>
+            <div style={{ font: '400 13px/1.5 var(--font-sans)', color: PawColors.label, marginTop: 8 }}>
+              골든 몽이 &amp; 코숏 버터와 함께 🐾<br/>
+              서울 마포구 · 반려동물 라이프 기록 중
+            </div>
+          </div>
+
+          {/* 프로필 편집 */}
+          <PawButton variant="secondary" full>프로필 편집</PawButton>
+        </div>
+
+        {/* ── 반려동물 카드 ── */}
+        <div style={{ background: PawColors.surface, borderTop: `1px solid ${PawColors.lineSoft}`, padding: '16px 0 20px' }}>
+          <div style={{ padding: '0 20px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ font: '700 14px/1 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>나의 반려동물</span>
+            <span style={{ font: '500 12px/1 var(--font-sans)', color: PawColors.labelHint }}>{MY_PETS.length}마리</span>
+          </div>
+          <div style={{ display: 'flex', gap: 14, overflowX: 'auto', padding: '0 20px 4px', scrollbarWidth: 'none' }}>
+            {MY_PETS.map(pet => (
+              <div key={pet.id} style={{
+                flexShrink: 0, width: 80,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+                cursor: 'pointer',
+              }}>
+                <PetGlyph pet={pet} size={56} ring />
+                <div style={{ textAlign: 'center', width: '100%' }}>
+                  <div style={{ font: '700 13px/1 var(--font-sans)', color: PawColors.labelStrong, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pet.name}</div>
+                  <div style={{ font: '500 10px/1 var(--font-sans)', color: PawColors.labelHint, marginTop: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pet.age}</div>
+                </div>
+              </div>
+            ))}
+            {/* 추가 버튼 */}
+            <div style={{
+              flexShrink: 0, width: 80,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+              cursor: 'pointer',
+            }}>
+              <div style={{
+                width: 56, height: 56, borderRadius: 999,
+                border: `2px dashed var(--color-border-default)`,
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <PawIcon name="plus" size={22} color={PawColors.labelHint} />
+              </div>
+              <div style={{ font: '500 12px/1 var(--font-sans)', color: PawColors.labelHint }}>추가</div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── 탭 (내 사진 / 좋아요) ── */}
+        <div style={{
+          display: 'flex',
+          background: PawColors.surface,
+          borderTop: `1px solid ${PawColors.lineSoft}`,
+          borderBottom: `1px solid ${PawColors.lineSoft}`,
+          position: 'sticky', top: 0, zIndex: 10,
+        }}>
+          {[
+            { id: 'mine', label: '내 사진' },
+            { id: 'liked', label: '좋아요' },
+          ].map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)} style={{
+              flex: 1, height: 44, background: 'transparent', border: 'none',
+              cursor: 'pointer',
+              font: `${tab === t.id ? 700 : 500} 14px/1 var(--font-sans)`,
+              letterSpacing: '-0.01em',
+              color: tab === t.id ? PawColors.labelStrong : PawColors.labelHint,
+              borderBottom: tab === t.id ? `2px solid ${PawColors.labelStrong}` : '2px solid transparent',
+            }}>{t.label}</button>
+          ))}
+        </div>
+
+        {/* ── Masonry 사진 그리드 ── */}
+        <div style={{ paddingTop: 12 }}>
+          {feedPhotos.length > 0 ? (
+            <PawMasonry items={feedPhotos} onLike={toggleLike} likedSet={liked} gap={3} bare />
+          ) : (
+            <div style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              padding: '60px 20px',
+              gap: 12,
+            }}>
+              <PawIcon name="heart" size={40} color={PawColors.labelHint} />
+              <span style={{ font: '500 14px/1 var(--font-sans)', color: PawColors.labelHint }}>좋아요한 사진이 없어요</span>
+            </div>
+          )}
+          <div style={{ height: 16 }} />
+        </div>
+
+      </div>
+
+      {/* TabBar */}
+      <PawTabBar active="me" />
+    </div>
+  );
+}
+
+function OtherUserProfileScreen() {
+  const { PHOTOS } = PETS_DATA;
+  const [following, setFollowing] = React.useState(true); // mutual 상태
+  const [tab, setTab] = React.useState('mine');
+  const [liked, setLiked] = React.useState(new Set());
+
+  const toggleLike = id => setLiked(prev => {
+    const n = new Set(prev);
+    n.has(id) ? n.delete(id) : n.add(id);
+    return n;
+  });
+
+  // 이 유저 데이터 (USERS[2] — 코기집사, 38.2K, mutual)
+  const user = { handle: '코기집사', real: '박민호', followers: '38.2K', following: '512', posts: '183', mutual: true };
+  const userPets = [
+    { id: 'cp1', name: '식빵이', breed: '웰시코기', age: '3살 1개월', color: '#e6c89c', emoji: '🐕' },
+    { id: 'cp2', name: '고구마', breed: '웰시코기', age: '1살 4개월', color: '#e0b896', emoji: '🐕' },
+  ];
+
+  const feedPhotos = tab === 'mine' ? PHOTOS.filter(p => p.species === 'dog') : PHOTOS.filter(p => liked.has(p.id));
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+
+      {/* TopBar */}
+      <PawTopBar variant="title" title={`@${user.handle}`} onBack={() => {}} right={
+        <PawIconBtn name="more" iconSize={22} />
+      } />
+
+      {/* Scrollable content */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+
+        {/* ── 프로필 섹션 ── */}
+        <div style={{ background: PawColors.surface, padding: '20px 20px 16px' }}>
+
+          {/* 아바타 + 통계 */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 14 }}>
+            <PawAvatar name={user.real} size={72} ring={user.mutual} />
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'space-around' }}>
+              {[
+                { label: '게시물', val: user.posts },
+                { label: '팔로워', val: user.followers },
+                { label: '팔로잉', val: user.following },
+              ].map(s => (
+                <div key={s.label} style={{ textAlign: 'center' }}>
+                  <div style={{ font: '800 18px/1 var(--font-sans)', letterSpacing: '-0.02em', color: PawColors.labelStrong }}>{s.val}</div>
+                  <div style={{ font: '500 11px/1 var(--font-sans)', color: PawColors.labelHint, marginTop: 3 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 이름 + 핸들 + 바이오 */}
+          <div style={{ marginBottom: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ font: '700 15px/1.3 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>{user.handle} 🐕</span>
+              {user.mutual && (
+                <span style={{
+                  fontSize: 10, fontWeight: 700, lineHeight: 1,
+                  padding: '3px 6px', borderRadius: 999,
+                  background: PawColors.brandSoft, color: PawColors.brandInk,
+                  letterSpacing: '-0.005em',
+                }}>맞팔</span>
+              )}
+            </div>
+            <div style={{ font: '500 12px/1 var(--font-sans)', color: PawColors.labelHint, marginTop: 2 }}>@cogi_jipsа</div>
+            <div style={{ font: '400 13px/1.5 var(--font-sans)', color: PawColors.label, marginTop: 8 }}>
+              웰시코기 식빵이 &amp; 고구마 아빠 🐾<br/>
+              경기 판교 · 코기 정보 공유 채널
+            </div>
+          </div>
+
+          {/* 액션 버튼 */}
+          <button
+            onClick={() => setFollowing(f => !f)}
+            style={{
+              width: '100%', height: 44, borderRadius: 12,
+              background: following ? PawColors.surface : PawColors.brand,
+              color: following ? PawColors.labelStrong : '#fff',
+              border: following ? `1px solid var(--color-border-default)` : 'none',
+              font: '700 14px/1 var(--font-sans)', letterSpacing: '-0.005em',
+              cursor: 'pointer',
+              transition: 'background .12s, color .12s',
+            }}
+          >{following ? '팔로잉 ✓' : '팔로우'}</button>
+        </div>
+
+        {/* ── 반려동물 카드 ── */}
+        <div style={{ background: PawColors.surface, borderTop: `1px solid ${PawColors.lineSoft}`, padding: '16px 0 20px' }}>
+          <div style={{ padding: '0 20px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ font: '700 14px/1 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>반려동물</span>
+            <span style={{ font: '500 12px/1 var(--font-sans)', color: PawColors.labelHint }}>{userPets.length}마리</span>
+          </div>
+          <div style={{ display: 'flex', gap: 14, overflowX: 'auto', padding: '0 20px 4px', scrollbarWidth: 'none' }}>
+            {userPets.map(pet => (
+              <div key={pet.id} style={{
+                flexShrink: 0, width: 80,
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+                cursor: 'pointer',
+              }}>
+                <PetGlyph pet={pet} size={56} />
+                <div style={{ textAlign: 'center', width: '100%' }}>
+                  <div style={{ font: '700 13px/1 var(--font-sans)', color: PawColors.labelStrong, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pet.name}</div>
+                  <div style={{ font: '500 10px/1 var(--font-sans)', color: PawColors.labelHint, marginTop: 3, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pet.age}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── 탭 (사진 / 태그됨) ── */}
+        <div style={{
+          display: 'flex',
+          background: PawColors.surface,
+          borderTop: `1px solid ${PawColors.lineSoft}`,
+          borderBottom: `1px solid ${PawColors.lineSoft}`,
+          position: 'sticky', top: 0, zIndex: 10,
+        }}>
+          {[
+            { id: 'mine', label: '사진' },
+            { id: 'tagged', label: '태그됨' },
+          ].map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)} style={{
+              flex: 1, height: 44, background: 'transparent', border: 'none',
+              cursor: 'pointer',
+              font: `${tab === t.id ? 700 : 500} 14px/1 var(--font-sans)`,
+              letterSpacing: '-0.01em',
+              color: tab === t.id ? PawColors.labelStrong : PawColors.labelHint,
+              borderBottom: tab === t.id ? `2px solid ${PawColors.labelStrong}` : '2px solid transparent',
+            }}>{t.label}</button>
+          ))}
+        </div>
+
+        {/* ── Masonry 사진 그리드 ── */}
+        <div style={{ paddingTop: 12 }}>
+          {feedPhotos.length > 0 ? (
+            <PawMasonry items={feedPhotos} onLike={toggleLike} likedSet={liked} gap={3} bare />
+          ) : (
+            <div style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              padding: '60px 20px', gap: 12,
+            }}>
+              <PawIcon name="image" size={40} color={PawColors.labelHint} />
+              <span style={{ font: '500 14px/1 var(--font-sans)', color: PawColors.labelHint }}>태그된 사진이 없어요</span>
+            </div>
+          )}
+          <div style={{ height: 16 }} />
+        </div>
+
+      </div>
+
+    </div>
+  );
+}
+
+function MyGuestScreen() {
+  const settingsItems = [
+    { label: '공지사항',        icon: 'bell' },
+    { label: '고객센터',        icon: 'bubble' },
+    { label: '이용약관',        icon: 'document' },
+    { label: '개인정보처리방침', icon: 'lock' },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+
+      <PawTopBar variant="title" title="MY" />
+
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+
+        {/* ── 로그인 유도 블록 ── */}
+        <div style={{
+          background: PawColors.surface, padding: '20px',
+          display: 'flex', alignItems: 'center', gap: 16,
+          cursor: 'pointer',
+        }}>
+          <div style={{
+            width: 64, height: 64, borderRadius: 999, flexShrink: 0,
+            background: 'var(--color-bg-muted)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <PawIcon name="person" size={32} color={PawColors.labelHint} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ font: '700 16px/1.3 var(--font-sans)', color: PawColors.labelStrong, marginBottom: 4 }}>
+              로그인 / 회원가입
+            </div>
+            <div style={{ font: '400 13px/1.4 var(--font-sans)', color: PawColors.labelHint }}>
+              반려동물의 일상을 기록해 보세요
+            </div>
+          </div>
+          <PawIcon name="chevron-right" size={20} color={PawColors.labelHint} />
+        </div>
+
+        {/* ── 앱 정보 / 설정 리스트 ── */}
+        <div style={{ background: PawColors.surface, marginTop: 8 }}>
+          {settingsItems.map((item, i) => (
+            <React.Fragment key={item.label}>
+              <div style={{
+                display: 'flex', alignItems: 'center',
+                padding: '0 20px', height: 52, gap: 14,
+                cursor: 'pointer',
+              }}>
+                <PawIcon name={item.icon} size={20} color={PawColors.labelHint} />
+                <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>{item.label}</span>
+                <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
+              </div>
+              {i < settingsItems.length - 1 && <PawDivider inset={54} />}
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* 앱 버전 */}
+        <div style={{ padding: '20px 20px 8px', textAlign: 'center' }}>
+          <span style={{ font: '400 12px/1 var(--font-sans)', color: PawColors.labelHint }}>몽냥 버전 1.0.0</span>
+        </div>
+
+      </div>
+
+      <PawTabBar active="me" />
+    </div>
+  );
+}
+
+function SettingsScreen() {
+  const [noti, setNoti] = React.useState({ like: true, comment: true, follow: false });
+
+  function Toggle({ on, onToggle }) {
+    return (
+      <div onClick={onToggle} style={{
+        width: 46, height: 26, borderRadius: 999, flexShrink: 0,
+        background: on ? PawColors.brand : 'var(--color-surface-track)',
+        position: 'relative', cursor: 'pointer',
+        transition: 'background .2s',
+      }}>
+        <div style={{
+          position: 'absolute', top: 3,
+          left: on ? 23 : 3,
+          width: 20, height: 20, borderRadius: 999,
+          background: '#fff',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+          transition: 'left .2s',
+        }} />
+      </div>
+    );
+  }
+
+  function SectionHeader({ label }) {
+    return (
+      <div style={{ padding: '20px 20px 6px' }}>
+        <span style={{ font: '600 12px/1 var(--font-sans)', letterSpacing: '0.04em', color: PawColors.labelHint, textTransform: 'uppercase' }}>{label}</span>
+      </div>
+    );
+  }
+
+  function SettingRow({ icon, label, right, danger, onTap }) {
+    return (
+      <div onClick={onTap} style={{
+        display: 'flex', alignItems: 'center',
+        padding: '0 20px', height: 52, gap: 14,
+        cursor: onTap ? 'pointer' : 'default',
+      }}>
+        {icon ? <PawIcon name={icon} size={20} color={danger ? 'var(--color-status-error)' : PawColors.labelHint} /> : <div style={{ width: 20, flexShrink: 0 }} />}
+        <span style={{
+          flex: 1,
+          font: '500 15px/1 var(--font-sans)', letterSpacing: '-0.01em',
+          color: danger ? 'var(--color-status-error)' : PawColors.labelStrong,
+        }}>{label}</span>
+        {right}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+
+      <PawTopBar variant="title" title="설정" onBack={() => {}} />
+
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+
+        {/* ── 알림 ── */}
+        <SectionHeader label="알림" />
+        <div style={{ background: PawColors.surface }}>
+          <SettingRow icon="heart" label="좋아요 알림" right={
+            <Toggle on={noti.like} onToggle={() => setNoti(n => ({ ...n, like: !n.like }))} />
+          } />
+          <PawDivider inset={54} />
+          <SettingRow icon="bubble" label="댓글 알림" right={
+            <Toggle on={noti.comment} onToggle={() => setNoti(n => ({ ...n, comment: !n.comment }))} />
+          } />
+          <PawDivider inset={54} />
+          <SettingRow icon="person" label="팔로우 알림" right={
+            <Toggle on={noti.follow} onToggle={() => setNoti(n => ({ ...n, follow: !n.follow }))} />
+          } />
+        </div>
+
+        {/* ── 앱 정보 ── */}
+        <SectionHeader label="앱 정보" />
+        <div style={{ background: PawColors.surface }}>
+          {[
+            { icon: 'bell',     label: '공지사항' },
+            { icon: 'bubble',   label: '고객센터' },
+            { icon: 'document', label: '이용약관' },
+            { icon: 'lock',     label: '개인정보처리방침' },
+          ].map((item, i, arr) => (
+            <React.Fragment key={item.label}>
+              <SettingRow icon={item.icon} label={item.label} onTap={() => {}} right={
+                <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
+              } />
+              {i < arr.length - 1 && <PawDivider inset={54} />}
+            </React.Fragment>
+          ))}
+          <PawDivider inset={54} />
+          <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 52, gap: 14 }}>
+            <PawIcon name="info" size={20} color={PawColors.labelHint} />
+            <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', color: PawColors.labelStrong }}>앱 버전</span>
+            <span style={{ font: '400 14px/1 var(--font-sans)', color: PawColors.labelHint }}>1.0.0</span>
+          </div>
+        </div>
+
+        {/* ── 계정 ── */}
+        <SectionHeader label="계정" />
+        <div style={{ background: PawColors.surface }}>
+          {/* 연결된 소셜 계정 */}
+          <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 52, gap: 14 }}>
+            <div style={{
+              width: 20, height: 20, borderRadius: 6, flexShrink: 0,
+              background: 'var(--color-social-kakao)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              font: '800 11px/1 var(--font-sans)', color: 'rgba(0,0,0,0.85)',
+            }}>K</div>
+            <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', color: PawColors.labelStrong }}>연결된 계정</span>
+            <span style={{ font: '400 13px/1 var(--font-sans)', color: PawColors.labelHint }}>카카오</span>
+          </div>
+          <PawDivider inset={54} />
+          <SettingRow icon="exit" label="로그아웃" onTap={() => {}} right={
+            <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
+          } />
+          <PawDivider inset={54} />
+          <SettingRow label="회원탈퇴" onTap={() => {}} right={
+            <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
+          } />
+        </div>
+
+        <div style={{ height: 32 }} />
+      </div>
+
+    </div>
+  );
+}
+
 function DarkColorPaletteScreen() {
   function PalSection({ title, sub, children }) {
     return (
@@ -5326,6 +5859,34 @@ function AppInner() {
             subtitle="이름 · 고유명 입력 후 가입 완료">
             <DCArtboard id="welcome-3b" label="S10 · 프로필 설정" width={W} height={H}>
               <Phone><OnboardingNoPetProfile /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          <DCFlowArrow mt={8} mb={8} branches={[
+            { label: '온보딩 완료 → 홈 진입', color: '#FF6B3D' },
+          ]} />
+
+          {/* 행 4: 홈 피드 */}
+          <DCSection id="home-feed" title="④ 홈 피드"
+            subtitle="Pinterest식 2열 Masonry · 종 필터 · 스토리 스트립 · 더블탭 좋아요">
+            <DCArtboard id="home-1" label="S11 · 홈 피드" width={W} height={H}>
+              <Phone><HomeScreen /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="my-profile" title="⑤ MY 프로필"
+            subtitle="프로필 · 반려동물 카드 · 사진 그리드">
+            <DCArtboard id="my-1" label="S12 · MY 프로필" width={W} height={H}>
+              <Phone><MyScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="my-2" label="S13 · 타유저 프로필" width={W} height={H}>
+              <Phone><OtherUserProfileScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="my-3" label="S14 · MY (비로그인)" width={W} height={H}>
+              <Phone><MyGuestScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="my-4" label="S15 · 설정" width={W} height={H}>
+              <Phone><SettingsScreen /></Phone>
             </DCArtboard>
           </DCSection>
 
