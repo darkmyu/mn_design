@@ -4472,7 +4472,7 @@ function OnboardingNoPetProfile() {
           font: '800 24px/1.35 var(--font-sans)',
           letterSpacing: '-0.024em',
           color: 'var(--color-text-strong)',
-        }}>프로필을 만들어볼게요</h1>
+        }}>프로필을 입력해주세요</h1>
         <p style={{
           margin: '8px 0 0',
           font: '500 14px/1.5 var(--font-sans)',
@@ -5300,7 +5300,7 @@ function MyScreen() {
         {/* ── Masonry 사진 그리드 ── */}
         <div style={{ paddingTop: 12 }}>
           {feedPhotos.length > 0 ? (
-            <PawMasonry items={feedPhotos} onLike={toggleLike} likedSet={liked} gap={3} bare />
+            <PawMasonry items={feedPhotos} onLike={toggleLike} likedSet={liked} gap={6} bare />
           ) : (
             <div style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -5458,7 +5458,7 @@ function OtherUserProfileScreen() {
         {/* ── Masonry 사진 그리드 ── */}
         <div style={{ paddingTop: 12 }}>
           {feedPhotos.length > 0 ? (
-            <PawMasonry items={feedPhotos} onLike={toggleLike} likedSet={liked} gap={3} bare />
+            <PawMasonry items={feedPhotos} onLike={toggleLike} likedSet={liked} gap={6} bare />
           ) : (
             <div style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center',
