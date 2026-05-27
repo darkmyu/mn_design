@@ -5834,6 +5834,7 @@ function OtherUserProfileScreen({ emptyPets, emptyPhotos }) {
 }
 
 function MyGuestScreen() {
+  const { dark, setDark } = useDarkMode();
   const settingsItems = [
     { label: '공지사항',        icon: 'bell' },
     { label: '고객센터',        icon: 'bubble' },
@@ -5872,6 +5873,26 @@ function MyGuestScreen() {
           <PawIcon name="chevron-right" size={20} color={PawColors.labelHint} />
         </div>
 
+        {/* ── 화면 ── */}
+        <div style={{ background: PawColors.surface, marginTop: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 52, gap: 14 }}>
+            <PawIcon name="eye" size={20} color={PawColors.labelHint} />
+            <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>다크 모드</span>
+            <div onClick={() => setDark(d => !d)} style={{
+              width: 46, height: 26, borderRadius: 999, flexShrink: 0,
+              background: dark ? PawColors.brand : 'var(--color-surface-track)',
+              position: 'relative', cursor: 'pointer', transition: 'background .2s',
+            }}>
+              <div style={{
+                position: 'absolute', top: 3, left: dark ? 23 : 3,
+                width: 20, height: 20, borderRadius: 999,
+                background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                transition: 'left .2s',
+              }} />
+            </div>
+          </div>
+        </div>
+
         {/* ── 앱 정보 / 설정 리스트 ── */}
         <div style={{ background: PawColors.surface, marginTop: 8 }}>
           {settingsItems.map((item, i) => (
@@ -5904,6 +5925,7 @@ function MyGuestScreen() {
 
 function SettingsScreen() {
   const [noti, setNoti] = React.useState({ like: true, comment: true, follow: false });
+  const { dark, setDark } = useDarkMode();
 
   function Toggle({ on, onToggle }) {
     return (
@@ -5971,6 +5993,14 @@ function SettingsScreen() {
           <PawDivider inset={54} />
           <SettingRow icon="person" label="팔로우 알림" right={
             <Toggle on={noti.follow} onToggle={() => setNoti(n => ({ ...n, follow: !n.follow }))} />
+          } />
+        </div>
+
+        {/* ── 화면 ── */}
+        <SectionHeader label="화면" />
+        <div style={{ background: PawColors.surface }}>
+          <SettingRow icon="eye" label="다크 모드" right={
+            <Toggle on={dark} onToggle={() => setDark(d => !d)} />
           } />
         </div>
 
