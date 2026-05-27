@@ -5207,7 +5207,7 @@ function PhotoDetailScreen({ photo, onBack }) {
         style={{ flex: 1, overflowY: 'auto', paddingBottom: kbOpen ? KB_H + INPUT_H + (replyTarget ? REPLY_H : 0) : INPUT_H + (replyTarget ? REPLY_H : 0) }}
       >
         {/* 사진 */}
-        <PawPhoto uid={p.uid} w={600} fav={p.fav} radius={0} style={{ height: 260 }} />
+        <PawPhoto uid={p.uid} w={600} h={Math.round(600 / p.ar)} fav={p.fav} radius={0} />
 
         {/* 유저 행 */}
         <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', gap: 10, borderBottom: `1px solid ${PawColors.lineSoft}` }}>
