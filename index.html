@@ -40,24 +40,20 @@
      ───────────────────────────────────────────────────────── */
 
   /* common — pure black/white */
-  --color-atomic-common-100: #ffffff;
-  --color-atomic-common-0:   #000000;
+  --color-atomic-common-50:  #ffffff;
+  --color-atomic-common-900: #000000;
 
-  /* neutral (warm gray scale, default 5 steps, 16 stops) */
-  --color-atomic-neutral-99: #F7F7F7;
-  --color-atomic-neutral-96: #DCDCDC;
-  --color-atomic-neutral-90: #C4C4C4;
-  --color-atomic-neutral-80: #B0B0B0;
-  --color-atomic-neutral-70: #9B9B9B;
-  --color-atomic-neutral-60: #8A8A8A;
-  --color-atomic-neutral-50: #737373;
-  --color-atomic-neutral-40: #5C5C5C;
-  --color-atomic-neutral-30: #474747;
-  --color-atomic-neutral-25: #303030;
-  --color-atomic-neutral-22: #2A2A2A;
-  --color-atomic-neutral-15: #1C1C1C;
-  --color-atomic-neutral-12: #171717;
-  --color-atomic-neutral-8:  #0F0F0F;
+  /* neutral */
+  --color-atomic-neutral-50:  #F7F7F7;
+  --color-atomic-neutral-100: #DCDCDC;
+  --color-atomic-neutral-200: #C4C4C4;
+  --color-atomic-neutral-300: #B0B0B0;
+  --color-atomic-neutral-400: #9B9B9B;
+  --color-atomic-neutral-500: #737373;
+  --color-atomic-neutral-600: #5C5C5C;
+  --color-atomic-neutral-700: #474747;
+  --color-atomic-neutral-800: #2A2A2A;
+  --color-atomic-neutral-900: #171717;
 
   /* slate — blue-tinted gray */
   --color-atomic-slate-50:  #F8FAFC;
@@ -96,17 +92,16 @@
   --color-atomic-zinc-900: #18181B;
 
   /* red — destructive / error */
-  --color-atomic-red-99: #FFFAFA;
-  --color-atomic-red-96: #FEECEC;
-  --color-atomic-red-90: #FED5D5;
-  --color-atomic-red-80: #FFB5B5;
-  --color-atomic-red-70: #FF8C8C;
-  --color-atomic-red-60: #FF6363;
-  --color-atomic-red-50: #FF4242;
-  --color-atomic-red-40: #E52222;
-  --color-atomic-red-25: #B20C0C;
-  --color-atomic-red-15: #750404;
-  --color-atomic-red-5:  #3B0101;
+  --color-atomic-red-50:  #FFFAFA;
+  --color-atomic-red-100: #FEECEC;
+  --color-atomic-red-200: #FED5D5;
+  --color-atomic-red-300: #FFB5B5;
+  --color-atomic-red-400: #FF8C8C;
+  --color-atomic-red-500: #FF6363;
+  --color-atomic-red-600: #FF4242;
+  --color-atomic-red-700: #E52222;
+  --color-atomic-red-800: #B20C0C;
+  --color-atomic-red-900: #3B0101;
 
   /* rose */
   --color-atomic-rose-50:  #FFF5F6;
@@ -121,32 +116,28 @@
   --color-atomic-rose-900: #7B1133;
 
   /* coral */
-  --color-atomic-coral-99: #FFFAF7;
-  --color-atomic-coral-96: #FEEEE5;
-  --color-atomic-coral-90: #FEDBC6;
-  --color-atomic-coral-80: #FFC09C;
-  --color-atomic-coral-70: #FF9C63;
-  --color-atomic-coral-60: #FF7B2E;
-  --color-atomic-coral-50: #FF5E00;
-  --color-atomic-coral-48: #F55A00;
-  --color-atomic-coral-40: #CC4B00;
-  --color-atomic-coral-30: #943600;
-  --color-atomic-coral-15: #5C2200;
-  --color-atomic-coral-5:  #2E1100;
+  --color-atomic-coral-50:  #FFFAF7;
+  --color-atomic-coral-100: #FEEEE5;
+  --color-atomic-coral-200: #FEDBC6;
+  --color-atomic-coral-300: #FFC09C;
+  --color-atomic-coral-400: #FF9C63;
+  --color-atomic-coral-500: #FF7B2E;
+  --color-atomic-coral-600: #FF5E00;
+  --color-atomic-coral-700: #CC4B00;
+  --color-atomic-coral-800: #943600;
+  --color-atomic-coral-900: #2E1100;
 
   /* orange — warning */
-  --color-atomic-orange-99: #FFFCF7;
-  --color-atomic-orange-96: #FEF4E6;
-  --color-atomic-orange-90: #FEE6C6;
-  --color-atomic-orange-80: #FFD49C;
-  --color-atomic-orange-70: #FFC06E;
-  --color-atomic-orange-60: #FFA938;
-  --color-atomic-orange-50: #FF9200;
-  --color-atomic-orange-45: #D47800;
-  --color-atomic-orange-40: #D17600;
-  --color-atomic-orange-30: #9C5800;
-  --color-atomic-orange-15: #663A00;
-  --color-atomic-orange-5:  #361E00;
+  --color-atomic-orange-50:  #FFFCF7;
+  --color-atomic-orange-100: #FEF4E6;
+  --color-atomic-orange-200: #FEE6C6;
+  --color-atomic-orange-300: #FFD49C;
+  --color-atomic-orange-400: #FFC06E;
+  --color-atomic-orange-500: #FFA938;
+  --color-atomic-orange-600: #FF9200;
+  --color-atomic-orange-700: #D17600;
+  --color-atomic-orange-800: #9C5800;
+  --color-atomic-orange-900: #361E00;
 
   /* yellow */
   --color-atomic-yellow-50:  #FEFEF3;
@@ -161,101 +152,88 @@
   --color-atomic-yellow-900: #60360F;
 
   /* lime — fresh accent */
-  --color-atomic-lime-99: #F8FFF2;
-  --color-atomic-lime-95: #E6FFD4;
-  --color-atomic-lime-90: #CCFCA9;
-  --color-atomic-lime-80: #AEF779;
-  --color-atomic-lime-70: #88F03E;
-  --color-atomic-lime-60: #6BE016;
-  --color-atomic-lime-50: #58CF04;
-  --color-atomic-lime-40: #48AD00;
-  --color-atomic-lime-37: #429E00;
-  --color-atomic-lime-30: #347D00;
-  --color-atomic-lime-15: #225200;
-  --color-atomic-lime-5:  #112900;
+  --color-atomic-lime-50:  #F8FFF2;
+  --color-atomic-lime-100: #E6FFD4;
+  --color-atomic-lime-200: #CCFCA9;
+  --color-atomic-lime-300: #AEF779;
+  --color-atomic-lime-400: #88F03E;
+  --color-atomic-lime-500: #6BE016;
+  --color-atomic-lime-600: #58CF04;
+  --color-atomic-lime-700: #48AD00;
+  --color-atomic-lime-800: #347D00;
+  --color-atomic-lime-900: #112900;
 
   /* green — success / positive */
-  --color-atomic-green-99: #F2FFF6;
-  --color-atomic-green-95: #D9FFE6;
-  --color-atomic-green-90: #ACFCC7;
-  --color-atomic-green-80: #7DF5A5;
-  --color-atomic-green-70: #49E57D;
-  --color-atomic-green-60: #1ED45A;
-  --color-atomic-green-50: #00BF40;
-  --color-atomic-green-40: #009632;
-  --color-atomic-green-30: #006E25;
-  --color-atomic-green-15: #004517;
-  --color-atomic-green-5:  #00240C;
+  --color-atomic-green-50:  #F2FFF6;
+  --color-atomic-green-100: #D9FFE6;
+  --color-atomic-green-200: #ACFCC7;
+  --color-atomic-green-300: #7DF5A5;
+  --color-atomic-green-400: #49E57D;
+  --color-atomic-green-500: #1ED45A;
+  --color-atomic-green-600: #00BF40;
+  --color-atomic-green-700: #009632;
+  --color-atomic-green-800: #006E25;
+  --color-atomic-green-900: #00240C;
 
   /* cyan */
-  --color-atomic-cyan-99: #F7FEFF;
-  --color-atomic-cyan-95: #DEFAFF;
-  --color-atomic-cyan-90: #B5F4FF;
-  --color-atomic-cyan-80: #8AEDFF;
-  --color-atomic-cyan-70: #57DFF7;
-  --color-atomic-cyan-60: #28D0ED;
-  --color-atomic-cyan-50: #00BDDE;
-  --color-atomic-cyan-40: #0098B2;
-  --color-atomic-cyan-25: #006F82;
-  --color-atomic-cyan-15: #004854;
-  --color-atomic-cyan-5:  #00252B;
+  --color-atomic-cyan-50:  #F7FEFF;
+  --color-atomic-cyan-100: #DEFAFF;
+  --color-atomic-cyan-200: #B5F4FF;
+  --color-atomic-cyan-300: #8AEDFF;
+  --color-atomic-cyan-400: #57DFF7;
+  --color-atomic-cyan-500: #28D0ED;
+  --color-atomic-cyan-600: #00BDDE;
+  --color-atomic-cyan-700: #0098B2;
+  --color-atomic-cyan-800: #006F82;
+  --color-atomic-cyan-900: #00252B;
 
   /* blue — primary brand color */
-  --color-atomic-blue-99: #F7FBFF;
-  --color-atomic-blue-96: #EAF2FE;
-  --color-atomic-blue-90: #C9DEFE;
-  --color-atomic-blue-80: #9EC5FF;
-  --color-atomic-blue-70: #69A5FF;
-  --color-atomic-blue-60: #4F95FF;
-  --color-atomic-blue-55: #3385FF;
-  --color-atomic-blue-50: #1A75FF;
-  --color-atomic-blue-45: #0066FF;   /* PRIMARY */
-  --color-atomic-blue-40: #005EEB;
-  --color-atomic-blue-35: #0054D1;
-  --color-atomic-blue-25: #003E9C;
-  --color-atomic-blue-15: #002966;
-  --color-atomic-blue-5:  #001536;
+  --color-atomic-blue-50:  #F7FBFF;
+  --color-atomic-blue-100: #EAF2FE;
+  --color-atomic-blue-200: #C9DEFE;
+  --color-atomic-blue-300: #9EC5FF;
+  --color-atomic-blue-400: #69A5FF;
+  --color-atomic-blue-500: #1A75FF;
+  --color-atomic-blue-600: #0066FF;
+  --color-atomic-blue-700: #0054D1;
+  --color-atomic-blue-800: #003E9C;
+  --color-atomic-blue-900: #001536;
 
   /* violet — secondary brand accent */
-  --color-atomic-violet-99: #FBFAFF;
-  --color-atomic-violet-96: #F0ECFE;
-  --color-atomic-violet-90: #DBD3FE;
-  --color-atomic-violet-80: #C0B0FF;
-  --color-atomic-violet-70: #9E86FC;
-  --color-atomic-violet-60: #7D5EF7;
-  --color-atomic-violet-50: #6541F2;
-  --color-atomic-violet-48: #5B37ED;
-  --color-atomic-violet-45: #4F29E5;
-  --color-atomic-violet-35: #3A16C9;
-  --color-atomic-violet-25: #23098F;
-  --color-atomic-violet-15: #11024D;
+  --color-atomic-violet-50:  #FBFAFF;
+  --color-atomic-violet-100: #F0ECFE;
+  --color-atomic-violet-200: #DBD3FE;
+  --color-atomic-violet-300: #C0B0FF;
+  --color-atomic-violet-400: #9E86FC;
+  --color-atomic-violet-500: #7D5EF7;
+  --color-atomic-violet-600: #6541F2;
+  --color-atomic-violet-700: #4F29E5;
+  --color-atomic-violet-800: #23098F;
+  --color-atomic-violet-900: #11024D;
 
   /* purple */
-  --color-atomic-purple-99: #FEFBFF;
-  --color-atomic-purple-95: #F9EDFF;
-  --color-atomic-purple-90: #F2D6FF;
-  --color-atomic-purple-80: #E9BAFF;
-  --color-atomic-purple-70: #DE96FF;
-  --color-atomic-purple-60: #D478FF;
-  --color-atomic-purple-50: #CB59FF;
-  --color-atomic-purple-40: #AD36E3;
-  --color-atomic-purple-30: #861CB8;
-  --color-atomic-purple-15: #580A7D;
-  --color-atomic-purple-5:  #290247;
+  --color-atomic-purple-50:  #FEFBFF;
+  --color-atomic-purple-100: #F9EDFF;
+  --color-atomic-purple-200: #F2D6FF;
+  --color-atomic-purple-300: #E9BAFF;
+  --color-atomic-purple-400: #DE96FF;
+  --color-atomic-purple-500: #D478FF;
+  --color-atomic-purple-600: #CB59FF;
+  --color-atomic-purple-700: #AD36E3;
+  --color-atomic-purple-800: #861CB8;
+  --color-atomic-purple-900: #290247;
 
   /* pink */
-  --color-atomic-pink-99: #FFFAFE;
-  --color-atomic-pink-96: #FEECFB;
-  --color-atomic-pink-90: #FED3F7;
-  --color-atomic-pink-80: #FFB8F3;
-  --color-atomic-pink-70: #FF94ED;
-  --color-atomic-pink-60: #FA73E3;
-  --color-atomic-pink-50: #F553DA;
-  --color-atomic-pink-46: #E846CD;
-  --color-atomic-pink-40: #D331B8;
-  --color-atomic-pink-30: #A81690;
-  --color-atomic-pink-15: #730560;
-  --color-atomic-pink-5:  #3D0133;
+  --color-atomic-pink-50:  #FFFAFE;
+  --color-atomic-pink-100: #FEECFB;
+  --color-atomic-pink-200: #FED3F7;
+  --color-atomic-pink-300: #FFB8F3;
+  --color-atomic-pink-400: #FF94ED;
+  --color-atomic-pink-500: #FA73E3;
+  --color-atomic-pink-600: #F553DA;
+  --color-atomic-pink-700: #D331B8;
+  --color-atomic-pink-800: #A81690;
+  --color-atomic-pink-900: #3D0133;
 
   /* ─────────────────────────────────────────────────────────
      RADII, SPACING, SHADOWS
@@ -339,49 +317,49 @@
    ───────────────────────────────────────────────────────── */
 :root {
   /* Brand */
-  --color-brand-primary:          var(--color-atomic-coral-60);
-  --color-brand-subtle:          var(--color-atomic-coral-96);
-  --color-brand-accent:         var(--color-atomic-coral-30);
+  --color-brand-primary:          var(--color-atomic-coral-500);
+  --color-brand-subtle:          var(--color-atomic-coral-100);
+  --color-brand-accent:         var(--color-atomic-coral-800);
 
   /* Text */
-  --color-text-strong:            var(--color-atomic-common-0);        /* #000000 */
-  --color-text-default:           #27272A;                             /* Zinc-800 */
-  --color-text-subtle:            var(--color-atomic-neutral-70);      /* #9B9B9B */
-  --color-text-placeholder:       #D4D4D8;                             /* Zinc-300 */
-  --color-text-disabled:          #E4E4E7;                             /* Zinc-200 */
+  --color-text-strong:            var(--color-atomic-common-900);
+  --color-text-default:           var(--color-atomic-zinc-800);
+  --color-text-subtle:            var(--color-atomic-neutral-400);
+  --color-text-placeholder:       var(--color-atomic-zinc-300);
+  --color-text-disabled:          var(--color-atomic-zinc-200);
 
   /* Icon */
-  --color-icon-default:           var(--color-atomic-neutral-70);      /* #9B9B9B */
+  --color-icon-default:           var(--color-atomic-neutral-400);
 
   /* Background */
-  --color-bg-default:             var(--color-atomic-common-100);      /* #FFFFFF */
-  --color-bg-subtle:              var(--color-atomic-neutral-99);      /* #F7F7F7 */
-  --color-bg-muted:               #F4F4F5;                             /* Neutral 98 */
-  --color-surface-default:        #E4E4E7;                             /* Zinc-200 */
-  --color-surface-track:          #D4D4D8;                             /* Zinc-300 */
+  --color-bg-default:             var(--color-atomic-common-50);
+  --color-bg-subtle:              var(--color-atomic-neutral-50);
+  --color-bg-muted:               var(--color-atomic-zinc-100);
+  --color-surface-default:        var(--color-atomic-zinc-200);
+  --color-surface-track:          var(--color-atomic-zinc-300);
 
   /* Border */
-  --color-border-default:         #E4E4E7;                             /* Zinc-200 */
-  --color-border-subtle:          #E4E4E7;                             /* Zinc-200 */
-  --color-border-strong:          #D4D4D8;                             /* Zinc-300 */
+  --color-border-default:         var(--color-atomic-zinc-200);
+  --color-border-subtle:          var(--color-atomic-zinc-200);
+  --color-border-strong:          var(--color-atomic-zinc-300);
 
   /* Status */
-  --color-status-info:            var(--color-atomic-blue-45);         /* #0066FF */
-  --color-status-error:           var(--color-atomic-red-50);          /* #FF4242 */
-  --color-status-success:         var(--color-atomic-green-50);        /* #00BF40 */
-  --color-status-warning:         var(--color-atomic-orange-60);       /* #FFA938 */
+  --color-status-info:            var(--color-atomic-blue-600);         /* #0066FF */
+  --color-status-error:           var(--color-atomic-red-600);          /* #FF4242 */
+  --color-status-success:         var(--color-atomic-green-600);        /* #00BF40 */
+  --color-status-warning:         var(--color-atomic-orange-500);       /* #FFA938 */
 
   /* Social */
   --color-social-kakao:           #FEE500;
   --color-social-naver:           #03C75A;
-  --color-social-google:          var(--color-atomic-common-100);      /* #FFFFFF */
-  --color-social-apple:           var(--color-atomic-common-0);        /* #000000 */
+  --color-social-google:          var(--color-atomic-common-50);      /* #FFFFFF */
+  --color-social-apple:           var(--color-atomic-common-900);        /* #000000 */
 
   /* Gender */
-  --color-gender-male:            var(--color-atomic-blue-70);         /* #69A5FF */
-  --color-gender-male-surface:    var(--color-atomic-blue-96);         /* #EAF2FE */
-  --color-gender-female:          var(--color-atomic-pink-60);         /* #FA73E3 */
-  --color-gender-female-surface:  var(--color-atomic-pink-96);         /* #FEECFB */
+  --color-gender-male:            var(--color-atomic-blue-400);         /* #69A5FF */
+  --color-gender-male-surface:    var(--color-atomic-blue-100);         /* #EAF2FE */
+  --color-gender-female:          var(--color-atomic-pink-500);         /* #FA73E3 */
+  --color-gender-female-surface:  var(--color-atomic-pink-100);         /* #FEECFB */
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -389,49 +367,49 @@
    ───────────────────────────────────────────────────────── */
 [data-theme="dark"] {
   /* Brand */
-  --color-brand-primary:          var(--color-atomic-coral-60);
-  --color-brand-subtle:          var(--color-atomic-coral-5);
-  --color-brand-accent:         var(--color-atomic-coral-80);
+  --color-brand-primary:          var(--color-atomic-coral-500);
+  --color-brand-subtle:          var(--color-atomic-coral-900);
+  --color-brand-accent:         var(--color-atomic-coral-300);
 
   /* Text */
-  --color-text-strong:            #E4E4E7;                             /* Zinc-200 */
-  --color-text-default:           #D4D4D8;                             /* Zinc-300 */
-  --color-text-subtle:            var(--color-atomic-neutral-70);      /* #9B9B9B */
-  --color-text-placeholder:       #52525B;                             /* Zinc-600 */
-  --color-text-disabled:          #3F3F46;                             /* Zinc-700 */
+  --color-text-strong:            var(--color-atomic-zinc-200);
+  --color-text-default:           var(--color-atomic-zinc-300);
+  --color-text-subtle:            var(--color-atomic-neutral-400);
+  --color-text-placeholder:       var(--color-atomic-zinc-600);
+  --color-text-disabled:          var(--color-atomic-zinc-700);
 
   /* Icon */
-  --color-icon-default:           #71717A;                             /* Zinc-500 */
+  --color-icon-default:           var(--color-atomic-zinc-500);
 
   /* Background */
-  --color-bg-default:             #18181B;                             /* Zinc-900 */
-  --color-bg-subtle:              #27272A;                             /* Zinc-800 */
-  --color-bg-muted:               #27272A;                             /* Zinc-800 */
-  --color-surface-default:        #3F3F46;                             /* Zinc-700 */
-  --color-surface-track:          #3F3F46;                             /* Zinc-700 */
+  --color-bg-default:             var(--color-atomic-zinc-900);
+  --color-bg-subtle:              var(--color-atomic-zinc-800);
+  --color-bg-muted:               var(--color-atomic-zinc-800);
+  --color-surface-default:        var(--color-atomic-zinc-700);
+  --color-surface-track:          var(--color-atomic-zinc-700);
 
   /* Border */
-  --color-border-default:         #3F3F46;                             /* Zinc-700 */
-  --color-border-subtle:          #3F3F46;                             /* Zinc-700 */
-  --color-border-strong:          #3F3F46;                             /* Zinc-700 */
+  --color-border-default:         var(--color-atomic-zinc-700);
+  --color-border-subtle:          var(--color-atomic-zinc-700);
+  --color-border-strong:          var(--color-atomic-zinc-700);
 
   /* Status */
-  --color-status-info:            var(--color-atomic-blue-70);         /* #69A5FF */
-  --color-status-error:           var(--color-atomic-red-60);          /* #FF6363 */
-  --color-status-success:         var(--color-atomic-green-50);        /* #00BF40 */
-  --color-status-warning:         var(--color-atomic-orange-60);       /* #FFA938 */
+  --color-status-info:            var(--color-atomic-blue-400);         /* #69A5FF */
+  --color-status-error:           var(--color-atomic-red-500);          /* #FF6363 */
+  --color-status-success:         var(--color-atomic-green-600);        /* #00BF40 */
+  --color-status-warning:         var(--color-atomic-orange-500);       /* #FFA938 */
 
   /* Social */
   --color-social-kakao:           #FEE500;
   --color-social-naver:           #03C75A;
-  --color-social-google:          var(--color-atomic-common-100);      /* #FFFFFF */
-  --color-social-apple:           var(--color-atomic-common-0);        /* #000000 */
+  --color-social-google:          var(--color-atomic-common-50);      /* #FFFFFF */
+  --color-social-apple:           var(--color-atomic-common-900);        /* #000000 */
 
   /* Gender */
-  --color-gender-male:            var(--color-atomic-blue-70);         /* #69A5FF */
-  --color-gender-male-surface:    var(--color-atomic-cyan-5);          /* #00252B */
-  --color-gender-female:          var(--color-atomic-pink-60);         /* #FA73E3 */
-  --color-gender-female-surface:  var(--color-atomic-pink-5);          /* #3D0133 */
+  --color-gender-male:            var(--color-atomic-blue-400);         /* #69A5FF */
+  --color-gender-male-surface:    var(--color-atomic-cyan-900);          /* #00252B */
+  --color-gender-female:          var(--color-atomic-pink-500);         /* #FA73E3 */
+  --color-gender-female-surface:  var(--color-atomic-pink-900);          /* #3D0133 */
 }
 
 /* ─────────────────────────────────────────────────────────

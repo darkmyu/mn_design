@@ -2,6 +2,9 @@ const DarkModeCtx = React.createContext({ dark: false, setDark: () => {} });
 function useDarkMode() { return React.useContext(DarkModeCtx); }
 function DarkModeProvider({ children }) {
   const [dark, setDark] = React.useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
+  React.useEffect(() => {
+    document.documentElement.dataset.theme = dark ? 'dark' : '';
+  }, [dark]);
   return <DarkModeCtx.Provider value={{ dark, setDark }}>{children}</DarkModeCtx.Provider>;
 }
 
@@ -2414,11 +2417,10 @@ const DS_TYPE_SCALE = [
 ];
 
 function DSColor({ colorTab, setColorTab }) {
-  const { dark } = useDarkMode();
-  const border     = dark ? '#3D3E41' : '#E1E2E4';
-  const rowBorder  = dark ? '#2E2F33' : '#F4F4F5';
-  const textStrong = dark ? '#EBEBEB' : '#171719';
-  const textSubtle = dark ? '#9D9EA2' : '#858688';
+  const border     = 'var(--color-border-default)';
+  const rowBorder  = 'var(--color-bg-muted)';
+  const textStrong = 'var(--color-text-strong)';
+  const textSubtle = 'var(--color-text-subtle)';
   const MONO = '"SF Mono","JetBrains Mono",monospace';
 
   return (
@@ -2436,8 +2438,8 @@ function DSColor({ colorTab, setColorTab }) {
           <button key={t} onClick={() => setColorTab(t)} style={{
             padding: '8px 20px', border: 'none', cursor: 'pointer', background: 'transparent',
             font: `${colorTab === t ? '600' : '400'} 13px/1 var(--font-sans)`,
-            color: colorTab === t ? '#FF6B3D' : textSubtle,
-            borderBottom: colorTab === t ? '2px solid #FF6B3D' : '2px solid transparent',
+            color: colorTab === t ? 'var(--color-brand-primary)' : textSubtle,
+            borderBottom: colorTab === t ? '2px solid var(--color-brand-primary)' : '2px solid transparent',
             marginBottom: -1, transition: 'color .15s',
           }}>
             {t === 'primitive' ? 'Primitive' : 'Semantic'}
@@ -2463,7 +2465,7 @@ function DSColor({ colorTab, setColorTab }) {
                     }} />
                     <div style={{ marginTop: 4, font: '500 9px/1 var(--font-sans)', color: textSubtle, whiteSpace: 'nowrap' }}>{s.step}</div>
                     <div style={{ marginTop: 3, font: `400 8px/1 ${MONO}`, color: textSubtle, opacity: 0.75, whiteSpace: 'nowrap' }}>{s.hex}</div>
-                    {s.badge && <div style={{ font: '600 8px/1 var(--font-sans)', color: '#FF6B3D', marginTop: 2 }}>{s.badge}</div>}
+                    {s.badge && <div style={{ font: '600 8px/1 var(--font-sans)', color: 'var(--color-brand-primary)', marginTop: 2 }}>{s.badge}</div>}
                   </div>
                 ))}
               </div>
@@ -2507,11 +2509,10 @@ function DSColor({ colorTab, setColorTab }) {
 }
 
 function DSTypography() {
-  const { dark } = useDarkMode();
-  const border     = dark ? '#3D3E41' : '#E1E2E4';
-  const rowBorder  = dark ? '#2E2F33' : '#F4F4F5';
-  const textStrong = dark ? '#EBEBEB' : '#171719';
-  const textSubtle = dark ? '#9D9EA2' : '#858688';
+  const border     = 'var(--color-border-default)';
+  const rowBorder  = 'var(--color-bg-muted)';
+  const textStrong = 'var(--color-text-strong)';
+  const textSubtle = 'var(--color-text-subtle)';
   const MONO = '"SF Mono","JetBrains Mono",monospace';
 
   return (
@@ -2547,16 +2548,15 @@ function DSTypography() {
 }
 
 function MongnyangDesignSystem() {
-  const { dark } = useDarkMode();
   const [nav, setNav] = React.useState('color');
   const [colorTab, setColorTab] = React.useState('primitive');
 
-  const bg        = dark ? '#1B1C1E' : '#FFFFFF';
-  const sidebarBg = dark ? '#232427' : '#F7F7F8';
-  const border    = dark ? '#3D3E41' : '#E1E2E4';
-  const textStrong = dark ? '#EBEBEB' : '#171719';
-  const textSubtle = dark ? '#9D9EA2' : '#858688';
-  const activeItemBg = dark ? '#2E2F33' : '#EAEBEC';
+  const bg           = 'var(--color-bg-default)';
+  const sidebarBg    = 'var(--color-bg-subtle)';
+  const border       = 'var(--color-border-default)';
+  const textStrong   = 'var(--color-text-strong)';
+  const textSubtle   = 'var(--color-text-subtle)';
+  const activeItemBg = 'var(--color-bg-muted)';
 
   const NAV_ITEMS = [
     { group: 'Foundation', items: [
@@ -2600,11 +2600,11 @@ function AppInner() {
   const [page, setPage] = React.useState(() => localStorage.getItem('mn-page') || 'canvas');
   const handleSetPage = (id) => { setPage(id); localStorage.setItem('mn-page', id); };
 
-  const topBg     = dark ? '#232427' : '#FFFFFF';
-  const topBorder = dark ? '#3D3E41' : '#E1E2E4';
-  const textStrong = dark ? '#EBEBEB' : '#171719';
-  const textSubtle = dark ? '#9D9EA2' : '#858688';
-  const activeTabBg = dark ? '#2E2F33' : '#F4F4F5';
+  const topBg       = 'var(--color-bg-default)';
+  const topBorder   = 'var(--color-border-default)';
+  const textStrong  = 'var(--color-text-strong)';
+  const textSubtle  = 'var(--color-text-subtle)';
+  const activeTabBg = 'var(--color-bg-muted)';
 
   return (
     <>
@@ -2616,7 +2616,7 @@ function AppInner() {
       }}>
         {/* 로고 */}
         <span style={{ font: '900 16px/1 var(--font-sans)', letterSpacing: '-0.04em', color: textStrong, flexShrink: 0 }}>
-          몽냥<span style={{ color: '#FF6B3D' }}>.</span>
+          몽냥<span style={{ color: 'var(--color-brand-primary)' }}>.</span>
         </span>
         <div style={{ width: 1, height: 16, background: topBorder, flexShrink: 0 }} />
 
