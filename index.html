@@ -267,10 +267,10 @@
   /* label — text colors, layered on background */
   --label-normal:    var(--color-atomic-coolNeutral-12);             /* near-black headings, body */
   --label-strong:    var(--color-atomic-common-0);
-  --label-neutral:   rgba(46, 47, 51, 0.88);  /* coolNeutral-18 @ 88% */
-  --label-alternative: rgba(55, 56, 60, 0.61); /* coolNeutral-25 @ 61% — secondary text */
-  --label-assistive: rgba(55, 56, 60, 0.28);  /* tertiary/placeholder */
-  --label-disable:   rgba(55, 56, 60, 0.16);
+  --label-neutral:   #47484B;  /* coolNeutral-18 @ 88% */
+  --label-alternative: #858688; /* coolNeutral-25 @ 61% — secondary text */
+  --label-assistive: #C7C7C8;  /* tertiary/placeholder */
+  --label-disable:   #DFDFE0;
   --label-inverse:   var(--color-atomic-common-100);  /* on dark backgrounds */
 
   /* background — surfaces */
@@ -282,8 +282,8 @@
   --background-overlay-normal:     rgba(0, 0, 0, 0.16);
 
   /* line — borders */
-  --line-normal-normal:      rgba(112, 115, 124, 0.22);   /* default border (== coolNeutral-50 @ 22%) */
-  --line-normal-neutral:     rgba(112, 115, 124, 0.16);   /* lighter divider */
+  --line-normal-normal:      #E0E0E2;   /* default border (== coolNeutral-50 @ 22%) */
+  --line-normal-neutral:     #E8E9EA;   /* lighter divider */
   --line-normal-alternative: var(--color-surface-default);
   --line-solid-normal:       var(--color-surface-default);
   --line-solid-neutral:      var(--color-bg-muted);
@@ -448,20 +448,20 @@
 [data-theme="dark"] {
   /* ── WDS semantic vars (used directly in components) ── */
   --label-strong:                      #EBEBEB;
-  --label-normal:                      rgba(235,236,240,0.88);
-  --label-neutral:                     rgba(235,236,240,0.88);
-  --label-alternative:                 rgba(235,236,240,0.61);
-  --label-assistive:                   rgba(235,236,240,0.28);
-  --label-disable:                     rgba(235,236,240,0.16);
+  --label-normal:                      #D3D4D8;
+  --label-neutral:                     #D3D4D8;
+  --label-alternative:                 #9D9EA2;
+  --label-assistive:                   #5B5C5F;
+  --label-disable:                     #434447;
   --background-elevated-normal:        #1B1C1E;
   --background-elevated-alternative:   #232427;
   --background-normal-normal:          #232427;
   --background-normal-alternative:     #2E2F33;
-  --line-normal-normal:                rgba(255,255,255,0.12);
-  --line-normal-neutral:               rgba(255,255,255,0.08);
-  --line-normal-alternative:           rgba(255,255,255,0.18);
-  --line-solid-normal:                 rgba(255,255,255,0.18);
-  --line-solid-neutral:                rgba(255,255,255,0.12);
+  --line-normal-normal:                #3D3E41;
+  --line-normal-neutral:               #353638;
+  --line-normal-alternative:           #4B4B4E;
+  --line-solid-normal:                 #4B4B4E;
+  --line-solid-neutral:                #3D3E41;
   --primary-normal:                    #4F95FF;
   --primary-hover:                     #3A80FF;
   --primary-pressed:                   #2B70E8;
@@ -472,7 +472,7 @@
   --color-atomic-coolNeutral-98:       #2E2F33;
   --color-atomic-coolNeutral-97:       #38393E;
   --color-atomic-coolNeutral-95:       #44454A;
-  --color-atomic-coolNeutral-90:       rgba(255,255,255,0.18);
+  --color-atomic-coolNeutral-90:       #4B4B4E;
 
   /* Brand */
   --color-brand-primary:          #FF6B3D;
@@ -481,10 +481,10 @@
 
   /* Text */
   --color-text-strong:            #EBEBEB;
-  --color-text-default:           rgba(235,236,240,0.88);
-  --color-text-subtle:            rgba(235,236,240,0.61);
-  --color-text-placeholder:         rgba(235,236,240,0.28);
-  --color-text-disabled:          rgba(235,236,240,0.16);
+  --color-text-default:           #D3D4D8;
+  --color-text-subtle:            #9D9EA2;
+  --color-text-placeholder:         #5B5C5F;
+  --color-text-disabled:          #434447;
 
   /* Icon */
   --color-icon-default:          #70737C;
@@ -497,9 +497,9 @@
   --color-surface-track:          #44454A;
 
   /* Border */
-  --color-border-default:         rgba(255,255,255,0.12);
-  --color-border-subtle:          rgba(255,255,255,0.08);
-  --color-border-strong:          rgba(255,255,255,0.18);
+  --color-border-default:         #3D3E41;
+  --color-border-subtle:          #353638;
+  --color-border-strong:          #4B4B4E;
 
   /* Status */
   --color-status-info:            #4F95FF;
@@ -5093,10 +5093,10 @@ function ColorPaletteScreen() {
       {/* 텍스트 */}
       <PalSection title="Text" sub="--color-text-*">
         <Swatch bg="#171719"                    token="--color-text-strong"      hex="#171719" />
-        <Swatch bg="rgba(46,47,51,0.88)"        token="--color-text-default"     hex="rgba(46,47,51,.88)" />
-        <Swatch bg="rgba(55,56,60,0.61)"        token="--color-text-subtle"      hex="rgba(55,56,60,.61)" />
-        <Swatch bg="rgba(55,56,60,0.28)"        token="--color-text-placeholder"   hex="rgba(55,56,60,.28)" light />
-        <Swatch bg="rgba(55,56,60,0.16)"        token="--color-text-disabled"    hex="rgba(55,56,60,.16)" light />
+        <Swatch bg="#47484B"                    token="--color-text-default"     hex="#47484B" />
+        <Swatch bg="#858688"                    token="--color-text-subtle"      hex="#858688" />
+        <Swatch bg="#C7C7C8"                    token="--color-text-placeholder" hex="#C7C7C8" light />
+        <Swatch bg="#DFDFE0"                    token="--color-text-disabled"    hex="#DFDFE0" light />
       </PalSection>
 
       {/* 아이콘 */}
@@ -5115,8 +5115,8 @@ function ColorPaletteScreen() {
 
       {/* 테두리 */}
       <PalSection title="Border" sub="--color-border-*">
-        <Swatch bg="rgba(112,115,124,0.22)" token="--color-border-default" hex="rgba(112,115,124,.22)" light />
-        <Swatch bg="rgba(112,115,124,0.16)" token="--color-border-subtle"  hex="rgba(112,115,124,.16)" light />
+        <Swatch bg="#E0E0E2" token="--color-border-default" hex="#E0E0E2" light />
+        <Swatch bg="#E8E9EA" token="--color-border-subtle"  hex="#E8E9EA" light />
         <Swatch bg="#C2C4C8"                token="--color-border-strong"  hex="#C2C4C8" light />
       </PalSection>
 
@@ -6108,10 +6108,10 @@ function DarkColorPaletteScreen() {
 
       <PalSection title="Text" sub="--color-text-*">
         <Swatch bg="#EBEBEB"                    token="--color-text-strong"    hex="#EBEBEB" />
-        <Swatch bg="rgba(235,236,240,0.88)"     token="--color-text-default"   hex="rgba(235,236,240,.88)" />
-        <Swatch bg="rgba(235,236,240,0.61)"     token="--color-text-subtle"    hex="rgba(235,236,240,.61)" needsBorder />
-        <Swatch bg="rgba(235,236,240,0.28)"     token="--color-text-placeholder" hex="rgba(235,236,240,.28)" needsBorder />
-        <Swatch bg="rgba(235,236,240,0.16)"     token="--color-text-disabled"  hex="rgba(235,236,240,.16)" needsBorder />
+        <Swatch bg="#D3D4D8"                     token="--color-text-default"      hex="#D3D4D8" />
+        <Swatch bg="#9D9EA2"                     token="--color-text-subtle"       hex="#9D9EA2" />
+        <Swatch bg="#5B5C5F"                     token="--color-text-placeholder"  hex="#5B5C5F" />
+        <Swatch bg="#434447"                     token="--color-text-disabled"     hex="#434447" />
       </PalSection>
 
       <PalSection title="Icon" sub="--color-icon-*">
@@ -6127,9 +6127,9 @@ function DarkColorPaletteScreen() {
       </PalSection>
 
       <PalSection title="Border" sub="--color-border-*">
-        <Swatch bg="rgba(255,255,255,0.12)" token="--color-border-default" hex="rgba(255,255,255,.12)" needsBorder />
-        <Swatch bg="rgba(255,255,255,0.08)" token="--color-border-subtle"  hex="rgba(255,255,255,.08)" needsBorder />
-        <Swatch bg="rgba(255,255,255,0.18)" token="--color-border-strong"  hex="rgba(255,255,255,.18)" needsBorder />
+        <Swatch bg="#3D3E41" token="--color-border-default" hex="#3D3E41" />
+        <Swatch bg="#353638" token="--color-border-subtle"  hex="#353638" />
+        <Swatch bg="#4B4B4E" token="--color-border-strong"  hex="#4B4B4E" />
       </PalSection>
 
       <PalSection title="Status" sub="--color-status-*">
