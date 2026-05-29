@@ -1,7 +1,7 @@
 const DarkModeCtx = React.createContext({ dark: false, setDark: () => {} });
 function useDarkMode() { return React.useContext(DarkModeCtx); }
 function DarkModeProvider({ children }) {
-  const [dark, setDark] = React.useState(false);
+  const [dark, setDark] = React.useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
   return <DarkModeCtx.Provider value={{ dark, setDark }}>{children}</DarkModeCtx.Provider>;
 }
 

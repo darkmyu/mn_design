@@ -16,10 +16,15 @@
 
 const DC = {
   bg: '#f0eee9',
+  bgDark: '#0a0a0c',
   grid: 'rgba(0,0,0,0.06)',
+  gridDark: 'rgba(255,255,255,0.05)',
   label: 'rgba(60,50,40,0.7)',
+  labelDark: 'rgba(255,255,255,0.55)',
   title: 'rgba(40,30,20,0.85)',
+  titleDark: 'rgba(255,255,255,0.88)',
   subtitle: 'rgba(60,50,40,0.6)',
+  subtitleDark: 'rgba(255,255,255,0.45)',
   postitBg: '#fef4a8',
   postitText: '#5a4a2a',
   font: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
@@ -254,6 +259,7 @@ function DesignCanvas({ children, minScale, maxScale, style }) {
 // keeps pans at 60fps on dense canvases.
 // ─────────────────────────────────────────────────────────────
 function DCViewport({ children, minScale = 0.1, maxScale = 8, style = {} }) {
+  const { dark } = useDarkMode();
   const vpRef = React.useRef(null);
   const worldRef = React.useRef(null);
   const tf = React.useRef({ x: 0, y: 0, scale: 1 });
@@ -454,14 +460,15 @@ function DCViewport({ children, minScale = 0.1, maxScale = 8, style = {} }) {
     };
   }, [apply, minScale, maxScale]);
 
-  const gridSvg = `url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M120 0H0v120' fill='none' stroke='${encodeURIComponent(DC.grid)}' stroke-width='1'/%3E%3C/svg%3E")`;
+  const gridColor = dark ? DC.gridDark : DC.grid;
+  const gridSvg = `url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M120 0H0v120' fill='none' stroke='${encodeURIComponent(gridColor)}' stroke-width='1'/%3E%3C/svg%3E")`;
   return (
     <div
       ref={vpRef}
       className="design-canvas"
       style={{
         height: '100vh', width: '100vw',
-        background: DC.bg,
+        background: dark ? DC.bgDark : DC.bg,
         overflow: 'hidden',
         overscrollBehavior: 'none',
         touchAction: 'none',
@@ -493,6 +500,7 @@ function DCViewport({ children, minScale = 0.1, maxScale = 8, style = {} }) {
 // DCSection — editable title + h-row of artboards in persisted order
 // ─────────────────────────────────────────────────────────────
 function DCSection({ id, title, subtitle, children, gap = 48 }) {
+  const { dark } = useDarkMode();
   const ctx = React.useContext(DCCtx);
   const sid = id ?? title;
   const all = React.Children.toArray(dcFlatten(children));
@@ -526,8 +534,8 @@ function DCSection({ id, title, subtitle, children, gap = 48 }) {
         <div className="dc-sectionhead" style={{ paddingBottom: 36 }}>
           <DCEditable tag="div" value={sec.title ?? title}
             onChange={(v) => ctx && sid && ctx.patchSection(sid, { title: v })}
-            style={{ fontSize: 28, fontWeight: 600, color: DC.title, letterSpacing: -0.4, marginBottom: 6, display: 'inline-block' }} />
-          {subtitle && <div style={{ fontSize: 16, color: DC.subtitle }}>{subtitle}</div>}
+            style={{ fontSize: 28, fontWeight: 600, color: dark ? DC.titleDark : DC.title, letterSpacing: -0.4, marginBottom: 6, display: 'inline-block' }} />
+          {subtitle && <div style={{ fontSize: 16, color: dark ? DC.subtitleDark : DC.subtitle }}>{subtitle}</div>}
         </div>
       </div>
       <div style={{ display: 'flex', gap, padding: '0 60px', alignItems: 'flex-start', width: 'max-content' }}>
@@ -671,6 +679,7 @@ async function dcExport(node, w, h, name, kind) {
 }
 
 function DCArtboardFrame({ sectionId, artboard, label, order, onRename, onReorder, onFocus, onDelete }) {
+  const { dark } = useDarkMode();
   const { id: rawId, label: rawLabel, width = 260, height = 480, children, style = {} } = artboard.props;
   const id = rawId ?? rawLabel;
   const ref = React.useRef(null);
@@ -760,14 +769,14 @@ function DCArtboardFrame({ sectionId, artboard, label, order, onRename, onReorde
 
   return (
     <div ref={ref} data-dc-slot={id} style={{ position: 'relative', flexShrink: 0 }}>
-      <div className="dc-header" data-noncommentable="" style={{ color: DC.label }} onPointerDown={(e) => e.stopPropagation()}>
+      <div className="dc-header" data-noncommentable="" style={{ color: dark ? DC.labelDark : DC.label }} onPointerDown={(e) => e.stopPropagation()}>
         <div className="dc-labelrow">
           <div className="dc-grip" onPointerDown={onGripDown} title="Drag to reorder">
             <svg width="9" height="13" viewBox="0 0 9 13" fill="currentColor"><circle cx="2" cy="2" r="1.1"/><circle cx="7" cy="2" r="1.1"/><circle cx="2" cy="6.5" r="1.1"/><circle cx="7" cy="6.5" r="1.1"/><circle cx="2" cy="11" r="1.1"/><circle cx="7" cy="11" r="1.1"/></svg>
           </div>
           <div className="dc-labeltext" onClick={onFocus} title="Click to focus">
             <DCEditable value={label} onChange={onRename} onClick={(e) => e.stopPropagation()}
-              style={{ fontSize: 15, fontWeight: 500, color: DC.label, lineHeight: 1 }} />
+              style={{ fontSize: 15, fontWeight: 500, color: dark ? DC.labelDark : DC.label, lineHeight: 1 }} />
           </div>
         </div>
         <div className="dc-btns">
@@ -793,7 +802,7 @@ function DCArtboardFrame({ sectionId, artboard, label, order, onRename, onReorde
         </div>
       </div>
       <div ref={cardRef} className="dc-card"
-        style={{ borderRadius: 2, boxShadow: '0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)', overflow: 'hidden', width, height, background: '#fff', ...style }}>
+        style={{ borderRadius: 2, boxShadow: dark ? '0 0 0 1px rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,.6)' : '0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06)', overflow: 'hidden', width, height, background: '#fff', ...style }}>
         {children || <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bbb', fontSize: 13, fontFamily: DC.font }}>{id}</div>}
       </div>
     </div>
