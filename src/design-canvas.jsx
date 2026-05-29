@@ -388,7 +388,7 @@ function DCViewport({ children, minScale = 0.1, maxScale = 8, style = {} }) {
     // background (anything that isn't an artboard or an inline editor).
     let drag = null;
     const onPointerDown = (e) => {
-      const onBg = !e.target.closest('[data-dc-slot], .dc-editable');
+      const onBg = !e.target.closest('[data-dc-slot], .dc-editable, [data-dc-no-pan]');
       if (!(e.button === 1 || (e.button === 0 && onBg))) return;
       e.preventDefault();
       vp.setPointerCapture(e.pointerId);
@@ -460,6 +460,38 @@ function DCViewport({ children, minScale = 0.1, maxScale = 8, style = {} }) {
     };
   }, [apply, minScale, maxScale]);
 
+  const resetToOrigin = React.useCallback(() => {
+    const vp = vpRef.current;
+    if (!vp) return;
+
+    const slot = vp.querySelector('[data-dc-slot]');
+    const card = slot?.querySelector('.dc-card') ?? vp.querySelector('.dc-card');
+
+    if (!card) {
+      tf.current = { x: 0, y: 0, scale: 1 };
+      lastPostedScale.current = undefined;
+      apply();
+      return;
+    }
+
+    const vpRect = vp.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const { x: cx, y: cy, scale: cs } = tf.current;
+
+    // 현재 transform을 역산해 카드의 월드 공간 중심 좌표를 구함
+    const worldCX = (cardRect.left + cardRect.width  / 2 - vpRect.left - cx) / cs;
+    const worldCY = (cardRect.top  + cardRect.height / 2 - vpRect.top  - cy) / cs;
+
+    // scale=1 로 카드를 뷰포트 중앙에 배치
+    tf.current = {
+      x: vpRect.width  / 2 - worldCX,
+      y: vpRect.height / 2 - worldCY,
+      scale: 1,
+    };
+    lastPostedScale.current = undefined;
+    apply();
+  }, [apply]);
+
   const gridColor = dark ? DC.gridDark : DC.grid;
   const gridSvg = `url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M120 0H0v120' fill='none' stroke='${encodeURIComponent(gridColor)}' stroke-width='1'/%3E%3C/svg%3E")`;
   return (
@@ -492,6 +524,34 @@ function DCViewport({ children, minScale = 0.1, maxScale = 8, style = {} }) {
         <div style={{ position: 'absolute', inset: -6000, backgroundImage: gridSvg, backgroundSize: '120px 120px', pointerEvents: 'none', zIndex: -1 }} />
         {children}
       </div>
+      <button
+        data-dc-no-pan=""
+        onClick={resetToOrigin}
+        title="처음으로 돌아가기"
+        style={{
+          position: 'absolute', right: 16, bottom: 16,
+          width: 36, height: 36, borderRadius: 10,
+          background: dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+          border: `1px solid ${dark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)'}`,
+          cursor: 'pointer', padding: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: dark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.45)',
+          transition: 'background .12s, color .12s',
+          zIndex: 20,
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.background = dark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.16)';
+          e.currentTarget.style.color = dark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.7)';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.background = dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+          e.currentTarget.style.color = dark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.45)';
+        }}
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 6.5L8 1.5l6 5V14a.5.5 0 0 1-.5.5h-3.75v-4h-3.5v4H2.5A.5.5 0 0 1 2 14V6.5z"/>
+        </svg>
+      </button>
     </div>
   );
 }

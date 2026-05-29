@@ -35,8 +35,7 @@
 :root {
   /* ─────────────────────────────────────────────────────────
      ATOMIC — raw palette. 13 hues, each with steps 99→0
-     plus a common pair, a coolNeutral neutral scale, and an
-     opacity scale used for layered translucent surfaces.
+     plus a common pair and a neutral scale.
      Names mirror Figma tokens exactly: color-atomic-{hue}-{step}.
      ───────────────────────────────────────────────────────── */
 
@@ -59,29 +58,6 @@
   --color-atomic-neutral-15: #1C1C1C;
   --color-atomic-neutral-12: #171717;
   --color-atomic-neutral-8:  #0F0F0F;
-
-  /* coolNeutral — the canonical UI gray scale used everywhere */
-  --color-atomic-coolNeutral-99: #F7F7F8;
-  --color-atomic-coolNeutral-98: #F4F4F5;
-  --color-atomic-coolNeutral-97: #EAEBEC;
-  --color-atomic-coolNeutral-96: #E1E2E4;
-  --color-atomic-coolNeutral-95: #DBDCDF;
-  --color-atomic-coolNeutral-90: #C2C4C8;
-  --color-atomic-coolNeutral-80: #AEB0B6;
-  --color-atomic-coolNeutral-70: #989BA2;
-  --color-atomic-coolNeutral-60: #878A93;
-  --color-atomic-coolNeutral-50: #70737C;
-  --color-atomic-coolNeutral-40: #5A5C63;
-  --color-atomic-coolNeutral-30: #46474C;
-  --color-atomic-coolNeutral-25: #37383C;
-  --color-atomic-coolNeutral-22: #333438;
-  --color-atomic-coolNeutral-18: #2E2F33;
-  --color-atomic-coolNeutral-15: #292A2D;
-  --color-atomic-coolNeutral-12: #212225;
-  --color-atomic-coolNeutral-10: #1B1C1E;
-  --color-atomic-coolNeutral-8:  #171719;
-  --color-atomic-coolNeutral-7:  #141415;
-  --color-atomic-coolNeutral-5:  #0F0F10;
 
   /* slate — blue-tinted gray */
   --color-atomic-slate-50:  #F8FAFC;
@@ -144,19 +120,19 @@
   --color-atomic-rose-800: #9F1239;
   --color-atomic-rose-900: #7B1133;
 
-  /* redOrange — secondary accent */
-  --color-atomic-redOrange-99: #FFFAF7;
-  --color-atomic-redOrange-96: #FEEEE5;
-  --color-atomic-redOrange-90: #FEDBC6;
-  --color-atomic-redOrange-80: #FFC09C;
-  --color-atomic-redOrange-70: #FF9C63;
-  --color-atomic-redOrange-60: #FF7B2E;
-  --color-atomic-redOrange-50: #FF5E00;
-  --color-atomic-redOrange-48: #F55A00;
-  --color-atomic-redOrange-40: #CC4B00;
-  --color-atomic-redOrange-30: #943600;
-  --color-atomic-redOrange-15: #5C2200;
-  --color-atomic-redOrange-5:  #2E1100;
+  /* coral */
+  --color-atomic-coral-99: #FFFAF7;
+  --color-atomic-coral-96: #FEEEE5;
+  --color-atomic-coral-90: #FEDBC6;
+  --color-atomic-coral-80: #FFC09C;
+  --color-atomic-coral-70: #FF9C63;
+  --color-atomic-coral-60: #FF7B2E;
+  --color-atomic-coral-50: #FF5E00;
+  --color-atomic-coral-48: #F55A00;
+  --color-atomic-coral-40: #CC4B00;
+  --color-atomic-coral-30: #943600;
+  --color-atomic-coral-15: #5C2200;
+  --color-atomic-coral-5:  #2E1100;
 
   /* orange — warning */
   --color-atomic-orange-99: #FFFCF7;
@@ -224,19 +200,6 @@
   --color-atomic-cyan-15: #004854;
   --color-atomic-cyan-5:  #00252B;
 
-  /* lightBlue */
-  --color-atomic-lightBlue-99: #F7FDFF;
-  --color-atomic-lightBlue-95: #E5F6FE;
-  --color-atomic-lightBlue-90: #C4ECFE;
-  --color-atomic-lightBlue-80: #A1E1FF;
-  --color-atomic-lightBlue-70: #70D2FF;
-  --color-atomic-lightBlue-60: #3DC2FF;
-  --color-atomic-lightBlue-50: #00AEFF;
-  --color-atomic-lightBlue-40: #008DCF;
-  --color-atomic-lightBlue-25: #006796;
-  --color-atomic-lightBlue-15: #004261;
-  --color-atomic-lightBlue-5:  #002130;
-
   /* blue — primary brand color */
   --color-atomic-blue-99: #F7FBFF;
   --color-atomic-blue-96: #EAF2FE;
@@ -293,87 +256,6 @@
   --color-atomic-pink-30: #A81690;
   --color-atomic-pink-15: #730560;
   --color-atomic-pink-5:  #3D0133;
-
-  /* opacity — applied to a coolNeutral to layer translucent UI */
-  --opacity-05: 0.05;
-  --opacity-08: 0.08;
-  --opacity-12: 0.12;
-  --opacity-16: 0.16;
-  --opacity-22: 0.22;
-  --opacity-28: 0.28;
-  --opacity-35: 0.35;
-  --opacity-43: 0.43;
-  --opacity-52: 0.52;
-  --opacity-61: 0.61;
-  --opacity-74: 0.74;
-  --opacity-88: 0.88;
-  --opacity-97: 0.97;
-
-  /* ─────────────────────────────────────────────────────────
-     SEMANTIC — Light theme (default).
-     Layered translucent labels/lines on top of the page background
-     mean two adjacent surfaces darken correctly when they overlap.
-     ───────────────────────────────────────────────────────── */
-
-  /* primary — brand */
-  --primary-normal:  var(--color-atomic-blue-45);          /* #0066FF */
-  --primary-hover:   var(--color-atomic-blue-40);
-  --primary-pressed: var(--color-atomic-blue-35);
-
-  /* static — invariant across light/dark */
-  --static-white: var(--color-atomic-common-100);
-  --static-black: var(--color-atomic-common-0);
-
-  /* label — text colors, layered on background */
-  --label-normal:    var(--color-atomic-coolNeutral-12);             /* near-black headings, body */
-  --label-strong:    var(--color-atomic-common-0);
-  --label-neutral:   var(--color-atomic-coolNeutral-30);
-  --label-alternative: var(--color-atomic-coolNeutral-60);
-  --label-assistive: var(--color-atomic-coolNeutral-90);
-  --label-disable:   var(--color-atomic-coolNeutral-96);
-  --label-inverse:   var(--color-atomic-common-100);  /* on dark backgrounds */
-
-  /* background — surfaces */
-  --background-normal-normal:      var(--color-atomic-coolNeutral-99); /* page bg in lightest variant */
-  --background-normal-alternative: var(--color-atomic-coolNeutral-98);
-  --background-elevated-normal:    var(--color-atomic-common-100);     /* cards */
-  --background-elevated-alternative: var(--color-atomic-coolNeutral-99);
-  --background-overlay-strong:     rgba(0, 0, 0, var(--opacity-28));    /* modal scrims */
-  --background-overlay-normal:     rgba(0, 0, 0, var(--opacity-16));
-
-  /* line — borders */
-  --line-normal-normal:      var(--color-atomic-coolNeutral-96);
-  --line-normal-neutral:     var(--color-atomic-coolNeutral-97);
-  --line-normal-alternative: var(--color-atomic-coolNeutral-97);
-  --line-solid-normal:       var(--color-atomic-coolNeutral-97);
-  --line-solid-neutral:      var(--color-atomic-coolNeutral-98);
-
-  /* interaction — pressable shells */
-  --interaction-inactive: var(--color-atomic-coolNeutral-70);
-  --interaction-disable:  var(--color-atomic-coolNeutral-98);
-
-  /* status */
-  --status-positive: var(--color-atomic-green-50);  /* #00BF40 */
-  --status-cautionary: var(--color-atomic-orange-50);
-  --status-destructive: var(--color-atomic-red-50);
-  --status-info: var(--color-atomic-blue-45);
-
-  /* accent — content tags / chips. Vivid hues, kept saturated. */
-  --accent-red:        var(--color-atomic-red-40);
-  --accent-redOrange:  var(--color-atomic-redOrange-48);
-  --accent-orange:     var(--color-atomic-orange-45);
-  --accent-lime:       var(--color-atomic-lime-37);
-  --accent-green:      var(--color-atomic-green-40);
-  --accent-cyan:       var(--color-atomic-cyan-40);
-  --accent-lightBlue:  var(--color-atomic-lightBlue-40);
-  --accent-blue:       var(--color-atomic-blue-45);
-  --accent-violet:     var(--color-atomic-violet-45);
-  --accent-purple:     var(--color-atomic-purple-40);
-  --accent-pink:       var(--color-atomic-pink-46);
-
-  /* inverse — dark-on-light helpers */
-  --inverse-primary: var(--color-atomic-coolNeutral-15);
-  --inverse-background: var(--color-atomic-coolNeutral-99);
 
   /* ─────────────────────────────────────────────────────────
      RADII, SPACING, SHADOWS
@@ -457,9 +339,9 @@
    ───────────────────────────────────────────────────────── */
 :root {
   /* Brand */
-  --color-brand-primary:          var(--color-atomic-redOrange-60);
-  --color-brand-subtle:          var(--color-atomic-redOrange-96);
-  --color-brand-accent:         var(--color-atomic-redOrange-30);
+  --color-brand-primary:          var(--color-atomic-coral-60);
+  --color-brand-subtle:          var(--color-atomic-coral-96);
+  --color-brand-accent:         var(--color-atomic-coral-30);
 
   /* Text */
   --color-text-strong:            var(--color-atomic-common-0);        /* #000000 */
@@ -474,7 +356,7 @@
   /* Background */
   --color-bg-default:             var(--color-atomic-common-100);      /* #FFFFFF */
   --color-bg-subtle:              var(--color-atomic-neutral-99);      /* #F7F7F7 */
-  --color-bg-muted:               var(--color-atomic-coolNeutral-98);  /* #F4F4F5 */
+  --color-bg-muted:               #F4F4F5;                             /* Neutral 98 */
   --color-surface-default:        #E4E4E7;                             /* Zinc-200 */
   --color-surface-track:          #D4D4D8;                             /* Zinc-300 */
 
@@ -506,32 +388,10 @@
    몽냥 Dark Mode Token Overrides
    ───────────────────────────────────────────────────────── */
 [data-theme="dark"] {
-  /* ── WDS semantic vars (used directly in components) ── */
-  --label-strong:                      var(--color-atomic-coolNeutral-97);
-  --label-normal:                      var(--color-atomic-coolNeutral-95);
-  --label-neutral:                     var(--color-atomic-coolNeutral-95);
-  --label-alternative:                 var(--color-atomic-coolNeutral-70);
-  --label-assistive:                   var(--color-atomic-coolNeutral-40);
-  --label-disable:                     var(--color-atomic-coolNeutral-30);
-  --background-elevated-normal:        var(--color-atomic-coolNeutral-10);
-  --background-elevated-alternative:   var(--color-atomic-coolNeutral-12);
-  --background-normal-normal:          var(--color-atomic-coolNeutral-12);
-  --background-normal-alternative:     var(--color-atomic-coolNeutral-18);
-  --line-normal-normal:                var(--color-atomic-coolNeutral-25);
-  --line-normal-neutral:               var(--color-atomic-coolNeutral-22);
-  --line-normal-alternative:           var(--color-atomic-coolNeutral-30);
-  --line-solid-normal:                 var(--color-atomic-coolNeutral-30);
-  --line-solid-neutral:                var(--color-atomic-coolNeutral-25);
-  --primary-normal:                    var(--color-atomic-blue-60);
-  --primary-hover:                     var(--color-atomic-blue-55);
-  --primary-pressed:                   var(--color-atomic-blue-50);
-  --status-destructive:                var(--color-atomic-red-60);
-  --interaction-inactive:              var(--color-atomic-coolNeutral-50);
-  --interaction-disable:               var(--color-atomic-coolNeutral-18);
   /* Brand */
-  --color-brand-primary:          var(--color-atomic-redOrange-60);
-  --color-brand-subtle:          var(--color-atomic-redOrange-5);
-  --color-brand-accent:         var(--color-atomic-redOrange-80);
+  --color-brand-primary:          var(--color-atomic-coral-60);
+  --color-brand-subtle:          var(--color-atomic-coral-5);
+  --color-brand-accent:         var(--color-atomic-coral-80);
 
   /* Text */
   --color-text-strong:            #E4E4E7;                             /* Zinc-200 */
