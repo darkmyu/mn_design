@@ -10,9 +10,9 @@ const PawColors = {
   labelStrong: 'var(--color-text-strong)',
   labelHint:   'var(--color-text-placeholder)',
   labelDis:    'var(--color-text-disabled)',
-  brand:       'var(--color-brand-primary)',
+  brand:       'var(--color-brand-default)',
   brandSoft:   'var(--color-brand-subtle)',
-  brandInk:    'var(--color-brand-accent)',
+  brandInk:    'var(--color-brand-strong)',
 };
 
 const ICON_PATH = '../assets/icons/';
@@ -52,7 +52,7 @@ function PawButton({ variant = 'primary', size = 'md', icon, iconTrailing, full,
       disabled={disabled}
       style={{
         height: s.h, padding: `0 ${s.px}px`, borderRadius: s.radius,
-        background: disabled ? 'var(--color-bg-muted)' : v.bg,
+        background: disabled ? 'var(--color-bg-subtle)' : v.bg,
         color: disabled ? PawColors.labelDis : v.color,
         border: v.border,
         font: `700 ${s.font}px/1 var(--font-sans)`,
@@ -94,7 +94,7 @@ function PawChip({ tone = 'neutral', selected, leadingDot, leadingIcon, children
   const sizes = { sm: { h: 24, px: 8, font: 11 }, md: { h: 28, px: 10, font: 12 }, lg: { h: 32, px: 12, font: 13 } };
   const sz = sizes[size];
   const tones = {
-    neutral:  { bg: 'var(--color-bg-muted)',  fg: PawColors.label, border: 'none' },
+    neutral:  { bg: 'var(--color-bg-subtle)',  fg: PawColors.label, border: 'none' },
     outline:  { bg: PawColors.surface, fg: PawColors.label, border: `1px solid ${PawColors.line}` },
     brand:    { bg: PawColors.brand, fg: '#fff', border: 'none' },
     brandSoft:{ bg: PawColors.brandSoft, fg: PawColors.brand, border: 'none' },
@@ -128,7 +128,7 @@ function PawAvatar({ src, name = '?', size = 40, square, ring, ringColor }) {
   const hue = colors[(name.charCodeAt(0) || 65) % colors.length];
   const box = (
     src ? (
-      <div style={{ width: size, height: size, borderRadius: square ? 12 : 999, overflow: 'hidden', background: 'var(--color-surface-default)', flexShrink: 0 }}>
+      <div style={{ width: size, height: size, borderRadius: square ? 12 : 999, overflow: 'hidden', background: 'var(--color-surface-track)', flexShrink: 0 }}>
         <img src={src} width={size} height={size} style={{ display: 'block', objectFit: 'cover' }} />
       </div>
     ) : (

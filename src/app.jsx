@@ -71,7 +71,7 @@ function PetInfoStep1_Name() {
             value={petName} onChange={e => setPetName(e.target.value)} maxLength={20}
             style={{
               width: '100%', height: 56, padding: '0 50px 0 18px',
-              background: 'var(--color-bg-muted)',
+              background: 'var(--color-bg-subtle)',
               border: `2px solid ${petName.length >= 1 ? PawColors.brand : 'transparent'}`,
               borderRadius: 16, outline: 'none', boxSizing: 'border-box',
               font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-strong)',
@@ -114,7 +114,7 @@ function PetInfoStep2_Breed() {
             return (
               <button key={s.id} onClick={() => { setSpecies(s.id); setBreed(''); }} style={{
                 padding: '20px 0', borderRadius: 18, cursor: 'pointer',
-                background: on ? PawColors.brandSoft : 'var(--color-bg-muted)',
+                background: on ? PawColors.brandSoft : 'var(--color-bg-subtle)',
                 border: `2px solid ${on ? PawColors.brand : 'transparent'}`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
                 transition: 'all .12s',
@@ -129,7 +129,7 @@ function PetInfoStep2_Breed() {
         {/* 품종 선택 버튼 */}
         <button onClick={() => setSheetOpen(true)} style={{
           width: '100%', height: 56, padding: '0 18px',
-          background: breed ? PawColors.brandSoft : 'var(--color-bg-muted)',
+          background: breed ? PawColors.brandSoft : 'var(--color-bg-subtle)',
           border: `2px solid ${breed ? PawColors.brand : 'transparent'}`,
           borderRadius: 16, cursor: 'pointer', boxSizing: 'border-box',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -274,7 +274,7 @@ function PetInfoStep3_Birth() {
         {/* 날짜 선택 버튼 — 하나로 통합 */}
         <button onClick={handleOpen} style={{
           width: '100%', height: 56, padding: '0 18px',
-          background: ok ? PawColors.brandSoft : 'var(--color-bg-muted)',
+          background: ok ? PawColors.brandSoft : 'var(--color-bg-subtle)',
           border: `2px solid ${ok ? PawColors.brand : 'transparent'}`,
           borderRadius: 16, cursor: 'pointer', boxSizing: 'border-box',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -316,7 +316,7 @@ function PetInfoStep3_Birth() {
               {/* 중앙 선택 하이라이트 */}
               <div style={{
                 position: 'absolute', top: 44 * 2, left: 20, right: 20, height: 44,
-                background: 'var(--color-bg-muted)', borderRadius: 12,
+                background: 'var(--color-bg-subtle)', borderRadius: 12,
                 pointerEvents: 'none', zIndex: 1,
               }} />
               <WheelPickerCol items={YEARS}  value={year}  onChange={setYear}         suffix="년" />
@@ -361,7 +361,7 @@ function PetInfoStep4_Gender() {
               <button key={g.id} onClick={() => setGender(g.id)} style={{
                 width: '100%', padding: '18px 20px',
                 borderRadius: 20, cursor: 'pointer',
-                background: on ? g.soft : 'var(--color-bg-muted)',
+                background: on ? g.soft : 'var(--color-bg-subtle)',
                 border: `2px solid ${on ? g.accent : 'transparent'}`,
                 display: 'flex', alignItems: 'center', gap: 16,
                 transition: 'all .15s', textAlign: 'left',
@@ -520,7 +520,7 @@ function OnboardingPetInfo() {
           <div style={{ position: 'relative' }}>
             <div style={{
               width: 88, height: 88, borderRadius: 999,
-              background: 'var(--color-surface-default)',
+              background: 'var(--color-surface-track)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               font: '44px/1 -apple-system, "Segoe UI Emoji"',
             }}>
@@ -539,7 +539,7 @@ function OnboardingPetInfo() {
             <span style={{
               position: 'absolute', top: -6, right: -6,
               font: '500 10px/1 var(--font-sans)', color: 'var(--color-text-placeholder)',
-              background: 'var(--color-surface-default)', borderRadius: 999,
+              background: 'var(--color-surface-track)', borderRadius: 999,
               padding: '3px 6px',
             }}>선택</span>
           </div>
@@ -556,7 +556,7 @@ function OnboardingPetInfo() {
               return (
                 <button key={s.id} onClick={() => { setSpecies(s.id); setBreed(''); }} style={{
                   padding: '18px 0', borderRadius: 16, cursor: 'pointer',
-                  background: on ? PawColors.brandSoft : 'var(--color-bg-muted)',
+                  background: on ? PawColors.brandSoft : 'var(--color-bg-subtle)',
                   border: `2px solid ${on ? PawColors.brand : 'transparent'}`,
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
                   transition: 'all .12s',
@@ -578,7 +578,7 @@ function OnboardingPetInfo() {
           </label>
           <button onClick={() => setSheetOpen(true)} style={{
             width: '100%', height: 52, padding: '0 14px',
-            background: 'var(--color-bg-muted)',
+            background: 'var(--color-bg-subtle)',
             border: `1.5px solid ${breed ? PawColors.brand : 'transparent'}`,
             borderRadius: 14, cursor: 'pointer', boxSizing: 'border-box',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -603,7 +603,7 @@ function OnboardingPetInfo() {
             value={petName} onChange={e => setPetName(e.target.value)} maxLength={20}
             style={{
               width: '100%', height: 52, padding: '0 14px',
-              background: 'var(--color-bg-muted)',
+              background: 'var(--color-bg-subtle)',
               border: `1.5px solid ${petName.length >= 1 ? PawColors.brand : 'transparent'}`,
               borderRadius: 14, outline: 'none', boxSizing: 'border-box',
               font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-strong)',
@@ -623,7 +623,7 @@ function OnboardingPetInfo() {
               return (
                 <button key={g.id} onClick={() => setGender(g.id)} style={{
                   height: 52, borderRadius: 14, cursor: 'pointer', border: 'none',
-                  background: on ? 'var(--color-text-strong)' : 'var(--color-bg-muted)',
+                  background: on ? 'var(--color-text-strong)' : 'var(--color-bg-subtle)',
                   color: on ? '#fff' : 'var(--color-text-default)',
                   font: `${on ? 700 : 600} 15px/1 var(--font-sans)`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
@@ -656,7 +656,7 @@ function OnboardingPetInfo() {
                 inputMode="numeric"
                 style={{
                   height: 52, padding: '0 14px', textAlign: 'center',
-                  background: 'var(--color-bg-muted)',
+                  background: 'var(--color-bg-subtle)',
                   border: `1.5px solid ${f.val.length === f.max ? PawColors.brand : 'transparent'}`,
                   borderRadius: 14, outline: 'none', boxSizing: 'border-box',
                   font: '600 15px/1 var(--font-sans)', color: 'var(--color-text-strong)',
@@ -760,10 +760,10 @@ function OnboardingNoPetProfile() {
           <div style={{ position: 'relative' }}>
             <div style={{
               width: 96, height: 96, borderRadius: 999,
-              background: 'var(--color-surface-default)',
+              background: 'var(--color-surface-track)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <PawIcon name="person" size={44} color="var(--color-icon-default)" />
+              <PawIcon name="person" size={44} color="var(--color-text-subtle)" />
             </div>
             <button style={{
               position: 'absolute', right: 0, bottom: 0,
@@ -794,7 +794,7 @@ function OnboardingNoPetProfile() {
               maxLength={30}
               style={{
                 width: '100%', height: 56, padding: '0 44px 0 14px',
-                background: 'var(--color-bg-muted)',
+                background: 'var(--color-bg-subtle)',
                 border: `2px solid ${nicknameOk ? PawColors.brand : nickname.length > 0 && !nicknameValid ? 'var(--color-status-error)' : 'transparent'}`,
                 borderRadius: 16, outline: 'none', boxSizing: 'border-box',
                 font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-strong)',
@@ -837,7 +837,7 @@ function OnboardingNoPetProfile() {
               maxLength={30}
               style={{
                 width: '100%', height: 56, padding: '0 44px 0 30px',
-                background: 'var(--color-bg-muted)',
+                background: 'var(--color-bg-subtle)',
                 border: `2px solid ${handleOk ? PawColors.brand : handle.length > 0 && !handleOk ? 'var(--color-status-error)' : 'transparent'}`,
                 borderRadius: 16, outline: 'none', boxSizing: 'border-box',
                 font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-strong)',
@@ -861,7 +861,7 @@ function OnboardingNoPetProfile() {
         {/* 미리보기 카드 */}
         <div style={{
             padding: '14px 16px', borderRadius: 16,
-            background: 'var(--color-bg-muted)',
+            background: 'var(--color-bg-subtle)',
             display: 'flex', alignItems: 'center', gap: 12,
             border: '1px solid var(--color-border-default)',
           }}>
@@ -870,7 +870,7 @@ function OnboardingNoPetProfile() {
               background: 'var(--color-border-strong)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}>
-              <PawIcon name="person" size={22} color="var(--color-icon-default)" />
+              <PawIcon name="person" size={22} color="var(--color-text-subtle)" />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ font: '700 14px/1.2 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
@@ -934,7 +934,7 @@ function OnboardingHasPet() {
           {/* 있어요 */}
           <button onClick={() => setSelected('yes')} style={{
             width: '100%', padding: '22px 20px',
-            background: selected === 'yes' ? PawColors.brandSoft : 'var(--color-bg-muted)',
+            background: selected === 'yes' ? PawColors.brandSoft : 'var(--color-bg-subtle)',
             border: `2px solid ${selected === 'yes' ? PawColors.brand : 'transparent'}`,
             borderRadius: 20, cursor: 'pointer', textAlign: 'left',
             display: 'flex', alignItems: 'center', gap: 16,
@@ -974,7 +974,7 @@ function OnboardingHasPet() {
           {/* 없어요 */}
           <button onClick={() => setSelected('no')} style={{
             width: '100%', padding: '22px 20px',
-            background: selected === 'no' ? 'var(--color-bg-muted)' : 'var(--color-bg-muted)',
+            background: selected === 'no' ? 'var(--color-bg-subtle)' : 'var(--color-bg-subtle)',
             border: `2px solid ${selected === 'no' ? 'var(--color-text-strong)' : 'transparent'}`,
             borderRadius: 20, cursor: 'pointer', textAlign: 'left',
             display: 'flex', alignItems: 'center', gap: 16,
@@ -1015,7 +1015,7 @@ function OnboardingHasPet() {
         {selected === 'no' && (
           <div style={{
             marginTop: 16, padding: '12px 14px',
-            background: 'var(--color-bg-muted)', borderRadius: 12,
+            background: 'var(--color-bg-subtle)', borderRadius: 12,
             display: 'flex', alignItems: 'flex-start', gap: 8,
           }}>
             <PawIcon name="circle-info-fill" size={16} color="var(--color-text-placeholder)" style={{ marginTop: 1, flexShrink: 0 }} />
@@ -1818,7 +1818,7 @@ function MyScreen({ emptyPets, emptyPhotos }) {
             <PawMasonry items={feedPhotos} onLike={toggleLike} likedSet={liked} gap={6} bare />
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '52px 20px', gap: 10 }}>
-              <div style={{ width: 64, height: 64, borderRadius: 999, background: 'var(--color-bg-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
+              <div style={{ width: 64, height: 64, borderRadius: 999, background: 'var(--color-bg-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
                 <PawIcon name="image" size={28} color={PawColors.labelHint} />
               </div>
               <span style={{ font: '700 15px/1.3 var(--font-sans)', color: PawColors.labelStrong }}>
@@ -1978,7 +1978,7 @@ function OtherUserProfileScreen({ emptyPets, emptyPhotos }) {
             <PawMasonry items={feedPhotos} onLike={toggleLike} likedSet={liked} gap={6} bare />
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '52px 20px', gap: 10 }}>
-              <div style={{ width: 64, height: 64, borderRadius: 999, background: 'var(--color-bg-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
+              <div style={{ width: 64, height: 64, borderRadius: 999, background: 'var(--color-bg-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>
                 <PawIcon name="image" size={28} color={PawColors.labelHint} />
               </div>
               <span style={{ font: '700 15px/1.3 var(--font-sans)', color: PawColors.labelStrong }}>아직 게시물이 없어요</span>
@@ -2020,7 +2020,7 @@ function MyGuestScreen() {
         }}>
           <div style={{
             width: 64, height: 64, borderRadius: 999, flexShrink: 0,
-            background: 'var(--color-bg-muted)',
+            background: 'var(--color-bg-subtle)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <PawIcon name="person" size={32} color={PawColors.labelHint} />
@@ -2342,9 +2342,9 @@ const DS_PRIMITIVE_SCALES = [
 
 const DS_SEMANTIC_TOKENS = [
   { category: 'Brand', tokens: [
-    { name: '--color-brand-primary', lightHex: '#FF7B2E', darkHex: '#FF7B2E' },
+    { name: '--color-brand-default', lightHex: '#FF7B2E', darkHex: '#FF7B2E' },
     { name: '--color-brand-subtle',  lightHex: '#FEEEE5', darkHex: '#2E1100', lightBorder: true },
-    { name: '--color-brand-accent',  lightHex: '#943600', darkHex: '#FFC09C' },
+    { name: '--color-brand-strong',  lightHex: '#943600', darkHex: '#FFC09C' },
   ]},
   { category: 'Text', tokens: [
     { name: '--color-text-strong',      lightHex: '#000000', darkHex: '#E4E4E7' },
@@ -2353,15 +2353,10 @@ const DS_SEMANTIC_TOKENS = [
     { name: '--color-text-placeholder', lightHex: '#D4D4D8', darkHex: '#52525B', lightBorder: true },
     { name: '--color-text-disabled',    lightHex: '#E4E4E7', darkHex: '#3F3F46', lightBorder: true },
   ]},
-  { category: 'Icon', tokens: [
-    { name: '--color-icon-default', lightHex: '#9B9B9B', darkHex: '#71717A' },
-  ]},
   { category: 'Background', tokens: [
-    { name: '--color-bg-default',      lightHex: '#FFFFFF', darkHex: '#18181B', lightBorder: true },
-    { name: '--color-bg-subtle',       lightHex: '#F7F7F7', darkHex: '#27272A', lightBorder: true },
-    { name: '--color-bg-muted',        lightHex: '#F4F4F5', darkHex: '#27272A', lightBorder: true },
-    { name: '--color-surface-default', lightHex: '#E4E4E7', darkHex: '#3F3F46', lightBorder: true },
-    { name: '--color-surface-track',   lightHex: '#D4D4D8', darkHex: '#3F3F46', lightBorder: true },
+    { name: '--color-bg-default',    lightHex: '#FFFFFF', darkHex: '#18181B', lightBorder: true },
+    { name: '--color-bg-subtle',      lightHex: '#F4F4F5', darkHex: '#27272A', lightBorder: true },
+    { name: '--color-surface-track', lightHex: '#D4D4D8', darkHex: '#3F3F46', lightBorder: true },
   ]},
   { category: 'Border', tokens: [
     { name: '--color-border-default', lightHex: '#E4E4E7', darkHex: '#52525B', lightBorder: true },
@@ -2418,7 +2413,7 @@ const DS_TYPE_SCALE = [
 
 function DSColor({ colorTab, setColorTab }) {
   const border     = 'var(--color-border-default)';
-  const rowBorder  = 'var(--color-bg-muted)';
+  const rowBorder  = 'var(--color-bg-subtle)';
   const textStrong = 'var(--color-text-strong)';
   const textSubtle = 'var(--color-text-subtle)';
   const MONO = '"SF Mono","JetBrains Mono",monospace';
@@ -2438,8 +2433,8 @@ function DSColor({ colorTab, setColorTab }) {
           <button key={t} onClick={() => setColorTab(t)} style={{
             padding: '8px 20px', border: 'none', cursor: 'pointer', background: 'transparent',
             font: `${colorTab === t ? '600' : '400'} 13px/1 var(--font-sans)`,
-            color: colorTab === t ? 'var(--color-brand-primary)' : textSubtle,
-            borderBottom: colorTab === t ? '2px solid var(--color-brand-primary)' : '2px solid transparent',
+            color: colorTab === t ? 'var(--color-brand-default)' : textSubtle,
+            borderBottom: colorTab === t ? '2px solid var(--color-brand-default)' : '2px solid transparent',
             marginBottom: -1, transition: 'color .15s',
           }}>
             {t === 'primitive' ? 'Primitive' : 'Semantic'}
@@ -2465,7 +2460,7 @@ function DSColor({ colorTab, setColorTab }) {
                     }} />
                     <div style={{ marginTop: 4, font: '500 9px/1 var(--font-sans)', color: textSubtle, whiteSpace: 'nowrap' }}>{s.step}</div>
                     <div style={{ marginTop: 3, font: `400 8px/1 ${MONO}`, color: textSubtle, opacity: 0.75, whiteSpace: 'nowrap' }}>{s.hex}</div>
-                    {s.badge && <div style={{ font: '600 8px/1 var(--font-sans)', color: 'var(--color-brand-primary)', marginTop: 2 }}>{s.badge}</div>}
+                    {s.badge && <div style={{ font: '600 8px/1 var(--font-sans)', color: 'var(--color-brand-default)', marginTop: 2 }}>{s.badge}</div>}
                   </div>
                 ))}
               </div>
@@ -2510,7 +2505,7 @@ function DSColor({ colorTab, setColorTab }) {
 
 function DSTypography() {
   const border     = 'var(--color-border-default)';
-  const rowBorder  = 'var(--color-bg-muted)';
+  const rowBorder  = 'var(--color-bg-subtle)';
   const textStrong = 'var(--color-text-strong)';
   const textSubtle = 'var(--color-text-subtle)';
   const MONO = '"SF Mono","JetBrains Mono",monospace';
@@ -2556,7 +2551,7 @@ function MongnyangDesignSystem() {
   const border       = 'var(--color-border-default)';
   const textStrong   = 'var(--color-text-strong)';
   const textSubtle   = 'var(--color-text-subtle)';
-  const activeItemBg = 'var(--color-bg-muted)';
+  const activeItemBg = 'var(--color-bg-subtle)';
 
   const NAV_ITEMS = [
     { group: 'Foundation', items: [
@@ -2604,7 +2599,7 @@ function AppInner() {
   const topBorder   = 'var(--color-border-default)';
   const textStrong  = 'var(--color-text-strong)';
   const textSubtle  = 'var(--color-text-subtle)';
-  const activeTabBg = 'var(--color-bg-muted)';
+  const activeTabBg = 'var(--color-bg-subtle)';
 
   return (
     <>
@@ -2616,7 +2611,7 @@ function AppInner() {
       }}>
         {/* 로고 */}
         <span style={{ font: '900 16px/1 var(--font-sans)', letterSpacing: '-0.04em', color: textStrong, flexShrink: 0 }}>
-          몽냥<span style={{ color: 'var(--color-brand-primary)' }}>.</span>
+          몽냥<span style={{ color: 'var(--color-brand-default)' }}>.</span>
         </span>
         <div style={{ width: 1, height: 16, background: topBorder, flexShrink: 0 }} />
 

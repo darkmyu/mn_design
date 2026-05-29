@@ -21,7 +21,7 @@ function PawTopBar({ variant = 'home', title, sub, onBack, right, left, dark }) 
           font: '900 22px/1 var(--font-sans)',
           letterSpacing: '-0.03em',
           color: 'var(--color-text-strong)',
-        }}>몽냥<span style={{color:'var(--color-brand-primary)',marginLeft:1}}>.</span></span>
+        }}>몽냥<span style={{color:'var(--color-brand-default)',marginLeft:1}}>.</span></span>
         <div style={{ flex: 1 }} />
         {right}
       </div>
@@ -128,7 +128,7 @@ function PawSpeciesTabs({ active, onChange, items }) {
         const on = t.id === active;
         return (
           <button key={t.id} onClick={() => onChange?.(t.id)} style={{
-            background: on ? 'var(--color-text-strong)' : 'var(--color-bg-muted)',
+            background: on ? 'var(--color-text-strong)' : 'var(--color-bg-subtle)',
             color: on ? '#fff' : 'var(--color-text-subtle)',
             border: 'none',
             height: 32, padding: '0 14px', borderRadius: 999,
