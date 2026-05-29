@@ -2597,7 +2597,8 @@ function MongnyangDesignSystem() {
 
 function AppInner() {
   const { dark, setDark } = useDarkMode();
-  const [page, setPage] = React.useState('canvas');
+  const [page, setPage] = React.useState(() => localStorage.getItem('mn-page') || 'canvas');
+  const handleSetPage = (id) => { setPage(id); localStorage.setItem('mn-page', id); };
 
   const topBg     = dark ? '#232427' : '#FFFFFF';
   const topBorder = dark ? '#3D3E41' : '#E1E2E4';
@@ -2622,7 +2623,7 @@ function AppInner() {
         {/* 페이지 탭 */}
         <div style={{ display: 'flex', gap: 4 }}>
           {[['canvas', '디자인 화면'], ['system', '디자인 시스템']].map(([id, label]) => (
-            <button key={id} onClick={() => setPage(id)} style={{
+            <button key={id} onClick={() => handleSetPage(id)} style={{
               height: 30, padding: '0 12px', borderRadius: 6, border: 'none', cursor: 'pointer',
               background: page === id ? activeTabBg : 'transparent',
               color: page === id ? textStrong : textSubtle,
