@@ -975,7 +975,7 @@ function OnboardingHasPet() {
           <button onClick={() => setSelected('no')} style={{
             width: '100%', padding: '22px 20px',
             background: selected === 'no' ? 'var(--color-bg-subtle)' : 'var(--color-bg-subtle)',
-            border: `2px solid ${selected === 'no' ? 'var(--color-text-strong)' : 'transparent'}`,
+            border: `2px solid ${selected === 'no' ? 'var(--color-border-strong)' : 'transparent'}`,
             borderRadius: 20, cursor: 'pointer', textAlign: 'left',
             display: 'flex', alignItems: 'center', gap: 16,
             transition: 'all .12s ease-out',
@@ -1001,12 +1001,12 @@ function OnboardingHasPet() {
             </div>
             <div style={{
               width: 22, height: 22, borderRadius: 999, flexShrink: 0,
-              background: selected === 'no' ? 'var(--color-text-strong)' : PawColors.surface,
-              border: `2px solid ${selected === 'no' ? 'var(--color-text-strong)' : 'var(--color-border-default)'}`,
+              background: selected === 'no' ? 'var(--color-bg-subtle)' : PawColors.surface,
+              border: `2px solid ${selected === 'no' ? 'var(--color-border-strong)' : 'var(--color-border-default)'}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               transition: 'all .12s',
             }}>
-              {selected === 'no' && <PawIcon name="check" size={12} color={PawColors.surface} />}
+              {selected === 'no' && <PawIcon name="check" size={12} color="var(--color-text-strong)" />}
             </div>
           </button>
         </div>
