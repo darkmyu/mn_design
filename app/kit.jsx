@@ -192,7 +192,7 @@ function PetGlyph({ pet, size = 44, ring }) {
 }
 
 function PawDivider({ inset = 0 }) {
-  return <div style={{ height: 1, background: PawColors.lineSoft, marginLeft: inset, marginRight: inset }} />;
+  return <div style={{ height: 1, background: PawColors.lineSoft, marginLeft: inset }} />;
 }
 
 // PawPhoto — renders a real pet photo from Unsplash, falls back to a colored block

@@ -2069,7 +2069,6 @@ function MyGuestScreen() {
                 <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>{item.label}</span>
                 <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
               </div>
-              {i < settingsItems.length - 1 && <PawDivider inset={54} />}
             </React.Fragment>
           ))}
         </div>
@@ -2148,11 +2147,9 @@ function SettingsScreen() {
           <SettingRow icon="heart" label="좋아요 알림" right={
             <Toggle on={noti.like} onToggle={() => setNoti(n => ({ ...n, like: !n.like }))} />
           } />
-          <PawDivider inset={54} />
           <SettingRow icon="bubble" label="댓글 알림" right={
             <Toggle on={noti.comment} onToggle={() => setNoti(n => ({ ...n, comment: !n.comment }))} />
           } />
-          <PawDivider inset={54} />
           <SettingRow icon="person" label="팔로우 알림" right={
             <Toggle on={noti.follow} onToggle={() => setNoti(n => ({ ...n, follow: !n.follow }))} />
           } />
@@ -2179,10 +2176,8 @@ function SettingsScreen() {
               <SettingRow icon={item.icon} label={item.label} onTap={() => {}} right={
                 <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
               } />
-              {i < arr.length - 1 && <PawDivider inset={54} />}
             </React.Fragment>
           ))}
-          <PawDivider inset={54} />
           <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 52, gap: 14 }}>
             <PawIcon name="info" size={20} color={PawColors.labelHint} />
             <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', color: PawColors.labelStrong }}>앱 버전</span>
@@ -2204,11 +2199,9 @@ function SettingsScreen() {
             <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', color: PawColors.labelStrong }}>연결된 계정</span>
             <span style={{ font: '400 13px/1 var(--font-sans)', color: PawColors.labelHint }}>카카오</span>
           </div>
-          <PawDivider inset={54} />
           <SettingRow icon="exit" label="로그아웃" onTap={() => {}} right={
             <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
           } />
-          <PawDivider inset={54} />
           <SettingRow label="회원탈퇴" onTap={() => {}} right={
             <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
           } />
