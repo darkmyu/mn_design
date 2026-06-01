@@ -2353,7 +2353,7 @@ const DS_SEMANTIC_TOKENS = [
   ]},
   { category: 'Border', tokens: [
     { name: '--color-border-default', lightHex: '#E4E4E7', darkHex: '#52525B', lightBorder: true },
-    { name: '--color-border-subtle',  lightHex: '#E4E4E7', darkHex: '#3F3F46', lightBorder: true },
+    { name: '--color-border-subtle',  lightHex: '#F4F4F5', darkHex: '#3F3F46', lightBorder: true },
     { name: '--color-border-strong',  lightHex: '#D4D4D8', darkHex: '#71717A', lightBorder: true },
   ]},
   { category: 'Status', tokens: [
