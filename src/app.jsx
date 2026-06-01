@@ -2142,7 +2142,6 @@ function SettingsScreen() {
       <div style={{ flex: 1, overflowY: 'auto' }}>
 
         {/* ── 알림 ── */}
-        <SectionHeader label="알림" />
         <div style={{ background: PawColors.surface }}>
           <SettingRow icon="heart" label="좋아요 알림" right={
             <Toggle on={noti.like} onToggle={() => setNoti(n => ({ ...n, like: !n.like }))} />
@@ -2156,16 +2155,14 @@ function SettingsScreen() {
         </div>
 
         {/* ── 화면 ── */}
-        <SectionHeader label="화면" />
-        <div style={{ background: PawColors.surface }}>
+        <div style={{ background: PawColors.surface, marginTop: 8 }}>
           <SettingRow icon="eye" label="다크 모드" right={
             <Toggle on={dark} onToggle={() => setDark(d => !d)} />
           } />
         </div>
 
         {/* ── 앱 정보 ── */}
-        <SectionHeader label="앱 정보" />
-        <div style={{ background: PawColors.surface }}>
+        <div style={{ background: PawColors.surface, marginTop: 8 }}>
           {[
             { icon: 'bell',     label: '공지사항' },
             { icon: 'bubble',   label: '고객센터' },
@@ -2186,8 +2183,7 @@ function SettingsScreen() {
         </div>
 
         {/* ── 계정 ── */}
-        <SectionHeader label="계정" />
-        <div style={{ background: PawColors.surface }}>
+        <div style={{ background: PawColors.surface, marginTop: 8 }}>
           {/* 연결된 소셜 계정 */}
           <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 52, gap: 14 }}>
             <div style={{
