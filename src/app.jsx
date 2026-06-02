@@ -2544,7 +2544,7 @@ function MongnyangDesignSystem() {
 
   const NAV_ITEMS = [
     { group: 'Foundation', items: [
-      { id: 'color', label: 'Color' },
+      { id: 'color', label: 'DS01 · Color' },
     ]},
   ];
 
@@ -2606,7 +2606,7 @@ function AppInner() {
 
         {/* 페이지 탭 */}
         <div style={{ display: 'flex', gap: 4 }}>
-          {[['canvas', '디자인 화면'], ['system', '디자인 시스템']].map(([id, label]) => (
+          {[['canvas', '[S] 디자인 화면'], ['system', '[DS] 디자인 시스템']].map(([id, label]) => (
             <button key={id} onClick={() => handleSetPage(id)} style={{
               height: 30, padding: '0 12px', borderRadius: 6, border: 'none', cursor: 'pointer',
               background: page === id ? activeTabBg : 'transparent',
