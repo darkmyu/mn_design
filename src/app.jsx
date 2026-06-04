@@ -185,7 +185,7 @@ function WheelPickerCol({ items, value, onChange, suffix }) {
   const ITEM_H = 44;
   const ref = React.useRef(null);
   const { dark } = useDarkMode();
-  const bg = dark ? '#1B1C1E' : '#ffffff';
+  const bg = dark ? '#18181B' : '#FFFFFF'; // --color-bg-default (zinc-900 / common-50)
 
   // 시트 열릴 때 현재 선택값으로 즉시 스크롤
   React.useLayoutEffect(() => {
@@ -1188,13 +1188,13 @@ function WelcomeScreen() {
       <div style={{
         position: 'absolute', top: -120, right: -80,
         width: 340, height: 340, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(255,107,61,0.12) 0%, rgba(255,107,61,0) 70%)',
+        background: 'radial-gradient(circle, color-mix(in srgb, var(--color-brand-default) 12%, transparent) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
       <div style={{
         position: 'absolute', bottom: 180, left: -100,
         width: 280, height: 280, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(255,176,102,0.15) 0%, rgba(255,176,102,0) 70%)',
+        background: 'radial-gradient(circle, color-mix(in srgb, var(--color-brand-default) 15%, transparent) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
@@ -1356,9 +1356,9 @@ function PhotoDetailScreen({ photo, onBack }) {
     ['a','s','d','f','g','h','j','k','l'],
     ['⇧','z','x','c','v','b','n','m','⌫'],
   ];
-  const kbBg  = dark ? '#1C1C1E' : '#AAB4C0';
-  const keyBg = dark ? '#3D3D3F' : '#FFFFFF';
-  const keyClr = dark ? '#FFFFFF' : '#000000';
+  const kbBg  = dark ? 'var(--color-bg-default)'   : 'var(--color-surface-track)';
+  const keyBg = dark ? 'var(--color-surface-track)' : 'var(--color-bg-default)';
+  const keyClr = 'var(--color-text-strong)';
 
   return (
     <div style={{ position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', background: PawColors.surface }}>
@@ -1570,8 +1570,8 @@ function PhotoDetailScreen({ photo, onBack }) {
                   flex: k === '⇧' || k === '⌫' ? '0 0 42px' : 1,
                   maxWidth: 36,
                   borderRadius: 5, border: 'none', cursor: 'pointer',
-                  background: k === '⇧' || k === '⌫' ? (dark ? '#545456' : '#AEB7C0') : keyBg,
-                  color: k === '⇧' || k === '⌫' ? (dark ? '#fff' : '#000') : keyClr,
+                  background: k === '⇧' || k === '⌫' ? 'var(--color-surface-track)' : keyBg,
+                  color: keyClr,
                   font: `500 ${k === '⇧' || k === '⌫' ? 13 : 16}px/1 var(--font-sans)`,
                   boxShadow: dark ? 'none' : '0 1px 0 rgba(0,0,0,0.3)',
                 }}>{k}</button>
@@ -2049,7 +2049,7 @@ function MyGuestScreen() {
               <div style={{
                 position: 'absolute', top: 3, left: dark ? 23 : 3,
                 width: 20, height: 20, borderRadius: 999,
-                background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                background: 'var(--color-atomic-common-50)', boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                 transition: 'left .2s',
               }} />
             </div>
@@ -2100,7 +2100,7 @@ function SettingsScreen() {
           position: 'absolute', top: 3,
           left: on ? 23 : 3,
           width: 20, height: 20, borderRadius: 999,
-          background: '#fff',
+          background: 'var(--color-atomic-common-50)',
           boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
           transition: 'left .2s',
         }} />
