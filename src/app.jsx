@@ -36,7 +36,7 @@ const CAT_BREEDS = ['코리안숏헤어','러시안블루','페르시안','먼�
 /* 공용 껍데기 */
 function PetInfoShell({ subStep, total = 5, children, onNext, canNext, nextLabel = '다음' }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface, position: 'relative' }}>
       {/* 헤더 */}
       <div style={{ padding: '14px 20px 8px' }}>
         <div style={{ height: 4, background: 'var(--color-surface-track)', borderRadius: 999, overflow: 'hidden' }}>
@@ -56,11 +56,15 @@ function PetInfoShell({ subStep, total = 5, children, onNext, canNext, nextLabel
         </div>
       </div>
       {/* 본문 */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', paddingBottom: 120 }}>
         {children}
       </div>
       {/* 하단 버튼 */}
-      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: PawColors.surface }}>
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '80px 20px 32px',
+        background: 'linear-gradient(to bottom, transparent 0%, var(--color-bg-default) 64px)',
+      }}>
         <PawButton full size="lg" disabled={!canNext}>{nextLabel}</PawButton>
       </div>
     </div>
@@ -518,7 +522,7 @@ function OnboardingPetInfo() {
         <div style={{ font: '500 11px/1.4 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 8, letterSpacing: '0.02em' }}>STEP 2 / 3</div>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 20px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 120px' }}>
         <h1 style={{ margin: 0, font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--color-text-strong)' }}>
           반려동물을 소개해줘요
         </h1>
@@ -680,7 +684,11 @@ function OnboardingPetInfo() {
       </div>
 
       {/* 하단 버튼 */}
-      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: PawColors.surface }}>
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '80px 20px 32px',
+        background: 'linear-gradient(to bottom, transparent 0%, var(--color-bg-default) 64px)',
+      }}>
         <PawButton full size="lg" disabled={!canNext}>몽냥 시작하기</PawButton>
       </div>
 
@@ -742,7 +750,7 @@ function OnboardingNoPetProfile() {
   const canNext = nicknameOk && handleOk;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface, position: 'relative' }}>
 
       {/* 진행 바 */}
       <div style={{ padding: '14px 20px 8px' }}>
@@ -752,7 +760,7 @@ function OnboardingNoPetProfile() {
         <div style={{ font: '500 11px/1.4 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 8, letterSpacing: '0.02em' }}>STEP 2 / 3</div>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 20px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 120px' }}>
         <h1 style={{
           margin: 0,
           font: '800 24px/1.35 var(--font-sans)',
@@ -896,7 +904,11 @@ function OnboardingNoPetProfile() {
       </div>
 
       {/* 하단 버튼 */}
-      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: PawColors.surface }}>
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '80px 20px 32px',
+        background: 'linear-gradient(to bottom, transparent 0%, var(--color-bg-default) 64px)',
+      }}>
         <PawButton full size="lg" disabled={!canNext}>
           몽냥 시작하기
         </PawButton>
@@ -914,7 +926,7 @@ function OnboardingHasPet() {
   const { dark } = useDarkMode();
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface, position: 'relative' }}>
 
       {/* 진행 바 */}
       <div style={{ padding: '14px 20px 8px' }}>
@@ -925,7 +937,7 @@ function OnboardingHasPet() {
       </div>
 
       {/* 본문 */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '12px 20px 0', overflowY: 'auto' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '12px 20px 120px', overflowY: 'auto' }}>
         <h1 style={{
           margin: 0,
           font: '800 24px/1.35 var(--font-sans)',
@@ -1038,7 +1050,11 @@ function OnboardingHasPet() {
       </div>
 
       {/* 하단 버튼 */}
-      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: PawColors.surface }}>
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '80px 20px 32px',
+        background: 'linear-gradient(to bottom, transparent 0%, var(--color-bg-default) 64px)',
+      }}>
         <PawButton full size="lg" disabled={!selected}>
           {selected === 'yes' ? '반려동물 정보 입력하기' : selected === 'no' ? '프로필 정보 입력하기' : '선택해 주세요'}
         </PawButton>
@@ -1223,9 +1239,8 @@ function WelcomeScreen() {
 
       {/* 하단 로그인 영역 */}
       <div style={{
-        padding: '24px 24px 40px',
-        background: PawColors.surface,
-        borderTop: '1px solid var(--color-border-default)',
+        padding: '48px 24px 40px',
+        background: 'linear-gradient(to bottom, transparent 0%, var(--color-bg-default) 48px)',
         display: 'flex', flexDirection: 'column', gap: 10,
       }}>
         <div style={{
@@ -2894,7 +2909,7 @@ function PhotoPickerScreen() {
   const CELL_H = 119; // ≈ (360 - gap*2) / 3 의 정수 근사
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--color-bg-default)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--color-bg-default)', position: 'relative' }}>
 
       {/* 탑바 */}
       <div style={{
@@ -2923,6 +2938,7 @@ function PhotoPickerScreen() {
         gap: 2,
         background: 'var(--color-border-subtle)',
         alignContent: 'start',
+        paddingBottom: 120,
       }}>
         {PICKER_PHOTOS.map((p, i) => (
           <div key={p.uid} style={{ position: 'relative', overflow: 'hidden', background: p.fav }}>
@@ -2945,8 +2961,12 @@ function PhotoPickerScreen() {
         ))}
       </div>
 
-      {/* 하단 액션바 */}
-      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: 'var(--color-bg-default)', flexShrink: 0 }}>
+      {/* 하단 액션바 — 그리드 위에 absolute로 띄워 그라데이션 경계 없앰 */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '80px 20px 32px',
+        background: 'linear-gradient(to bottom, transparent 0%, var(--color-bg-default) 64px)',
+      }}>
         <button style={{
           width: '100%', height: 52, borderRadius: 14, border: 'none',
           background: 'var(--color-brand-default)', color: '#fff',
@@ -2979,7 +2999,7 @@ function PhotoPostFormScreen({ variant = 'form' }) {
       />
 
       {/* ── 스크롤 폼 ── */}
-      <div style={{ flex: 1, overflowY: 'auto' }}>
+      <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 120 }}>
 
         {/* 선택된 사진 미리보기 */}
         <div style={{ padding: '16px 20px 0' }}>
@@ -3134,7 +3154,11 @@ function PhotoPostFormScreen({ variant = 'form' }) {
       </div>
 
       {/* ── 하단 게시 버튼 ── */}
-      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: 'var(--color-bg-default)' }}>
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '80px 20px 32px',
+        background: 'linear-gradient(to bottom, transparent 0%, var(--color-bg-default) 64px)',
+      }}>
         <button style={{
           width: '100%', height: 52, borderRadius: 14, border: 'none',
           background: canPost ? 'var(--color-brand-default)' : 'var(--color-bg-subtle)',
