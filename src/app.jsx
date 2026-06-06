@@ -2752,11 +2752,448 @@ function AppInner() {
             </DCArtboard>
           </DCSection>
 
+          <DCFlowArrow mt={8} mb={8} branches={[
+            { label: '하단 탭 + 버튼 → 사진 등록', color: '#FF6B3D' },
+          ]} />
+
+          {/* 행 6: 사진 등록 */}
+          <DCSection id="photo-upload" title="⑥ 사진 등록"
+            subtitle="갤러리 선택 → 등록 폼 (반려동물 바텀시트 · 제목 · 태그)">
+            <DCArtboard id="photo-form-alert" label="S17-0 · 반려동물 없음 알럿" width={W} height={H}>
+              <Phone><PhotoUploadNoPetAlertScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="photo-form-0" label="S17-A · 갤러리 사진 선택" width={W} height={H}>
+              <Phone><PhotoPickerScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="photo-form-1" label="S17 · 사진 등록 (기본)" width={W} height={H}>
+              <Phone><PhotoPostFormScreen variant="form" /></Phone>
+            </DCArtboard>
+            <DCArtboard id="photo-form-2" label="S17-B · 반려동물 선택 (바텀시트)" width={W} height={H}>
+              <Phone><PhotoPostFormScreen variant="sheet" /></Phone>
+            </DCArtboard>
+            <DCArtboard id="photo-form-3" label="S17-C · 입력 완료" width={W} height={H}>
+              <Phone><PhotoPostFormScreen variant="filled" /></Phone>
+            </DCArtboard>
+          </DCSection>
+
         </div>
       </div>
     </DesignCanvas>
       )}
     </>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ⑥ 사진 등록 — S17-A 갤러리 선택 → S17 등록 폼
+// ─────────────────────────────────────────────────────────────────────────────
+
+const FORM_PETS = [
+  { id: 'mongi',  name: '몽이',  breed: '골든리트리버',  emoji: '🐕', color: '#f0c894' },
+  { id: 'butter', name: '버터',  breed: '코리안숏헤어', emoji: '🐈', color: '#f5c781' },
+];
+
+// 갤러리 그리드용 사진 목록 (Unsplash uid + 폴백 색상)
+const PICKER_PHOTOS = [
+  { uid: '1583337130417-3346a1be7dee', fav: '#f4dab3' },
+  { uid: '1574144611937-0df059b5ef3e', fav: '#f5c781' },
+  { uid: '1543466835-00a7907e9de1',    fav: '#e8c89c' },
+  { uid: '1561948955-570b270e7c36',    fav: '#dde2e8' },
+  { uid: '1604848698030-c434ba08ece1', fav: '#e2c89a' },
+  { uid: '1450778869180-41d0601e046e', fav: '#d4c1a8' },
+  { uid: '1592194996308-7b43878e84a6', fav: '#c9b08a' },
+  { uid: '1583511655826-05700d52f4d9', fav: '#f0e6d8' },
+  { uid: '1547721064-da6cfb341d50',    fav: '#d8c8a8' },
+  { uid: '1517849845537-4d257902454a', fav: '#e6c89c' },
+  { uid: '1576201836106-db1758fd1c97', fav: '#e8d9c1' },
+  { uid: '1544568100-847a948585b9',    fav: '#c9d2da' },
+  { uid: '1535268647677-300dbf3d78d1', fav: '#f0e8de' },
+  { uid: '1452857297128-d9c29adba80b', fav: '#e8e0d2' },
+  { uid: '1601758228041-f3b2795255f1', fav: '#e0b896' },
+  { uid: '1521247913-d2a6c5e8e85d',    fav: '#bfb697' },
+  { uid: '1583337130417-3346a1be7dee', fav: '#f4dab3' },
+  { uid: '1574144611937-0df059b5ef3e', fav: '#f5c781' },
+];
+
+// S17-0: 반려동물 미등록 상태에서 사진 등록 버튼 탭 시 알럿
+function PhotoUploadNoPetAlertScreen() {
+  return (
+    <div style={{ position: 'relative', height: '100%', overflow: 'hidden' }}>
+      {/* 배경: 홈 피드 (컨텍스트 표시용) */}
+      <HomeScreen />
+
+      {/* 딤 오버레이 */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.52)', zIndex: 50 }} />
+
+      {/* 알럿 다이얼로그 */}
+      <div style={{
+        position: 'absolute', left: 24, right: 24,
+        top: '44%', transform: 'translateY(-50%)',
+        background: 'var(--color-bg-default)',
+        borderRadius: 20,
+        padding: '32px 24px 20px',
+        zIndex: 51,
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+      }}>
+        {/* 타이틀 */}
+        <div style={{
+          font: '800 17px/1.35 var(--font-sans)',
+          color: 'var(--color-text-strong)',
+          letterSpacing: '-0.018em',
+          textAlign: 'center',
+          marginBottom: 8,
+        }}>반려동물이 없어요</div>
+
+        {/* 설명 */}
+        <div style={{
+          font: '400 14px/1.55 var(--font-sans)',
+          color: 'var(--color-text-subtle)',
+          textAlign: 'center',
+          letterSpacing: '-0.01em',
+          marginBottom: 28,
+        }}>
+          사진을 등록하려면 반려동물 정보가<br />필요해요. 먼저 등록해볼까요?
+        </div>
+
+        {/* 버튼 */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}>
+          <button style={{
+            width: '100%', height: 50, borderRadius: 14, border: 'none',
+            background: 'var(--color-brand-default)', color: '#fff',
+            font: '700 15px/1 var(--font-sans)', letterSpacing: '-0.005em',
+            cursor: 'pointer',
+          }}>반려동물 등록하기</button>
+          <button style={{
+            width: '100%', height: 44, borderRadius: 14, border: 'none',
+            background: 'transparent', color: 'var(--color-text-subtle)',
+            font: '500 14px/1 var(--font-sans)', letterSpacing: '-0.005em',
+            cursor: 'pointer',
+          }}>취소</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// S17-A: 갤러리에서 사진 선택
+function PhotoPickerScreen() {
+  const CELL_H = 119; // ≈ (360 - gap*2) / 3 의 정수 근사
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--color-bg-default)' }}>
+
+      {/* 탑바 */}
+      <div style={{
+        display: 'flex', alignItems: 'center',
+        height: 52, padding: '0 4px',
+        borderBottom: '1px solid var(--color-border-default)',
+        background: 'var(--color-bg-default)', flexShrink: 0,
+      }}>
+        <button style={{ height: 40, padding: '0 12px', background: 'none', border: 'none', cursor: 'pointer', font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-default)' }}>취소</button>
+        <button style={{
+          flex: 1, background: 'none', border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+        }}>
+          <span style={{ font: '700 16px/1.3 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>최근 항목</span>
+          <PawIcon name="chevron-down" size={14} color="var(--color-text-strong)" />
+        </button>
+        <div style={{ width: 64 }} />
+      </div>
+
+      {/* 사진 그리드 */}
+      <div style={{
+        flex: 1, overflowY: 'auto',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridAutoRows: `${CELL_H}px`,
+        gap: 2,
+        background: 'var(--color-border-subtle)',
+        alignContent: 'start',
+      }}>
+        {PICKER_PHOTOS.map((p, i) => (
+          <div key={p.uid} style={{ position: 'relative', overflow: 'hidden', background: p.fav }}>
+            <div style={{
+              position: 'absolute', inset: 0,
+              backgroundImage: `url("https://images.unsplash.com/photo-${p.uid}?w=150&q=70&auto=format&fit=crop")`,
+              backgroundSize: 'cover', backgroundPosition: 'center',
+            }} />
+            {i === 0 && <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.22)' }} />}
+            <div style={{
+              position: 'absolute', top: 6, right: 6,
+              width: 22, height: 22, borderRadius: 999,
+              background: i === 0 ? 'var(--color-brand-default)' : 'rgba(0,0,0,0.28)',
+              border: i === 0 ? 'none' : '1.5px solid rgba(255,255,255,0.75)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              {i === 0 && <PawIcon name="check" size={12} color="#fff" />}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* 하단 액션바 */}
+      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: 'var(--color-bg-default)', flexShrink: 0 }}>
+        <button style={{
+          width: '100%', height: 52, borderRadius: 14, border: 'none',
+          background: 'var(--color-brand-default)', color: '#fff',
+          font: '700 15px/1 var(--font-sans)', letterSpacing: '-0.005em',
+          cursor: 'pointer',
+        }}>선택하기</button>
+      </div>
+    </div>
+  );
+}
+
+// S17 등록 폼 — 항상 사진이 선택된 상태로 진입 (갤러리 → 폼 플로우)
+// variant: 'form' | 'sheet' | 'filled'
+function PhotoPostFormScreen({ variant = 'form' }) {
+  const showSheet  = variant === 'sheet';
+  const selectedPet = variant === 'filled' ? FORM_PETS[0] : null;
+  const titleText  = variant === 'filled' ? '오늘의 공원 산책 ☀️' : '';
+  const descText   = variant === 'filled' ? '오늘 몽이랑 공원 산책 다녀왔어요 🐾\n날씨도 좋고 기분도 좋은 하루!' : '';
+  const tags       = variant === 'filled' ? ['#골든리트리버', '#공원산책', '#몽이'] : [];
+  const canPost    = !!selectedPet;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--color-bg-default)', position: 'relative' }}>
+
+      {/* ── 탑바 ── */}
+      <PawTopBar
+        variant="title"
+        title="사진 등록"
+        onBack={() => {}}
+      />
+
+      {/* ── 스크롤 폼 ── */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+
+        {/* 선택된 사진 미리보기 */}
+        <div style={{ padding: '16px 20px 0' }}>
+          <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden' }}>
+            <PawPhoto uid="1583337130417-3346a1be7dee" w={320} h={320} fav="#f4dab3" radius={0} style={{ height: 264 }} />
+          </div>
+        </div>
+
+        {/* 구분선 */}
+        <div style={{ height: 1, background: 'var(--color-border-subtle)', margin: '16px 0' }} />
+
+        {/* 폼 필드 */}
+        <div style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+          {/* ─ 반려동물 (필수) ─ */}
+          <div>
+            <div style={{ marginBottom: 8 }}>
+              <span style={{ font: '600 13px/1 var(--font-sans)', color: 'var(--color-text-default)', letterSpacing: '-0.01em' }}>반려동물</span>
+              <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-status-error)', marginLeft: 2 }}>*</span>
+            </div>
+            <button style={{
+              width: '100%', height: 58, padding: '0 16px',
+              background: selectedPet ? 'var(--color-brand-subtle)' : 'var(--color-bg-subtle)',
+              border: `1.5px solid ${selectedPet ? 'var(--color-brand-default)' : 'var(--color-border-default)'}`,
+              borderRadius: 14, cursor: 'pointer', boxSizing: 'border-box',
+              display: 'flex', alignItems: 'center', gap: 12,
+              transition: 'all .12s',
+            }}>
+              {selectedPet ? (
+                <>
+                  <span style={{ font: '24px/1 -apple-system, "Segoe UI Emoji"', flexShrink: 0 }}>{selectedPet.emoji}</span>
+                  <div style={{ flex: 1, textAlign: 'left' }}>
+                    <div style={{ font: '700 15px/1 var(--font-sans)', color: 'var(--color-brand-strong)', letterSpacing: '-0.01em' }}>{selectedPet.name}</div>
+                    <div style={{ font: '500 12px/1 var(--font-sans)', color: 'var(--color-brand-default)', marginTop: 3 }}>{selectedPet.breed}</div>
+                  </div>
+                  <PawIcon name="circle-check-fill" size={20} color="var(--color-brand-default)" />
+                </>
+              ) : (
+                <>
+                  <div style={{
+                    width: 34, height: 34, borderRadius: 999,
+                    background: 'var(--color-border-default)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <span style={{ font: '16px/1 -apple-system, "Segoe UI Emoji"' }}>🐾</span>
+                  </div>
+                  <span style={{
+                    flex: 1, textAlign: 'left',
+                    font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-placeholder)',
+                    letterSpacing: '-0.01em',
+                  }}>어떤 아이의 사진인가요?</span>
+                  <PawIcon name="chevron-down" size={16} color="var(--color-text-subtle)" />
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* ─ 제목 (선택) ─ */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ font: '600 13px/1 var(--font-sans)', color: 'var(--color-text-default)', letterSpacing: '-0.01em' }}>제목</span>
+              <span style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-placeholder)' }}>{titleText.length} / 100</span>
+            </div>
+            <div style={{
+              width: '100%', height: 52, padding: '0 16px',
+              background: 'var(--color-bg-subtle)',
+              border: `1.5px solid ${titleText ? 'var(--color-border-strong)' : 'var(--color-border-subtle)'}`,
+              borderRadius: 14, boxSizing: 'border-box',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
+            }}>
+              <span style={{
+                flex: 1,
+                font: `${titleText ? '500' : '400'} 15px/1 var(--font-sans)`,
+                color: titleText ? 'var(--color-text-strong)' : 'var(--color-text-placeholder)',
+                letterSpacing: '-0.01em',
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>{titleText || '사진에 대해 소개해주세요'}</span>
+            </div>
+          </div>
+
+          {/* ─ 설명 (선택) ─ */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ font: '600 13px/1 var(--font-sans)', color: 'var(--color-text-default)', letterSpacing: '-0.01em' }}>설명</span>
+              <span style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-placeholder)' }}>{descText.length} / 1000</span>
+            </div>
+            <div style={{
+              width: '100%', minHeight: 88, padding: '14px 16px',
+              background: 'var(--color-bg-subtle)',
+              border: `1.5px solid ${descText ? 'var(--color-border-strong)' : 'var(--color-border-subtle)'}`,
+              borderRadius: 14, boxSizing: 'border-box',
+              display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 8,
+            }}>
+              <span style={{
+                font: `${descText ? '400' : '400'} 15px/1.5 var(--font-sans)`,
+                color: descText ? 'var(--color-text-strong)' : 'var(--color-text-placeholder)',
+                letterSpacing: '-0.01em', whiteSpace: 'pre-line',
+                flex: 1,
+              }}>{descText || '사진에 대한 설명을 입력하세요'}</span>
+            </div>
+          </div>
+
+          {/* ─ 태그 (선택) ─ */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ font: '600 13px/1 var(--font-sans)', color: 'var(--color-text-default)', letterSpacing: '-0.01em' }}>태그</span>
+              <span style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-placeholder)' }}>선택 · 최대 10개</span>
+            </div>
+
+            {/* 입력된 태그 칩 */}
+            {tags.length > 0 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 10 }}>
+                {tags.map(tag => (
+                  <div key={tag} style={{
+                    height: 30, padding: '0 8px 0 12px',
+                    background: 'var(--color-bg-subtle)',
+                    border: '1px solid var(--color-border-default)',
+                    borderRadius: 999,
+                    display: 'inline-flex', alignItems: 'center', gap: 3,
+                  }}>
+                    <span style={{ font: '600 12px/1 var(--font-sans)', color: 'var(--color-brand-default)' }}>{tag}</span>
+                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px 1px', display: 'inline-flex', alignItems: 'center' }}>
+                      <PawIcon name="close" size={11} color="var(--color-text-subtle)" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* 태그 입력 필드 */}
+            <div style={{
+              width: '100%', height: 52, padding: '0 16px',
+              background: 'var(--color-bg-subtle)',
+              border: '1.5px solid var(--color-border-subtle)',
+              borderRadius: 14, boxSizing: 'border-box',
+              display: 'flex', alignItems: 'center', gap: 8,
+            }}>
+              <PawIcon name="tag" size={16} color="var(--color-text-subtle)" />
+              <span style={{
+                font: '400 15px/1 var(--font-sans)',
+                color: 'var(--color-text-placeholder)', letterSpacing: '-0.01em',
+              }}>{tags.length > 0 ? '태그 추가...' : '#태그를 입력하세요'}</span>
+            </div>
+            <div style={{ marginTop: 6, font: '400 11px/1 var(--font-sans)', color: 'var(--color-text-placeholder)' }}>
+              스페이스 또는 엔터로 태그 구분
+            </div>
+          </div>
+        </div>
+
+        <div style={{ height: 24 }} />
+      </div>
+
+      {/* ── 하단 게시 버튼 ── */}
+      <div style={{ padding: '12px 20px 28px', borderTop: '1px solid var(--color-border-default)', background: 'var(--color-bg-default)' }}>
+        <button style={{
+          width: '100%', height: 52, borderRadius: 14, border: 'none',
+          background: canPost ? 'var(--color-brand-default)' : 'var(--color-bg-subtle)',
+          color: canPost ? '#fff' : 'var(--color-text-disabled)',
+          font: '700 15px/1 var(--font-sans)', letterSpacing: '-0.005em',
+          cursor: canPost ? 'pointer' : 'not-allowed',
+          transition: 'background .12s, color .12s',
+        }}>등록하기</button>
+      </div>
+
+      {/* ── 반려동물 선택 바텀시트 ── */}
+      {showSheet && (
+        <div style={{ position: 'absolute', inset: 0, zIndex: 30 }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.45)' }} />
+          <div style={{
+            position: 'absolute', left: 0, right: 0, bottom: 0,
+            background: 'var(--color-bg-default)',
+            borderRadius: '24px 24px 0 0',
+            paddingBottom: 32,
+          }}>
+            {/* 핸들 */}
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
+              <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--color-border-strong)' }} />
+            </div>
+            {/* 헤더 */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 20px 20px' }}>
+              <span style={{ font: '800 17px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.018em' }}>
+                반려동물 선택
+              </span>
+              <PawIconBtn name="close" iconSize={18} />
+            </div>
+            {/* 반려동물 목록 */}
+            <div style={{ padding: '0 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {FORM_PETS.map((pet, i) => (
+                <button key={pet.id} style={{
+                  width: '100%', padding: '14px 16px', borderRadius: 16,
+                  background: i === 0 ? 'var(--color-brand-subtle)' : 'var(--color-bg-subtle)',
+                  border: `1.5px solid ${i === 0 ? 'var(--color-brand-default)' : 'transparent'}`,
+                  cursor: 'pointer', boxSizing: 'border-box',
+                  display: 'flex', alignItems: 'center', gap: 14,
+                  transition: 'all .12s',
+                }}>
+                  <div style={{
+                    width: 48, height: 48, borderRadius: 999,
+                    background: pet.color, flexShrink: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    font: '24px/1 -apple-system, "Segoe UI Emoji"',
+                  }}>{pet.emoji}</div>
+                  <div style={{ flex: 1, textAlign: 'left' }}>
+                    <div style={{ font: '700 15px/1 var(--font-sans)', letterSpacing: '-0.01em', color: i === 0 ? 'var(--color-brand-strong)' : 'var(--color-text-strong)' }}>{pet.name}</div>
+                    <div style={{ font: '500 12px/1 var(--font-sans)', color: i === 0 ? 'var(--color-brand-default)' : 'var(--color-text-subtle)', marginTop: 4 }}>{pet.breed}</div>
+                  </div>
+                  {i === 0 && <PawIcon name="circle-check-fill" size={20} color="var(--color-brand-default)" />}
+                </button>
+              ))}
+
+              {/* 새 반려동물 추가 */}
+              <button style={{
+                width: '100%', height: 50, borderRadius: 14, marginTop: 8,
+                background: 'transparent',
+                border: '1.5px dashed var(--color-border-strong)',
+                cursor: 'pointer', boxSizing: 'border-box',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                font: '600 14px/1 var(--font-sans)', color: 'var(--color-text-subtle)', letterSpacing: '-0.01em',
+              }}>
+                <PawIcon name="plus" size={16} color="var(--color-text-subtle)" />
+                새 반려동물 추가
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
