@@ -114,7 +114,7 @@ function PetInfoStep2_Breed() {
             return (
               <button key={s.id} onClick={() => { setSpecies(s.id); setBreed(''); }} style={{
                 padding: '20px 0', borderRadius: 18, cursor: 'pointer',
-                background: on ? PawColors.brandSoft : 'var(--color-bg-subtle)',
+                background: 'var(--color-bg-subtle)',
                 border: `2px solid ${on ? PawColors.brand : 'transparent'}`,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
                 transition: 'all .12s',
@@ -129,7 +129,7 @@ function PetInfoStep2_Breed() {
         {/* 품종 선택 버튼 */}
         <button onClick={() => setSheetOpen(true)} style={{
           width: '100%', height: 56, padding: '0 18px',
-          background: breed ? PawColors.brandSoft : 'var(--color-bg-subtle)',
+          background: 'var(--color-bg-subtle)',
           border: `2px solid ${breed ? PawColors.brand : 'transparent'}`,
           borderRadius: 16, cursor: 'pointer', boxSizing: 'border-box',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -161,8 +161,8 @@ function PetInfoStep2_Breed() {
             <div style={{ flex: 1, overflowY: 'auto', padding: '0 12px 20px' }}>
               {breeds.map(b => (
                 <button key={b} onClick={() => { setBreed(b); setSheetOpen(false); }} style={{
-                  width: '100%', padding: '14px 16px', borderRadius: 12, border: 'none', cursor: 'pointer', textAlign: 'left',
-                  background: breed === b ? PawColors.brandSoft : 'transparent',
+                  width: '100%', padding: '14px 16px', borderRadius: 12, border: `1.5px solid ${breed === b ? PawColors.brand : 'transparent'}`, cursor: 'pointer', textAlign: 'left',
+                  background: 'transparent',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   font: `${breed === b ? 700 : 500} 15px/1 var(--font-sans)`,
                   color: breed === b ? PawColors.brandInk : 'var(--color-text-default)',
@@ -274,7 +274,7 @@ function PetInfoStep3_Birth() {
         {/* 날짜 선택 버튼 — 하나로 통합 */}
         <button onClick={handleOpen} style={{
           width: '100%', height: 56, padding: '0 18px',
-          background: ok ? PawColors.brandSoft : 'var(--color-bg-subtle)',
+          background: 'var(--color-bg-subtle)',
           border: `2px solid ${ok ? PawColors.brand : 'transparent'}`,
           borderRadius: 16, cursor: 'pointer', boxSizing: 'border-box',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -288,12 +288,6 @@ function PetInfoStep3_Birth() {
             : <PawIcon name="chevron-down" size={18} color="var(--color-text-subtle)" />}
         </button>
 
-        {/* 미리보기 */}
-        {ok && (
-          <div style={{ marginTop: 16, padding: '14px 16px', background: PawColors.brandSoft, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, font: '700 14px/1 var(--font-sans)', color: PawColors.brandInk }}>
-            <span>🎂</span><span>{year}년 {month}월 {day}일</span>
-          </div>
-        )}
       </div>
 
       {/* 휠 피커 바텀시트 */}
@@ -934,7 +928,7 @@ function OnboardingHasPet() {
           {/* 있어요 */}
           <button onClick={() => setSelected('yes')} style={{
             width: '100%', padding: '22px 20px',
-            background: selected === 'yes' ? PawColors.brandSoft : 'var(--color-bg-subtle)',
+            background: 'var(--color-bg-subtle)',
             border: `2px solid ${selected === 'yes' ? PawColors.brand : 'transparent'}`,
             borderRadius: 20, cursor: 'pointer', textAlign: 'left',
             display: 'flex', alignItems: 'center', gap: 16,
@@ -2988,7 +2982,7 @@ function PhotoPostFormScreen({ variant = 'form' }) {
             </div>
             <button style={{
               width: '100%', height: 58, padding: '0 16px',
-              background: selectedPet ? 'var(--color-brand-subtle)' : 'var(--color-bg-subtle)',
+              background: 'var(--color-bg-subtle)',
               border: `1.5px solid ${selectedPet ? 'var(--color-brand-default)' : 'var(--color-border-default)'}`,
               borderRadius: 14, cursor: 'pointer', boxSizing: 'border-box',
               display: 'flex', alignItems: 'center', gap: 12,
@@ -3157,7 +3151,7 @@ function PhotoPostFormScreen({ variant = 'form' }) {
               {FORM_PETS.map((pet, i) => (
                 <button key={pet.id} style={{
                   width: '100%', padding: '14px 16px', borderRadius: 16,
-                  background: i === 0 ? 'var(--color-brand-subtle)' : 'var(--color-bg-subtle)',
+                  background: 'var(--color-bg-subtle)',
                   border: `1.5px solid ${i === 0 ? 'var(--color-brand-default)' : 'transparent'}`,
                   cursor: 'pointer', boxSizing: 'border-box',
                   display: 'flex', alignItems: 'center', gap: 14,
