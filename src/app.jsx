@@ -2860,6 +2860,7 @@ function PhotoUploadNoPetAlertScreen() {
         top: '44%', transform: 'translateY(-50%)',
         background: 'var(--color-bg-default)',
         borderRadius: 20,
+        border: '1px solid var(--color-border-default)',
         padding: '32px 24px 20px',
         zIndex: 51,
         display: 'flex', flexDirection: 'column', alignItems: 'center',
