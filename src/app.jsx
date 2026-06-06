@@ -1,11 +1,22 @@
 const DarkModeCtx = React.createContext({ dark: false, setDark: () => {} });
 function useDarkMode() { return React.useContext(DarkModeCtx); }
 function DarkModeProvider({ children }) {
-  const [dark, setDark] = React.useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const [dark, setDark] = React.useState(() => {
+    const saved = localStorage.getItem('mn-theme');
+    if (saved !== null) return saved === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+  const setDarkPersist = (v) => {
+    setDark(prev => {
+      const next = typeof v === 'function' ? v(prev) : v;
+      localStorage.setItem('mn-theme', next ? 'dark' : 'light');
+      return next;
+    });
+  };
   React.useEffect(() => {
     document.documentElement.dataset.theme = dark ? 'dark' : '';
   }, [dark]);
-  return <DarkModeCtx.Provider value={{ dark, setDark }}>{children}</DarkModeCtx.Provider>;
+  return <DarkModeCtx.Provider value={{ dark, setDark: setDarkPersist }}>{children}</DarkModeCtx.Provider>;
 }
 
 const W = 360;
