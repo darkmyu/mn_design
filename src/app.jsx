@@ -395,8 +395,8 @@ function PetInfoStep4_Gender() {
 }
 
 /* ── 2-5: 사진 업로드 + 정보 확인 (통합) ── */
-function PetInfoStep5_Photo() {
-  const [picked, setPicked] = React.useState(false);
+function PetInfoStep5_Photo({ withPhoto = false }) {
+  const [picked, setPicked] = React.useState(withPhoto);
   const rows = [
     { label: '이름',    value: '몽이' },
     { label: '품종',    value: '강아지 · 골든리트리버' },
@@ -420,31 +420,37 @@ function PetInfoStep5_Photo() {
         {/* 프로필 카드 */}
         <div style={{ borderRadius: 22, overflow: 'hidden', border: '1px solid var(--color-border-default)' }}>
 
-          {/* 사진 업로드 + 이름 헤더 */}
-          <div style={{ padding: '24px 20px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, background: PawColors.brandSoft }}>
-            <button onClick={() => setPicked(p => !p)} style={{
-              width: 88, height: 88, borderRadius: '50%', cursor: 'pointer',
-              background: picked ? PawColors.brand : '#fff',
-              border: `2.5px dashed ${picked ? 'transparent' : PawColors.brand}`,
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6,
-              boxShadow: '0 4px 14px rgba(0,0,0,0.10)',
-              transition: 'all .15s', position: 'relative',
+          {/* 사진 업로드 헤더 */}
+          {picked ? (
+            <button onClick={() => setPicked(false)} style={{
+              display: 'block', width: '100%', height: 180, border: 'none', cursor: 'pointer', padding: 0, position: 'relative',
+              backgroundImage: 'url("https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=600&q=80&auto=format&fit=crop")',
+              backgroundSize: 'cover', backgroundPosition: 'center',
             }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={picked ? '#fff' : PawColors.brand} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                <circle cx="12" cy="13" r="4"/>
-              </svg>
-              <span style={{ font: `600 10px/1 var(--font-sans)`, color: picked ? '#fff' : PawColors.brand }}>
-                {picked ? '변경' : '사진 추가'}
-              </span>
+              <div style={{
+                position: 'absolute', bottom: 10, right: 12,
+                height: 28, padding: '0 10px',
+                background: 'rgba(0,0,0,0.45)', borderRadius: 999,
+                display: 'flex', alignItems: 'center', gap: 5,
+              }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+                <span style={{ font: '500 11px/1 var(--font-sans)', color: '#fff' }}>변경</span>
+              </div>
             </button>
-            <div style={{ font: '800 18px/1 var(--font-sans)', letterSpacing: '-0.02em', color: 'var(--color-text-strong)' }}>
-              몽이
+          ) : (
+            <div style={{ padding: '36px 20px 32px', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'var(--color-bg-subtle)' }}>
+              <button onClick={() => setPicked(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-subtle)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+                <span style={{ font: '500 10px/1 var(--font-sans)', color: 'var(--color-text-subtle)' }}>프로필 사진 추가</span>
+              </button>
             </div>
-            <div style={{ font: '500 11px/1 var(--font-sans)', color: 'var(--color-text-placeholder)' }}>
-              사진은 선택사항이에요
-            </div>
-          </div>
+          )}
 
           {/* 정보 목록 */}
           <div style={{ background: PawColors.surface }}>
@@ -2684,6 +2690,9 @@ function AppInner() {
             </DCArtboard>
             <DCArtboard id="welcome-3a-5" label="S09 · 사진 업로드 · 정보 확인" width={W} height={H}>
               <Phone><PetInfoStep5_Photo /></Phone>
+            </DCArtboard>
+            <DCArtboard id="welcome-3a-5b" label="S09-B · 사진 선택 완료" width={W} height={H}>
+              <Phone><PetInfoStep5_Photo withPhoto /></Phone>
             </DCArtboard>
           </DCSection>
 
