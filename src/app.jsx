@@ -3404,7 +3404,7 @@ function PhotoPostFormScreen({ variant = 'form' }) {
             <button style={{
               width: '100%', height: 58, padding: '0 16px',
               background: 'var(--color-bg-subtle)',
-              border: `1.5px solid ${selectedPet ? 'var(--color-brand-default)' : 'var(--color-border-default)'}`,
+              border: 'none',
               borderRadius: 14, cursor: 'pointer', boxSizing: 'border-box',
               display: 'flex', alignItems: 'center', gap: 12,
               transition: 'all .12s',
@@ -3448,7 +3448,7 @@ function PhotoPostFormScreen({ variant = 'form' }) {
             <div style={{
               width: '100%', height: 52, padding: '0 16px',
               background: 'var(--color-bg-subtle)',
-              border: `1.5px solid ${titleText ? 'var(--color-border-strong)' : 'var(--color-border-subtle)'}`,
+              border: 'none',
               borderRadius: 14, boxSizing: 'border-box',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
             }}>
@@ -3471,7 +3471,7 @@ function PhotoPostFormScreen({ variant = 'form' }) {
             <div style={{
               width: '100%', minHeight: 88, padding: '14px 16px',
               background: 'var(--color-bg-subtle)',
-              border: `1.5px solid ${descText ? 'var(--color-border-strong)' : 'var(--color-border-subtle)'}`,
+              border: 'none',
               borderRadius: 14, boxSizing: 'border-box',
               display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 8,
             }}>
@@ -3515,7 +3515,7 @@ function PhotoPostFormScreen({ variant = 'form' }) {
             <div style={{
               width: '100%', height: 52, padding: '0 16px',
               background: 'var(--color-bg-subtle)',
-              border: '1.5px solid var(--color-border-subtle)',
+              border: 'none',
               borderRadius: 14, boxSizing: 'border-box',
               display: 'flex', alignItems: 'center', gap: 8,
             }}>
