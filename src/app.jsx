@@ -1959,6 +1959,238 @@ function PetViewerScreen({ isMine = false }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// S12-F: 반려동물 정보 수정
+// ─────────────────────────────────────────────────────────────────────────────
+function PetEditScreen() {
+  const { MY_PETS } = PETS_DATA;
+  const pet = MY_PETS[0];
+
+  const [name, setName]       = React.useState(pet.name);
+  const [species, setSpecies] = React.useState('dog');
+  const [breed, setBreed]     = React.useState(pet.breed);
+  const [gender, setGender]   = React.useState('male');
+  const [birthYear, setBirthYear]   = React.useState('2024');
+  const [birthMonth, setBirthMonth] = React.useState('2');
+  const [birthDay, setBirthDay]     = React.useState('10');
+  const [sheetOpen, setSheetOpen]   = React.useState(false);
+  const [dateOpen, setDateOpen]     = React.useState(false);
+
+  const breeds = species === 'dog' ? DOG_BREEDS : CAT_BREEDS;
+  const YEARS  = Array.from({ length: 37 }, (_, i) => String(2026 - i));
+  const MONTHS = Array.from({ length: 12 }, (_, i) => String(i + 1));
+  const dayCount = (birthYear && birthMonth) ? new Date(Number(birthYear), Number(birthMonth), 0).getDate() : 31;
+  const DAYS = Array.from({ length: dayCount }, (_, i) => String(i + 1));
+  const dateOk = !!birthYear && !!birthMonth && !!birthDay;
+  const canSave = name.length >= 1 && breed && gender && dateOk;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface, position: 'relative' }}>
+
+      {/* 탑바 */}
+      <PawTopBar variant="title" title="반려동물 수정" onBack={() => {}} />
+
+      {/* 스크롤 폼 */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 160px' }}>
+
+        {/* 프로필 사진 */}
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0 28px' }}>
+          <div style={{ position: 'relative' }}>
+            <PetGlyph pet={pet} size={88} />
+            <button style={{
+              position: 'absolute', right: 0, bottom: 0,
+              width: 28, height: 28, borderRadius: 999,
+              background: PawColors.brand, border: '2.5px solid var(--color-bg-default)',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 10px rgba(255,107,61,0.35)',
+            }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* 이름 */}
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
+            이름 <span style={{ color: PawColors.brand }}>*</span>
+          </label>
+          <input
+            value={name} onChange={e => setName(e.target.value)} maxLength={20}
+            style={{
+              width: '100%', height: 52, padding: '0 14px', boxSizing: 'border-box',
+              background: 'var(--color-bg-subtle)',
+              border: 'none',
+              borderRadius: 14, outline: 'none',
+              font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-strong)',
+            }}
+          />
+        </div>
+
+        {/* 종류 */}
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
+            종류 <span style={{ color: PawColors.brand }}>*</span>
+          </label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            {[{ id: 'dog', label: '강아지', emoji: '🐶' }, { id: 'cat', label: '고양이', emoji: '🐱' }].map(s => {
+              const on = species === s.id;
+              return (
+                <button key={s.id} onClick={() => { setSpecies(s.id); setBreed(''); }} style={{
+                  padding: '16px 0', borderRadius: 14, cursor: 'pointer',
+                  background: 'var(--color-bg-subtle)',
+                  border: `2px solid ${on ? PawColors.brand : 'transparent'}`,
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                  transition: 'all .12s',
+                }}>
+                  <span style={{ font: '28px/1 -apple-system, "Segoe UI Emoji"' }}>{s.emoji}</span>
+                  <span style={{ font: `${on ? 800 : 700} 13px/1 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
+                    {s.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 품종 */}
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
+            품종 <span style={{ color: PawColors.brand }}>*</span>
+          </label>
+          <button onClick={() => setSheetOpen(true)} style={{
+            width: '100%', height: 52, padding: '0 14px', boxSizing: 'border-box',
+            background: 'var(--color-bg-subtle)',
+            border: 'none',
+            borderRadius: 14, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          }}>
+            <span style={{ font: '500 15px/1 var(--font-sans)', color: breed ? 'var(--color-text-strong)' : 'var(--color-text-placeholder)' }}>
+              {breed || '품종 선택'}
+            </span>
+            <PawIcon name="chevron-down" size={16} color="var(--color-text-subtle)" />
+          </button>
+        </div>
+
+        {/* 성별 */}
+        <div style={{ marginBottom: 20 }}>
+          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
+            성별 <span style={{ color: PawColors.brand }}>*</span>
+          </label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            {[
+              { id: 'male',   label: '남아', emoji: '♂', accent: 'var(--color-gender-male)',   soft: 'var(--color-gender-male-surface)' },
+              { id: 'female', label: '여아', emoji: '♀', accent: 'var(--color-gender-female)', soft: 'var(--color-gender-female-surface)' },
+            ].map(g => {
+              const on = gender === g.id;
+              return (
+                <button key={g.id} onClick={() => setGender(g.id)} style={{
+                  height: 52, borderRadius: 14, cursor: 'pointer',
+                  background: on ? g.soft : 'var(--color-bg-subtle)',
+                  border: `2px solid ${on ? g.accent : 'transparent'}`,
+                  color: on ? g.accent : 'var(--color-text-default)',
+                  font: `${on ? 700 : 600} 15px/1 var(--font-sans)`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  transition: 'all .12s',
+                }}>
+                  <span style={{ font: '16px/1 -apple-system, "Segoe UI Emoji"' }}>{g.emoji}</span>
+                  {g.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 생년월일 */}
+        <div style={{ marginBottom: 8 }}>
+          <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.012em' }}>
+            생년월일 <span style={{ color: PawColors.brand }}>*</span>
+          </label>
+          <button onClick={() => setDateOpen(true)} style={{
+            width: '100%', height: 52, padding: '0 14px', boxSizing: 'border-box',
+            background: 'var(--color-bg-subtle)', border: 'none',
+            borderRadius: 14, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          }}>
+            <span style={{ font: `${dateOk ? 600 : 500} 15px/1 var(--font-sans)`, color: dateOk ? 'var(--color-text-strong)' : 'var(--color-text-placeholder)' }}>
+              {dateOk ? `${birthYear}년 ${birthMonth}월 ${birthDay}일` : '생년월일 선택'}
+            </span>
+            <PawIcon name="chevron-down" size={16} color="var(--color-text-subtle)" />
+          </button>
+        </div>
+      </div>
+
+      {/* 저장 버튼 */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '80px 20px 32px',
+        background: 'linear-gradient(to bottom, transparent 0%, var(--color-bg-default) 64px)',
+      }}>
+        <PawButton full size="lg" disabled={!canSave}>저장하기</PawButton>
+      </div>
+
+      {/* 생년월일 휠 피커 바텀시트 */}
+      {dateOpen && (
+        <div style={{ position: 'absolute', inset: 0, zIndex: 20 }}>
+          <div onClick={() => setDateOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)' }} />
+          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: PawColors.surface, borderRadius: '20px 20px 0 0' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
+              <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--color-border-strong)' }} />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 20px 12px' }}>
+              <span style={{ font: '700 16px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.015em' }}>생년월일 선택</span>
+              <button onClick={() => setDateOpen(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', font: '700 15px/1 var(--font-sans)', color: PawColors.brand, padding: '4px 0' }}>완료</button>
+            </div>
+            <div style={{ position: 'relative', display: 'flex', padding: '0 20px 40px' }}>
+              <div style={{
+                position: 'absolute', top: 44 * 2, left: 20, right: 20, height: 44,
+                background: 'var(--color-bg-subtle)', borderRadius: 12,
+                pointerEvents: 'none', zIndex: 1,
+              }} />
+              <WheelPickerCol items={YEARS}  value={birthYear}  onChange={setBirthYear} suffix="년" />
+              <WheelPickerCol items={MONTHS} value={birthMonth} onChange={v => { setBirthMonth(v); const max = new Date(Number(birthYear) || 2000, Number(v), 0).getDate(); if (Number(birthDay) > max) setBirthDay(String(max)); }} suffix="월" />
+              <WheelPickerCol items={DAYS}   value={birthDay}   onChange={setBirthDay}  suffix="일" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 품종 선택 바텀시트 */}
+      {sheetOpen && (
+        <div style={{ position: 'absolute', inset: 0, zIndex: 20 }}>
+          <div onClick={() => setSheetOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)' }} />
+          <div style={{
+            position: 'absolute', left: 0, right: 0, bottom: 0,
+            background: PawColors.surface, borderRadius: '20px 20px 0 0',
+            maxHeight: '65%', display: 'flex', flexDirection: 'column',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
+              <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--color-border-strong)' }} />
+            </div>
+            <div style={{ padding: '8px 20px 12px', font: '700 16px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.015em' }}>
+              품종 선택
+            </div>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '0 12px 24px' }}>
+              {breeds.map(b => (
+                <button key={b} onClick={() => { setBreed(b); setSheetOpen(false); }} style={{
+                  width: '100%', height: 48, padding: '0 12px', background: 'none',
+                  border: 'none', borderRadius: 10, cursor: 'pointer', textAlign: 'left',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                }}>
+                  <span style={{ font: `${breed === b ? 700 : 500} 15px/1 var(--font-sans)`, color: breed === b ? PawColors.brandInk : 'var(--color-text-default)' }}>{b}</span>
+                  {breed === b && <PawIcon name="check" size={16} color={PawColors.brand} />}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // S12-E: 반려동물 사진 전체 보기
 // ─────────────────────────────────────────────────────────────────────────────
 function PetPhotoGridScreen() {
@@ -2897,6 +3129,9 @@ function AppInner() {
             </DCArtboard>
             <DCArtboard id="pet-viewer-mine" label="S12-D-A · 반려동물 정보 (나)" width={W} height={H}>
               <Phone><PetViewerScreen isMine /></Phone>
+            </DCArtboard>
+            <DCArtboard id="pet-edit" label="S12-F · 반려동물 수정" width={W} height={H}>
+              <Phone><PetEditScreen /></Phone>
             </DCArtboard>
             <DCArtboard id="pet-photo-grid" label="S12-E · 반려동물 사진 전체" width={W} height={H}>
               <Phone><PetPhotoGridScreen /></Phone>
