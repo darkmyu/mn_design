@@ -1867,6 +1867,142 @@ function MyScreen({ emptyPets, emptyPhotos }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// S12-D: 반려동물 정보 뷰어
+// ─────────────────────────────────────────────────────────────────────────────
+function PetViewerScreen({ isMine = false }) {
+  const { PHOTOS, MY_PETS } = PETS_DATA;
+  const pet = MY_PETS[0]; // 몽이
+  const petPhotos = PHOTOS.filter(p => p.species === pet.species);
+
+  const INFO_ROWS = [
+    { label: '종류',     value: '강아지' },
+    { label: '품종',     value: pet.breed },
+    { label: '성별',     value: '남아' },
+    { label: '나이',     value: pet.age },
+    { label: '생년월일', value: pet.born },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--color-bg-subtle)' }}>
+
+      {/* 탑바 */}
+      <PawTopBar variant="title" title="반려동물 정보" onBack={() => {}} />
+
+      {/* 스크롤 */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+
+        {/* ── 히어로 ── */}
+        <div style={{
+          background: `linear-gradient(160deg, ${pet.color}55 0%, var(--color-bg-default) 68%)`,
+          padding: '32px 20px 28px',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14,
+        }}>
+          <PetGlyph pet={pet} size={96} ring />
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ font: '800 26px/1.2 var(--font-sans)', letterSpacing: '-0.028em', color: 'var(--color-text-strong)' }}>{pet.name}</div>
+            <div style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 7 }}>{pet.breed}</div>
+          </div>
+          {/* 나이 + 생일 배지 */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10,
+            background: 'var(--color-bg-default)',
+            border: '1px solid var(--color-border-default)',
+            borderRadius: 999, padding: '7px 16px',
+          }}>
+            <span style={{ font: '600 13px/1 var(--font-sans)', color: 'var(--color-text-strong)' }}>{pet.age}</span>
+            <span style={{ width: 1, height: 11, background: 'var(--color-border-default)', display: 'block' }} />
+            <span style={{ font: '500 13px/1 var(--font-sans)', color: 'var(--color-text-subtle)' }}>{pet.born}</span>
+          </div>
+        </div>
+
+        {/* ── 기본 정보 ── */}
+        <div style={{ background: 'var(--color-bg-default)', padding: '0 20px' }}>
+          <div style={{ padding: '18px 0 2px', font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.01em' }}>기본 정보</div>
+          {INFO_ROWS.map((row, i) => (
+            <div key={row.label} style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '13px 0',
+              borderBottom: i < INFO_ROWS.length - 1 ? '1px solid var(--color-border-subtle)' : 'none',
+            }}>
+              <span style={{ font: '500 14px/1 var(--font-sans)', color: 'var(--color-text-subtle)' }}>{row.label}</span>
+              <span style={{ font: '600 14px/1 var(--font-sans)', color: 'var(--color-text-strong)' }}>{row.value}</span>
+            </div>
+          ))}
+          {isMine && (
+            <div style={{ paddingTop: 12, paddingBottom: 16 }}>
+              <PawButton variant="secondary" full>정보 수정</PawButton>
+            </div>
+          )}
+          {!isMine && <div style={{ height: 6 }} />}
+        </div>
+
+        {/* ── 사진 그리드 ── */}
+        <div style={{ background: 'var(--color-bg-default)', marginTop: 8, paddingTop: 18 }}>
+          <div style={{ padding: '0 20px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-strong)', letterSpacing: '-0.01em' }}>사진</span>
+            <span style={{ font: '500 12px/1 var(--font-sans)', color: 'var(--color-brand-default)', cursor: 'pointer' }}>전체 보기</span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
+            {petPhotos.slice(0, 9).map(p => (
+              <div key={p.id} style={{ aspectRatio: '1', overflow: 'hidden' }}>
+                <PawPhoto uid={p.uid} w={120} h={120} fav={p.fav} radius={0} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ height: 32 }} />
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// S12-E: 반려동물 사진 전체 보기
+// ─────────────────────────────────────────────────────────────────────────────
+function PetPhotoGridScreen() {
+  const { PHOTOS, MY_PETS } = PETS_DATA;
+  const pet = MY_PETS[0];
+  const petPhotos = PHOTOS.filter(p => p.species === pet.species);
+  const CELL = (360 - 4) / 3; // 2px gap × 2
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--color-bg-default)' }}>
+
+      {/* 탑바 */}
+      <PawTopBar variant="title" title={`${pet.name}의 사진`} onBack={() => {}} />
+
+      {/* 총 장수 */}
+      <div style={{
+        padding: '10px 16px',
+        font: '500 12px/1 var(--font-sans)',
+        color: 'var(--color-text-placeholder)',
+        borderBottom: '1px solid var(--color-border-subtle)',
+      }}>
+        총 {petPhotos.length}장
+      </div>
+
+      {/* 사진 그리드 */}
+      <div style={{
+        flex: 1, overflowY: 'auto',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridAutoRows: `${CELL}px`,
+        gap: 2,
+        alignContent: 'start',
+      }}>
+        {petPhotos.map(p => (
+          <div key={p.id} style={{ overflow: 'hidden', cursor: 'pointer' }}>
+            <PawPhoto uid={p.uid} w={CELL} h={CELL} fav={p.fav} radius={0} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 function OtherUserProfileScreen({ emptyPets, emptyPhotos }) {
   const { PHOTOS } = PETS_DATA;
   const [following, setFollowing] = React.useState(true);
@@ -2755,6 +2891,15 @@ function AppInner() {
             </DCArtboard>
             <DCArtboard id="my-1c" label="S12-C · 사진 없음" width={W} height={H}>
               <Phone><MyScreen emptyPhotos /></Phone>
+            </DCArtboard>
+            <DCArtboard id="pet-viewer" label="S12-D · 반려동물 정보 (타유저)" width={W} height={H}>
+              <Phone><PetViewerScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="pet-viewer-mine" label="S12-D-A · 반려동물 정보 (나)" width={W} height={H}>
+              <Phone><PetViewerScreen isMine /></Phone>
+            </DCArtboard>
+            <DCArtboard id="pet-photo-grid" label="S12-E · 반려동물 사진 전체" width={W} height={H}>
+              <Phone><PetPhotoGridScreen /></Phone>
             </DCArtboard>
           </DCSection>
 
