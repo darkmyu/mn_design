@@ -492,6 +492,28 @@ function DCViewport({ children, minScale = 0.1, maxScale = 8, style = {} }) {
     apply();
   }, [apply]);
 
+  // dc-navigate 커스텀 이벤트: { detail: { sectionId } } → 해당 섹션으로 패닝
+  React.useEffect(() => {
+    const handler = (e) => {
+      const sectionId = e.detail?.sectionId;
+      if (!sectionId || !vpRef.current || !worldRef.current) return;
+      const sec = worldRef.current.querySelector(`[data-dc-section="${sectionId}"]`);
+      if (!sec) return;
+      const el = sec.querySelector('.dc-card') ?? sec;
+      const vpRect = vpRef.current.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      const { x, y, scale: cs } = tf.current;
+      const worldElX = (elRect.left + elRect.width  / 2 - vpRect.left - x) / cs;
+      const worldElY = (elRect.top  + elRect.height / 2 - vpRect.top  - y) / cs;
+      const next = 1;
+      tf.current = { x: vpRect.width / 2 - worldElX * next, y: vpRect.height / 2 - worldElY * next, scale: next };
+      lastPostedScale.current = undefined;
+      apply();
+    };
+    window.addEventListener('dc-navigate', handler);
+    return () => window.removeEventListener('dc-navigate', handler);
+  }, [apply]);
+
   const gridColor = dark ? DC.gridDark : DC.grid;
   const gridSvg = `url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M120 0H0v120' fill='none' stroke='${encodeURIComponent(gridColor)}' stroke-width='1'/%3E%3C/svg%3E")`;
   return (

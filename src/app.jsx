@@ -2973,10 +2973,23 @@ function MongnyangDesignSystem() {
   );
 }
 
+const NAV_SECTIONS = [
+  { id: 'welcome-login',    label: '① 로그인' },
+  { id: 'welcome-step1',   label: '② 반려동물 유무' },
+  { id: 'welcome-step2a',  label: '③-A 반려동물 정보' },
+  { id: 'welcome-step2b',  label: '③-B 프로필 설정' },
+  { id: 'home-feed',       label: '④ 홈 피드' },
+  { id: 'my-profile-me',   label: '⑤-A MY 프로필' },
+  { id: 'my-profile-other',label: '⑤-B 타유저 프로필' },
+  { id: 'my-profile-etc',  label: '⑤-C 비로그인·설정' },
+  { id: 'photo-upload',    label: '⑥ 사진 등록' },
+];
+
 function AppInner() {
   const { dark, setDark } = useDarkMode();
   const [page, setPage] = React.useState(() => localStorage.getItem('mn-page') || 'canvas');
   const handleSetPage = (id) => { setPage(id); localStorage.setItem('mn-page', id); };
+  const navigateTo = (sectionId) => window.dispatchEvent(new CustomEvent('dc-navigate', { detail: { sectionId } }));
 
   const topBg       = 'var(--color-bg-default)';
   const topBorder   = 'var(--color-border-default)';
@@ -3025,6 +3038,36 @@ function AppInner() {
           <span>{dark ? '라이트' : '다크'}</span>
         </button>
       </div>
+
+      {/* ── 플로팅 섹션 네비게이션 ── */}
+      {page === 'canvas' && (
+        <div data-dc-no-pan="" style={{
+          position: 'fixed', top: 60, left: 12, zIndex: 100,
+          display: 'flex', flexDirection: 'column', gap: 4,
+        }}>
+          {NAV_SECTIONS.map(s => (
+            <button key={s.id} onClick={() => navigateTo(s.id)} style={{
+              height: 28, padding: '0 10px',
+              background: dark ? 'rgba(30,30,34,0.82)' : 'rgba(255,255,255,0.88)',
+              border: `1px solid ${dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}`,
+              borderRadius: 7, cursor: 'pointer', backdropFilter: 'blur(8px)',
+              font: '500 11px/1 var(--font-sans)',
+              color: dark ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.6)',
+              whiteSpace: 'nowrap', textAlign: 'left',
+              transition: 'background .12s, color .12s',
+            }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = dark ? 'rgba(255,107,61,0.25)' : 'rgba(255,107,61,0.12)';
+                e.currentTarget.style.color = dark ? '#ff8a5c' : '#c96442';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = dark ? 'rgba(30,30,34,0.82)' : 'rgba(255,255,255,0.88)';
+                e.currentTarget.style.color = dark ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.6)';
+              }}
+            >{s.label}</button>
+          ))}
+        </div>
+      )}
 
       {/* ── 페이지 콘텐츠 ── */}
       {page === 'system' ? (
