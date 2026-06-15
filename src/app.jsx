@@ -1961,6 +1961,135 @@ function PetViewerScreen({ isMine = false }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // S12-F: 반려동물 정보 수정
 // ─────────────────────────────────────────────────────────────────────────────
+function ProfileEditScreen() {
+  const rows = [
+    { label: '이름', value: '몽이아빠 🐕', editable: true },
+    { label: '소개', value: '골든 몽이 & 코숏 버터와 함께 🐾 서울 마포구 · 반려동물 라이프 기록 중', editable: true },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+
+      <PawTopBar variant="title" title="프로필 편집" onBack={() => {}} />
+
+      {/* 프로필 사진 */}
+      <div style={{
+        background: PawColors.surface, padding: '24px 20px 20px',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+        borderBottom: `1px solid ${PawColors.lineSoft}`,
+      }}>
+        <div style={{ position: 'relative' }}>
+          <PawAvatar name="김지원" size={80} ring />
+          <button style={{
+            position: 'absolute', right: 0, bottom: 0,
+            width: 28, height: 28, borderRadius: 999,
+            background: PawColors.brand, border: '2.5px solid var(--color-bg-default)',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 10px rgba(255,107,61,0.35)',
+          }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </button>
+        </div>
+        <span style={{ font: '600 13px/1 var(--font-sans)', color: PawColors.brand, cursor: 'pointer' }}>사진 변경</span>
+      </div>
+
+      {/* 항목 리스트 */}
+      <div style={{ background: PawColors.surface, marginTop: 12, borderTop: `1px solid ${PawColors.lineSoft}`, borderBottom: `1px solid ${PawColors.lineSoft}` }}>
+        {rows.map((row, i) => (
+          <div key={row.label} style={{
+            display: 'flex', alignItems: row.multiline ? 'flex-start' : 'center',
+            padding: row.multiline ? '16px 20px' : '0 20px',
+            minHeight: 56,
+            borderBottom: i < rows.length - 1 ? `1px solid ${PawColors.lineSoft}` : 'none',
+            cursor: row.editable ? 'pointer' : 'default',
+          }}>
+            <span style={{ font: '600 14px/1 var(--font-sans)', color: PawColors.labelStrong, width: 68, flexShrink: 0, paddingTop: row.multiline ? 2 : 0 }}>
+              {row.label}
+            </span>
+            <span style={{
+              flex: 1, font: '400 14px/1.55 var(--font-sans)',
+              color: row.editable ? PawColors.label : PawColors.labelDis,
+              whiteSpace: row.multiline ? 'pre-line' : 'nowrap',
+              overflow: 'hidden', textOverflow: row.multiline ? undefined : 'ellipsis',
+            }}>
+              {row.value}
+            </span>
+            {row.editable
+              ? <span style={{ flexShrink: 0, marginLeft: 8 }}><PawIcon name="chevron-right" size={16} color={PawColors.labelHint} /></span>
+              : <span style={{ font: '500 11px/1 var(--font-sans)', color: PawColors.labelHint, flexShrink: 0, marginLeft: 8 }}>변경 불가</span>
+            }
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProfileEditNameScreen() {
+  const [name, setName] = React.useState('몽이아빠 🐕');
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface, position: 'relative' }}>
+      <PawTopBar variant="title" title="이름" onBack={() => {}} />
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 20px 120px' }}>
+        <input
+          value={name} onChange={e => setName(e.target.value)} maxLength={30}
+          style={{
+            width: '100%', height: 52, padding: '0 14px', boxSizing: 'border-box',
+            background: 'var(--color-bg-subtle)', border: 'none',
+            borderRadius: 14, outline: 'none',
+            font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-strong)',
+          }}
+        />
+        <div style={{ marginTop: 8, font: '500 11px/1 var(--font-sans)', color: PawColors.labelHint, textAlign: 'right' }}>
+          {name.length}/30
+        </div>
+      </div>
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '80px 20px 32px',
+        background: 'linear-gradient(to bottom, transparent 0%, var(--color-bg-default) 64px)',
+      }}>
+        <PawButton full size="lg" disabled={name.trim().length < 2}>저장하기</PawButton>
+      </div>
+    </div>
+  );
+}
+
+function ProfileEditBioScreen() {
+  const [bio, setBio] = React.useState('골든 몽이 & 코숏 버터와 함께 🐾\n서울 마포구 · 반려동물 라이프 기록 중');
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface, position: 'relative' }}>
+      <PawTopBar variant="title" title="소개" onBack={() => {}} />
+      <div style={{ flex: 1, overflowY: 'auto', padding: '20px 20px 120px' }}>
+        <textarea
+          value={bio} onChange={e => setBio(e.target.value)} maxLength={1000} rows={6}
+          style={{
+            width: '100%', padding: '14px', boxSizing: 'border-box',
+            background: 'var(--color-bg-subtle)', border: 'none',
+            borderRadius: 14, outline: 'none', resize: 'none',
+            font: '400 14px/1.55 var(--font-sans)', color: 'var(--color-text-strong)',
+          }}
+        />
+        <div style={{ marginTop: 8, font: '500 11px/1 var(--font-sans)', color: PawColors.labelHint, textAlign: 'right' }}>
+          {bio.length}/1000
+        </div>
+      </div>
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0,
+        padding: '80px 20px 32px',
+        background: 'linear-gradient(to bottom, transparent 0%, var(--color-bg-default) 64px)',
+      }}>
+        <PawButton full size="lg">저장하기</PawButton>
+      </div>
+    </div>
+  );
+}
+
 function PetEditScreen() {
   const { MY_PETS } = PETS_DATA;
   const pet = MY_PETS[0];
@@ -3178,6 +3307,15 @@ function AppInner() {
             </DCArtboard>
             <DCArtboard id="pet-photo-grid" label="S12-E · 반려동물 사진 전체" width={W} height={H}>
               <Phone><PetPhotoGridScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="profile-edit" label="S12-G · 프로필 편집" width={W} height={H}>
+              <Phone><ProfileEditScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="profile-edit-name" label="S12-G-A · 이름 편집" width={W} height={H}>
+              <Phone><ProfileEditNameScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="profile-edit-bio" label="S12-G-B · 소개 편집" width={W} height={H}>
+              <Phone><ProfileEditBioScreen /></Phone>
             </DCArtboard>
           </DCSection>
 
