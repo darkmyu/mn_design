@@ -587,7 +587,19 @@ function DCSection({ id, title, subtitle, children, gap = 48 }) {
   const sid = id ?? title;
   const all = React.Children.toArray(dcFlatten(children));
   const artboards = all.filter((c) => c && c.type === DCArtboard);
-  const rest = all.filter((c) => !(c && c.type === DCArtboard));
+  const rest = all.filter((c) => !(c && c.type === DCArtboard) && !(c && c.type === DCGroupDivider));
+
+  // Build a map: artboardId → divider props that should appear BEFORE it
+  const dividerBefore = {};
+  let pendingDivider = null;
+  all.forEach((c) => {
+    if (c && c.type === DCGroupDivider) {
+      pendingDivider = c.props;
+    } else if (c && c.type === DCArtboard) {
+      const k = c.props.id ?? c.props.label;
+      if (pendingDivider !== null) { dividerBefore[k] = pendingDivider; pendingDivider = null; }
+    }
+  });
   const sec = (ctx && sid && ctx.section(sid)) || {};
   // Must match DesignCanvas's srcKey computation exactly (it filters falsy
   // IDs), or onDelete persists a srcKey that DesignCanvas never recognizes.
@@ -620,9 +632,11 @@ function DCSection({ id, title, subtitle, children, gap = 48 }) {
           {subtitle && <div style={{ fontSize: 16, color: dark ? DC.subtitleDark : DC.subtitle }}>{subtitle}</div>}
         </div>
       </div>
-      <div style={{ display: 'flex', gap, padding: '0 60px', alignItems: 'flex-start', width: 'max-content' }}>
+      <div style={{ display: 'flex', gap, padding: '0 60px', alignItems: 'stretch', width: 'max-content' }}>
         {order.map((k) => (
-          <DCArtboardFrame key={k} sectionId={sid} artboard={byId[k]} order={order}
+          <React.Fragment key={k}>
+            {dividerBefore[k] && <_DCGroupDividerEl dark={dark} label={dividerBefore[k].label} />}
+          <DCArtboardFrame sectionId={sid} artboard={byId[k]} order={order}
             label={(sec.labels || {})[k] ?? byId[k].props.label}
             onRename={(v) => ctx && ctx.patchSection(sid, (x) => ({ labels: { ...x.labels, [k]: v } }))}
             onReorder={(next) => ctx && ctx.patchSection(sid, { order: next })}
@@ -631,6 +645,7 @@ function DCSection({ id, title, subtitle, children, gap = 48 }) {
               srcKey,
             }))}
             onFocus={() => ctx && ctx.setFocus(`${sid}/${k}`)} />
+          </React.Fragment>
         ))}
       </div>
       {rest}
@@ -1089,6 +1104,21 @@ function DCFlowArrow({ branches = [], mt = 0, mb = 0 }) {
   );
 }
 
-Object.assign(window, { DesignCanvas, DCSection, DCArtboard, DCPostIt, DCFlowArrow });
+// DCGroupDivider — diagonal separator between artboard groups within a DCSection.
+// Place it between DCArtboard children; it renders as a slashed visual break.
+function DCGroupDivider({ label }) { return null; } // marker only — DCSection renders the actual element
+
+function _DCGroupDividerEl({ label, dark, height }) {
+  return (
+    <div style={{
+      alignSelf: 'stretch', width: 52, flexShrink: 0,
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      position: 'relative',
+    }}>
+    </div>
+  );
+}
+
+Object.assign(window, { DesignCanvas, DCSection, DCArtboard, DCPostIt, DCFlowArrow, DCGroupDivider });
 
 

@@ -3296,6 +3296,7 @@ function AppInner() {
             <DCArtboard id="my-1c" label="S12-C · 사진 없음" width={W} height={H}>
               <Phone><MyScreen emptyPhotos /></Phone>
             </DCArtboard>
+            <DCGroupDivider />
             <DCArtboard id="pet-viewer" label="S12-D · 반려동물 정보 (타유저)" width={W} height={H}>
               <Phone><PetViewerScreen /></Phone>
             </DCArtboard>
@@ -3308,6 +3309,7 @@ function AppInner() {
             <DCArtboard id="pet-photo-grid" label="S12-E · 반려동물 사진 전체" width={W} height={H}>
               <Phone><PetPhotoGridScreen /></Phone>
             </DCArtboard>
+            <DCGroupDivider />
             <DCArtboard id="profile-edit" label="S12-G · 프로필 편집" width={W} height={H}>
               <Phone><ProfileEditScreen /></Phone>
             </DCArtboard>
