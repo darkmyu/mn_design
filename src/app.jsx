@@ -1344,6 +1344,8 @@ function PhotoDetailScreen({ photo, onBack }) {
   const [replyTarget, setReplyTarget] = React.useState(null);
   const [menuComment, setMenuComment] = React.useState(null);
   const [editTarget, setEditTarget] = React.useState(null);
+  const [commentLikes, setCommentLikes] = React.useState({});
+  const [replyComment, setReplyComment] = React.useState(null);
 
   const KB_H = 258;
   const INPUT_H = 52;
@@ -1390,7 +1392,11 @@ function PhotoDetailScreen({ photo, onBack }) {
     <div style={{ position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', background: PawColors.surface }}>
 
       <PawTopBar variant="title" title="" onBack={onBack || (() => {})} right={
-        <PawIconBtn name="more" iconSize={22} />
+        <div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <PawIconBtn name="bell"          iconSize={20} />
+          <PawIconBtn name="share"         iconSize={20} />
+          <PawIconBtn name="more-vertical" iconSize={22} />
+        </div>
       } />
 
       {/* ── 스크롤 영역 ── */}
@@ -1399,14 +1405,14 @@ function PhotoDetailScreen({ photo, onBack }) {
         style={{ flex: 1, overflowY: 'auto', paddingBottom: kbOpen ? KB_H + INPUT_H + (replyTarget || editTarget ? REPLY_H : 0) : INPUT_H + (replyTarget || editTarget ? REPLY_H : 0) }}
       >
         {/* 사진 */}
-        <PawPhoto uid={p.uid} w={600} h={Math.round(600 / p.ar)} fav={p.fav} radius={0} />
+        <PawPhoto uid={p.uid} w={600} h={Math.round(600 / p.ar)} fav={p.fav} radius={0} style={{ height: 280 }} />
 
         {/* 유저 행 */}
         <div style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', gap: 10, borderBottom: `1px solid ${PawColors.lineSoft}` }}>
           <PawAvatar name={author.real} size={36} ring />
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ font: '700 14px/1 var(--font-sans)', color: PawColors.labelStrong, letterSpacing: '-0.01em' }}>{author.handle}</div>
-            <div style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.labelHint, marginTop: 2 }}>{p.breed}</div>
+            <div style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.label, marginTop: 2 }}>2시간 전</div>
           </div>
           <button onClick={e => { e.stopPropagation(); setFollowing(f => !f); }} style={{
             height: 30, padding: '0 14px', borderRadius: 999,
@@ -1417,106 +1423,96 @@ function PhotoDetailScreen({ photo, onBack }) {
           }}>{following ? '팔로잉' : '팔로우'}</button>
         </div>
 
-        {/* 액션 바 */}
-        <div style={{ display: 'flex', alignItems: 'center', padding: '10px 12px', gap: 4 }}>
-          <button onClick={e => { e.stopPropagation(); setLiked(l => !l); }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 8px' }}>
-            <PawIcon name={liked ? 'heart-fill' : 'heart'} size={24} color={liked ? PawColors.brand : PawColors.labelStrong} />
-            <span style={{ font: '600 13px/1 var(--font-sans)', color: PawColors.labelStrong }}>{p.likes + (liked ? 1 : 0)}</span>
-          </button>
-          <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 8px' }}>
-            <PawIcon name="bubble" size={24} color={PawColors.labelStrong} />
-            <span style={{ font: '600 13px/1 var(--font-sans)', color: PawColors.labelStrong }}>{COMMENTS.length}</span>
-          </button>
-          <div style={{ flex: 1 }} />
-          <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px' }}>
-            <PawIcon name="share" size={24} color={PawColors.labelStrong} />
-          </button>
-        </div>
-
-        {/* 캡션 */}
-        <div style={{ padding: '0 16px 14px' }}>
-          <span style={{ font: '700 13px/1.5 var(--font-sans)', color: PawColors.labelStrong }}>{author.handle} </span>
+        {/* 캡션 + 액션 바 */}
+        <div style={{ padding: '16px 20px', borderBottom: `1px solid ${PawColors.lineSoft}` }}>
           <span style={{ font: '400 13px/1.5 var(--font-sans)', color: PawColors.label }}>
             오늘도 {p.pet}이랑 산책 다녀왔어요 🐾 날씨가 너무 좋아서 평소보다 두 배 걸었더니 얘가 집에 오자마자 쓰러졌어요 😂
           </span>
-          <div style={{ marginTop: 6, display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+          <div style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             {['#골든리트리버', `#${p.pet}`, '#반려동물', '#강아지산책'].map(tag => (
               <span key={tag} style={{ font: '500 12px/1 var(--font-sans)', color: PawColors.brandInk }}>{tag}</span>
             ))}
           </div>
-          <div style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.labelHint, marginTop: 8 }}>2025년 6월 10일</div>
+          <div style={{ marginTop: 14 }} />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <button onClick={e => { e.stopPropagation(); setLiked(l => !l); }} style={{
+              display: 'flex', alignItems: 'center', gap: 4, height: 30, padding: '0 10px',
+              borderRadius: 999, border: `1px solid ${liked ? PawColors.brand : PawColors.lineSoft}`,
+              background: liked ? PawColors.brandSoft : 'transparent', cursor: 'pointer',
+              font: '600 12px/1 var(--font-sans)', color: liked ? PawColors.brand : PawColors.label,
+              transition: 'all .12s',
+            }}>
+              <PawIcon name={liked ? 'heart-fill' : 'heart'} size={13} color={liked ? PawColors.brand : PawColors.label} />
+              {p.likes + (liked ? 1 : 0)}
+            </button>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 4, font: '500 12px/1 var(--font-sans)', color: PawColors.label }}>
+              <PawIcon name="eye" size={14} color={PawColors.label} />
+              {p.likes * 5}명이 봤어요
+            </span>
+          </div>
         </div>
 
-        <PawDivider />
-
-        {/* ── 댓글 전체 목록 ── */}
+        {/* 댓글 섹션 */}
         <div style={{ padding: '12px 16px 0' }}>
           <span style={{ font: '600 13px/1 var(--font-sans)', color: PawColors.labelStrong }}>댓글 {totalCount}개</span>
 
           {COMMENTS.map(c => (
             <div key={c.id} style={{ marginTop: 16 }}>
-
-              {/* 댓글 */}
+              {/* 댓글 본체 */}
               <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                 <PawAvatar name={c.user} size={30} />
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 3 }}>
                     <span style={{ font: '700 13px/1 var(--font-sans)', color: PawColors.labelStrong }}>{c.user}</span>
-                    <span style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.labelHint }}>{c.time}</span>
+                    <span style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.labelSubtle }}>{c.time}</span>
                   </div>
                   <span style={{ font: '400 13px/1.5 var(--font-sans)', color: PawColors.label }}>{c.text}</span>
                   <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 14 }}>
-                    <button onClick={e => { e.stopPropagation(); setReplyTarget({ user: c.user, text: c.text }); setKbOpen(true); }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: '500 12px/1 var(--font-sans)', color: PawColors.labelHint }}>답글 달기</button>
+                    <button onClick={() => setCommentLikes(prev => ({ ...prev, [c.id]: !prev[c.id] }))} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center', gap: 3, font: '500 11px/1 var(--font-sans)', color: commentLikes[c.id] ? PawColors.brand : PawColors.labelSubtle }}>
+                      <PawIcon name="heart" size={13} color={commentLikes[c.id] ? PawColors.brand : PawColors.labelSubtle} />
+                      {commentLikes[c.id] ? `좋아요 ${(c.likes || 0) + 1}` : '좋아요'}
+                    </button>
+                    <button onClick={() => setReplyComment(c)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center', gap: 3, font: '500 11px/1 var(--font-sans)', color: PawColors.labelSubtle }}>
+                      <PawIcon name="bubble-text" size={13} color={PawColors.labelSubtle} />
+                      {c.replies?.length > 0 ? `답글 ${c.replies.length}` : '답글달기'}
+                    </button>
                   </div>
                 </div>
-                <button onClick={e => { e.stopPropagation(); setMenuComment(c); }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '1px 0', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-                  <PawIcon name="more-vertical" size={16} color={PawColors.labelHint} />
+                <button onClick={e => { e.stopPropagation(); setMenuComment(c); }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '1px 0', flexShrink: 0 }}>
+                  <PawIcon name="more-vertical" size={16} color={PawColors.labelSubtle} />
                 </button>
               </div>
 
-              {/* 답글 펼치기 버튼 */}
-              {c.replies?.length > 0 && (
-                <button onClick={() => toggleReplies(c.id)} style={{
-                  background: 'none', border: 'none', cursor: 'pointer', padding: '8px 0 0 40px',
-                  display: 'flex', alignItems: 'center', gap: 6,
-                }}>
-                  <div style={{ width: 20, height: 1, background: PawColors.labelHint }} />
-                  <span style={{ font: '600 12px/1 var(--font-sans)', color: PawColors.labelHint }}>
-                    {expandedReplies.has(c.id) ? '답글 숨기기' : `답글 ${c.replies.length}개 보기`}
-                  </span>
-                </button>
-              )}
-
-              {/* 답글 목록 */}
-              {expandedReplies.has(c.id) && c.replies?.map(r => (
+              {/* 답글 미리보기 (최대 3개) */}
+              {c.replies?.length > 0 && c.replies.slice(0, 3).map(r => (
                 <div key={r.id} style={{ paddingLeft: 40, marginTop: 12 }}>
-
-                  {/* 답글 */}
                   <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
                     <PawAvatar name={r.user} size={24} />
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 3 }}>
                         <span style={{ font: '700 12px/1 var(--font-sans)', color: PawColors.labelStrong }}>{r.user}</span>
-                        <span style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.labelHint }}>{r.time}</span>
+                        <span style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.labelSubtle }}>{r.time}</span>
                       </div>
                       <span style={{ font: '400 13px/1.5 var(--font-sans)', color: PawColors.label }}>
-                        {r.text.startsWith('@') && (
-                          <span style={{ color: PawColors.brandInk, fontWeight: 600 }}>{r.text.split(' ')[0]} </span>
-                        )}
+                        {r.text.startsWith('@') && <span style={{ color: PawColors.brandInk, fontWeight: 600 }}>{r.text.split(' ')[0]} </span>}
                         {r.text.startsWith('@') ? r.text.slice(r.text.indexOf(' ') + 1) : r.text}
                       </span>
-                      <div style={{ marginTop: 5, display: 'flex', gap: 14 }}>
-                        <button onClick={e => { e.stopPropagation(); setReplyTarget({ user: r.user, text: r.text }); setKbOpen(true); }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: '500 12px/1 var(--font-sans)', color: PawColors.labelHint }}>답글 달기</button>
+                      <div style={{ marginTop: 5, display: 'flex', alignItems: 'center', gap: 14 }}>
+                        <button onClick={() => setCommentLikes(prev => ({ ...prev, [r.id]: !prev[r.id] }))} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center', gap: 3, font: '500 11px/1 var(--font-sans)', color: commentLikes[r.id] ? PawColors.brand : PawColors.labelSubtle }}>
+                          <PawIcon name="heart" size={12} color={commentLikes[r.id] ? PawColors.brand : PawColors.labelSubtle} />
+                          {commentLikes[r.id] ? `좋아요 ${(r.likes || 0) + 1}` : '좋아요'}
+                        </button>
+                        <button onClick={() => setReplyComment(c)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center', gap: 3, font: '500 11px/1 var(--font-sans)', color: PawColors.labelSubtle }}>
+                          <PawIcon name="bubble-text" size={12} color={PawColors.labelSubtle} />답글달기
+                        </button>
                       </div>
                     </div>
-                    <button onClick={e => { e.stopPropagation(); setMenuComment(r); }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '1px 0', display: 'flex', alignItems: 'flex-start', flexShrink: 0 }}>
-                      <PawIcon name="more-vertical" size={14} color={PawColors.labelHint} />
+                    <button onClick={e => { e.stopPropagation(); setMenuComment(r); }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '1px 0', flexShrink: 0 }}>
+                      <PawIcon name="more-vertical" size={14} color={PawColors.labelSubtle} />
                     </button>
                   </div>
-
                 </div>
               ))}
-
             </div>
           ))}
           <div style={{ height: 12 }} />
@@ -1668,6 +1664,140 @@ function PhotoDetailScreen({ photo, onBack }) {
         </div>
       )}
 
+      {/* 답글 화면 오버레이 */}
+      {replyComment && (
+        <div style={{ position: 'absolute', inset: 0, zIndex: 100 }}>
+          <PhotoReplyScreen comment={replyComment} onBack={() => setReplyComment(null)} />
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+function PhotoReplyScreen({ comment, onBack }) {
+  const { dark } = useDarkMode();
+  const [replyLikes, setReplyLikes] = React.useState({});
+  const [replyingTo, setReplyingTo] = React.useState(null);
+  const [kbOpen, setKbOpen] = React.useState(false);
+  const [commentText, setCommentText] = React.useState('');
+
+  const KB_H = 258; const INPUT_H = 52; const REPLY_H = 36;
+  const KB_ROWS = [
+    ['q','w','e','r','t','y','u','i','o','p'],
+    ['a','s','d','f','g','h','j','k','l'],
+    ['⇧','z','x','c','v','b','n','m','⌫'],
+  ];
+  const kbBg  = dark ? 'var(--color-bg-default)'    : 'var(--color-surface-track)';
+  const keyBg = dark ? 'var(--color-surface-track)'  : 'var(--color-bg-default)';
+  const keyClr = 'var(--color-text-strong)';
+  const bottomPad = INPUT_H + (replyingTo ? REPLY_H : 0) + (kbOpen ? KB_H : 0);
+
+  return (
+    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface, overflow: 'hidden' }}>
+      <PawTopBar variant="title" title={`답글 ${comment.replies?.length || 0}`} onBack={onBack || (() => {})} />
+
+      <div style={{ flex: 1, overflowY: 'auto', paddingBottom: bottomPad }}>
+        {/* 원댓글 */}
+        <div style={{ padding: '14px 16px' }}>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+            <PawAvatar name={comment.user} size={30} />
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 3 }}>
+                <span style={{ font: '700 13px/1 var(--font-sans)', color: PawColors.labelStrong }}>{comment.user}</span>
+                <span style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.labelSubtle }}>{comment.time}</span>
+              </div>
+              <span style={{ font: '400 13px/1.5 var(--font-sans)', color: PawColors.label }}>{comment.text}</span>
+              <div style={{ marginTop: 6 }}>
+                <button onClick={() => setReplyLikes(prev => ({ ...prev, [comment.id]: !prev[comment.id] }))} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center', gap: 3, font: '500 11px/1 var(--font-sans)', color: replyLikes[comment.id] ? PawColors.brand : PawColors.labelSubtle }}>
+                  <PawIcon name="heart" size={13} color={replyLikes[comment.id] ? PawColors.brand : PawColors.labelSubtle} />
+                  {replyLikes[comment.id] ? `좋아요 ${(comment.likes || 0) + 1}` : '좋아요'}
+                </button>
+              </div>
+            </div>
+            <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '1px 0', flexShrink: 0 }}>
+              <PawIcon name="more-vertical" size={16} color={PawColors.labelSubtle} />
+            </button>
+          </div>
+        </div>
+
+        {/* 답글 목록 */}
+        <div style={{ padding: '0 16px 12px' }}>
+          <div style={{ paddingLeft: 40 }}>
+            {comment.replies?.map((r, i) => (
+              <div key={r.id} style={{ marginTop: i > 0 ? 16 : 0 }}>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                  <PawAvatar name={r.user} size={28} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 3 }}>
+                      <span style={{ font: '700 12px/1 var(--font-sans)', color: PawColors.labelStrong }}>{r.user}</span>
+                      <span style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.labelSubtle }}>{r.time}</span>
+                    </div>
+                    <span style={{ font: '400 13px/1.5 var(--font-sans)', color: PawColors.label }}>
+                      {r.text.startsWith('@') && <span style={{ color: PawColors.brandInk, fontWeight: 600 }}>{r.text.split(' ')[0]} </span>}
+                      {r.text.startsWith('@') ? r.text.slice(r.text.indexOf(' ') + 1) : r.text}
+                    </span>
+                    <div style={{ marginTop: 5, display: 'flex', alignItems: 'center', gap: 14 }}>
+                      <button onClick={() => setReplyLikes(prev => ({ ...prev, [r.id]: !prev[r.id] }))} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center', gap: 3, font: '500 11px/1 var(--font-sans)', color: replyLikes[r.id] ? PawColors.brand : PawColors.labelSubtle }}>
+                        <PawIcon name="heart" size={12} color={replyLikes[r.id] ? PawColors.brand : PawColors.labelSubtle} />
+                        {replyLikes[r.id] ? `좋아요 ${(r.likes || 0) + 1}` : '좋아요'}
+                      </button>
+                      <button onClick={() => { setReplyingTo({ user: r.user, text: r.text }); setKbOpen(true); }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'inline-flex', alignItems: 'center', gap: 3, font: '500 11px/1 var(--font-sans)', color: PawColors.labelSubtle }}>
+                        <PawIcon name="bubble-text" size={12} color={PawColors.labelSubtle} />답글달기
+                      </button>
+                    </div>
+                  </div>
+                  <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '1px 0', flexShrink: 0 }}>
+                    <PawIcon name="more-vertical" size={14} color={PawColors.labelSubtle} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 입력 바 */}
+      <div style={{ position: 'absolute', left: 0, right: 0, bottom: kbOpen ? KB_H : 0, zIndex: 20 }}>
+        {replyingTo && (
+          <div style={{ background: PawColors.bg, borderTop: `1px solid ${PawColors.line}`, padding: '0 12px 0 16px', height: REPLY_H, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ font: '500 12px/1 var(--font-sans)', color: PawColors.labelSubtle, flexShrink: 0 }}>@{replyingTo.user}</span>
+            <span style={{ font: '400 12px/1 var(--font-sans)', color: PawColors.labelHint, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>에게 답글 · {replyingTo.text}</span>
+            <button onClick={() => setReplyingTo(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 0 4px', flexShrink: 0, font: '400 18px/1 var(--font-sans)', color: PawColors.labelHint, lineHeight: 1 }}>×</button>
+          </div>
+        )}
+        <div style={{ borderTop: `1px solid ${PawColors.lineSoft}`, padding: '14px 12px 24px', background: PawColors.surface, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <PawAvatar name="김지원" size={32} />
+          <div onClick={() => setKbOpen(true)} style={{ flex: 1, height: 36, borderRadius: 999, background: PawColors.bg, border: `1px solid ${PawColors.lineSoft}`, display: 'flex', alignItems: 'center', padding: '0 14px', cursor: 'text' }}>
+            <span style={{ font: '400 13px/1 var(--font-sans)', color: PawColors.labelHint }}>
+              {replyingTo ? `@${replyingTo.user}에게 답글...` : '답글 달기...'}
+            </span>
+          </div>
+          {kbOpen && (
+            <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0 2px', flexShrink: 0 }}>
+              <PawIcon name="send-fill" size={22} color={commentText ? PawColors.brand : PawColors.labelSubtle} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* 키보드 */}
+      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: kbOpen ? KB_H : 0, overflow: 'hidden', background: kbBg, zIndex: 19 }}>
+        <div style={{ padding: '8px 4px 0', display: 'flex', flexDirection: 'column', gap: 7 }}>
+          {KB_ROWS.map((row, ri) => (
+            <div key={ri} style={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
+              {row.map(k => (
+                <button key={k} onClick={() => { if (k === '⌫') setCommentText(t => t.slice(0, -1)); else if (k !== '⇧') setCommentText(t => t + k); }} style={{ height: 42, flex: k === '⇧' || k === '⌫' ? '0 0 42px' : 1, maxWidth: 36, borderRadius: 5, border: 'none', cursor: 'pointer', background: k === '⇧' || k === '⌫' ? 'var(--color-surface-track)' : keyBg, color: keyClr, font: `500 ${k === '⇧' || k === '⌫' ? 13 : 16}px/1 var(--font-sans)`, boxShadow: dark ? 'none' : '0 1px 0 rgba(0,0,0,0.3)' }}>{k}</button>
+              ))}
+            </div>
+          ))}
+          <div style={{ display: 'flex', gap: 5, padding: '0 4px' }}>
+            {[{ label: '한/영', w: 68 }, { label: 'space', flex: 1 }, { label: 'return', w: 88 }].map(k => (
+              <button key={k.label} onClick={() => k.label === 'space' && setCommentText(t => t + ' ')} style={{ height: 42, borderRadius: 5, border: 'none', cursor: 'pointer', background: keyBg, color: keyClr, font: '400 13px/1 var(--font-sans)', width: k.w, flex: k.flex, boxShadow: dark ? 'none' : '0 1px 0 rgba(0,0,0,0.3)' }}>{k.label}</button>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
