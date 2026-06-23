@@ -1331,6 +1331,30 @@ function WelcomeScreen() {
   );
 }
 
+const PHOTO_DETAIL_COMMENTS = [
+  { id: 'c1', user: '치즈맘',    text: '너무 귀여워요 🥹',              time: '방금',    likes: 4,
+    replies: [
+      { id: 'r1a', user: '코기집사',  text: '저도 완전 공감 ㅠㅠ',                          time: '1분 전',  likes: 1 },
+      { id: 'r1b', user: '치즈맘',   text: '@코기집사 그죠?? 진짜 찰랑찰랑 😍',             time: '2분 전',  likes: 0 },
+      { id: 'r1c', user: '몽냥집사', text: '산책 같이 가요!! 🐾',                            time: '3분 전',  likes: 2 },
+    ],
+  },
+  { id: 'c2', user: 'reptile.kr', text: '진짜 너무 예쁘다',             time: '5분 전',  likes: 7,
+    replies: [
+      { id: 'r2a', user: '몽냥집사', text: '골든은 항상 옳아요 🐕',                          time: '6분 전',  likes: 3 },
+    ],
+  },
+  { id: 'c3', user: '코기집사',  text: '우리 애기랑 완전 닮았다 ㅠ',    time: '10분 전', likes: 12, replies: [] },
+  { id: 'cm', user: '몽이아빠', text: '다들 감사해요 🙏 이 날 진짜 날씨가 완벽했어요!', time: '12분 전', likes: 6, replies: [], mine: true },
+  { id: 'c4', user: '몽냥집사',  text: '털이 왜이렇게 찰랑찰랑해요',    time: '15분 전', likes: 5,
+    replies: [
+      { id: 'r4a', user: '치즈맘',   text: '브러싱 자주 해줘서 그런가봐요',                  time: '16분 전', likes: 1 },
+      { id: 'r4b', user: '몽냥집사', text: '@치즈맘 아 그렇군요!! 저도 해봐야겠다',          time: '17분 전', likes: 0 },
+    ],
+  },
+  { id: 'c5', user: '치즈맘',   text: '사진 찍는 실력도 대단하세요 📸', time: '22분 전', likes: 8, replies: [] },
+];
+
 function PhotoDetailScreen({ photo, onBack }) {
   const { USERS } = PETS_DATA;
   const p = photo || PETS_DATA.PHOTOS[0];
@@ -1351,33 +1375,8 @@ function PhotoDetailScreen({ photo, onBack }) {
   const INPUT_H = 52;
   const REPLY_H = 36;
 
-  const COMMENTS = [
-    { id: 'c1', user: '치즈맘',    text: '너무 귀여워요 🥹',              time: '방금',   likes: 4,
-      replies: [
-        { id: 'r1a', user: '코기집사',  text: '저도 완전 공감 ㅠㅠ',                        time: '1분 전',  likes: 1 },
-        { id: 'r1b', user: '치즈맘',   text: '@코기집사 그죠?? 진짜 찰랑찰랑 😍',          time: '2분 전',  likes: 0 },
-        { id: 'r1c', user: '몽냥집사', text: '산책 같이 가요!! 🐾',                         time: '3분 전',  likes: 2 },
-      ]
-    },
-    { id: 'c2', user: 'reptile.kr', text: '진짜 너무 예쁘다',             time: '5분 전', likes: 7,
-      replies: [
-        { id: 'r2a', user: '몽냥집사', text: '골든은 항상 옳아요 🐕',                       time: '6분 전',  likes: 3 },
-      ]
-    },
-    { id: 'c3', user: '코기집사',  text: '우리 애기랑 완전 닮았다 ㅠ',    time: '10분 전', likes: 12, replies: [] },
-    { id: 'cm', user: '몽이아빠', text: '다들 감사해요 🙏 이 날 진짜 날씨가 완벽했어요!', time: '12분 전', likes: 6, replies: [], mine: true },
-    { id: 'c4', user: '몽냥집사',  text: '털이 왜이렇게 찰랑찰랑해요',    time: '15분 전', likes: 5,
-      replies: [
-        { id: 'r4a', user: '치즈맘',   text: '브러싱 자주 해줘서 그런가봐요',               time: '16분 전', likes: 1 },
-        { id: 'r4b', user: '몽냥집사', text: '@치즈맘 아 그렇군요!! 저도 해봐야겠다',       time: '17분 전', likes: 0 },
-      ]
-    },
-    { id: 'c5', user: '치즈맘',    text: '사진 찍는 실력도 대단하세요 📸', time: '22분 전', likes: 8, replies: [] },
-  ];
-
+  const COMMENTS = PHOTO_DETAIL_COMMENTS;
   const totalCount = COMMENTS.reduce((acc, c) => acc + 1 + (c.replies?.length || 0), 0);
-  const [expandedReplies, setExpandedReplies] = React.useState(new Set(['c1']));
-  const toggleReplies = id => setExpandedReplies(s => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   const KB_ROWS = [
     ['q','w','e','r','t','y','u','i','o','p'],
@@ -1675,11 +1674,12 @@ function PhotoDetailScreen({ photo, onBack }) {
   );
 }
 
-function PhotoReplyScreen({ comment, onBack }) {
+function PhotoReplyScreen({ comment: propComment, onBack, initialReplyingTo, initialKbOpen }) {
+  const comment = propComment || PHOTO_DETAIL_COMMENTS[0];
   const { dark } = useDarkMode();
   const [replyLikes, setReplyLikes] = React.useState({});
-  const [replyingTo, setReplyingTo] = React.useState(null);
-  const [kbOpen, setKbOpen] = React.useState(false);
+  const [replyingTo, setReplyingTo] = React.useState(initialReplyingTo || null);
+  const [kbOpen, setKbOpen] = React.useState(initialKbOpen || false);
   const [commentText, setCommentText] = React.useState('');
 
   const KB_H = 258; const INPUT_H = 52; const REPLY_H = 36;
@@ -4060,6 +4060,12 @@ function AppInner() {
             </DCArtboard>
             <DCArtboard id="home-2" label="S16 · 사진 상세" width={W} height={H}>
               <Phone><PhotoDetailScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="home-2-e" label="S16-E · 댓글 답글" width={W} height={H}>
+              <Phone><PhotoReplyScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="home-2-f" label="S16-F · 댓글 답글 입력" width={W} height={H}>
+              <Phone><PhotoReplyScreen initialReplyingTo={{ user: PHOTO_DETAIL_COMMENTS[0].replies[0].user, text: PHOTO_DETAIL_COMMENTS[0].replies[0].text }} initialKbOpen={true} /></Phone>
             </DCArtboard>
           </DCSection>
 
