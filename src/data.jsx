@@ -67,5 +67,42 @@ const USERS = [
   { id: 'u5', handle: '몽냥집사',   real: '최가람',   pets: ['시바', '먼치킨'], followers: '6.4K', mutual: true,  rec: '관심 품종' },
 ];
 
-Object.assign(window, { PETS_DATA: { PHOTOS, SPECIES, MY_PETS, TIMELINE, USERS } });
+const COMMUNITY_POSTS = [
+  {
+    id: 'c1', category: '강아지',
+    title: '골든리트리버 첫 목욕 후기 너무 웃겼어요 😂',
+    body: '처음엔 엄청 무서워하더니 지금은 오히려 물장난을 치려고 해요. 샴푸는 어떤 걸 쓰시나요?',
+    author: '몽이아빠', authorReal: '김지원', likes: 42, comments: 18, views: 82, time: '2시간 전',
+    image: '1583337130417-3346a1be7dee',
+  },
+  {
+    id: 'c2', category: '고양이',
+    title: '코숏 중성화 수술 전에 꼭 알아야 할 것들',
+    body: '다음 달에 예정인데 경험자분들 조언 부탁드려요. 회복 기간이 얼마나 걸리는지 궁금합니다.',
+    author: '버터맘', authorReal: '이서연', likes: 31, comments: 24, views: 156, time: '4시간 전',
+  },
+  {
+    id: 'c3', category: 'Q&A',
+    title: '강아지가 갑자기 밥을 안 먹어요',
+    body: '평소엔 잘 먹던 아이인데 어제부터 사료를 거부하네요. 간식은 먹는데 밥만 안 먹는 상황이에요.',
+    author: '멍냥러버', authorReal: '박민호', likes: 15, comments: 33, time: '6시간 전',
+  },
+  {
+    id: 'c4', category: '일상',
+    title: '오늘 처음으로 강아지랑 펫카페 갔어요 ☕',
+    body: '반려동물 동반 카페가 이렇게 많은지 몰랐어요. 서울 마포 근처 펫카페 추천해 주실 분!',
+    author: '포메러버', authorReal: '최지아', likes: 89, comments: 41, views: 341, time: '8시간 전',
+    image: '1450778869180-41d0601e046e',
+    images: ['1450778869180-41d0601e046e', '1583337130417-3346a1be7dee', '1517849845537-4d257902454a'],
+  },
+  {
+    id: 'c5', category: '건강',
+    title: '고양이 IBD 진단받았어요, 식이 관리 어떻게 하시나요?',
+    body: '어제 검사 결과 IBD 진단을 받았어요. 처방식으로 바꿨는데 안 먹으려고 해서 걱정이에요.',
+    author: '냥이집사', authorReal: '정민준', likes: 27, comments: 52, time: '1일 전',
+    image: '1574144611937-0df059b5ef3e',
+  },
+];
+
+Object.assign(window, { PETS_DATA: { PHOTOS, SPECIES, MY_PETS, TIMELINE, USERS, COMMUNITY_POSTS } });
 

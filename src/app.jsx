@@ -1672,6 +1672,452 @@ function PhotoDetailScreen({ photo, onBack }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// ⑦ 커뮤니티
+// ─────────────────────────────────────────────────────────────────────────────
+
+const COMMUNITY_CATS = ['전체', '강아지', '고양이', '건강', '일상', 'Q&A'];
+
+const COMMUNITY_COMMENTS = [
+  { id: 'cm1', author: '버터맘',   authorReal: '이서연', text: '우리 코숏도 처음엔 그랬는데 지금은 완전 목욕 마니아가 됐어요!', time: '1시간 전', likes: 8 },
+  { id: 'cm2', author: '코기집사', authorReal: '박민호', text: '이즈덴트 샴푸 강추예요 🐾 냄새도 좋고 모질도 좋아졌어요', time: '1시간 전', likes: 12 },
+  { id: 'cm3', author: '멍냥러버', authorReal: '최가람', text: '사진 더 올려주세요 ㅋㅋ 목욕하는 골든 너무 귀엽겠다', time: '30분 전', likes: 5 },
+];
+
+const SORT_OPTIONS = ['추천순', '최신순'];
+
+function CommunityScreen() {
+  const { COMMUNITY_POSTS } = PETS_DATA;
+  const [cat, setCat] = React.useState('전체');
+  const [sort, setSort] = React.useState('추천순');
+  const [sortOpen, setSortOpen] = React.useState(false);
+
+  const filtered = cat === '전체' ? COMMUNITY_POSTS : COMMUNITY_POSTS.filter(p => p.category === cat);
+  const posts = sort === '최신순' ? [...filtered].reverse() : filtered;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+
+      <PawTopBar variant="title" title="커뮤니티" right={
+        <PawIconBtn name="search" iconSize={22} />
+      } />
+
+      {/* 카테고리 필터 */}
+      <div style={{ position: 'relative', flexShrink: 0 }}>
+        <div style={{
+          display: 'flex', gap: 6, padding: '10px 16px',
+          overflowX: 'auto', scrollbarWidth: 'none',
+          background: PawColors.surface, borderBottom: `1px solid ${PawColors.lineSoft}`,
+          alignItems: 'center',
+        }}>
+          {/* 정렬 드롭다운 버튼 */}
+          <button onClick={() => setSortOpen(o => !o)} style={{
+            flexShrink: 0, height: 32, padding: '0 10px 0 12px', borderRadius: 999,
+            background: PawColors.bg,
+            color: PawColors.labelStrong,
+            border: `1px solid ${PawColors.lineSoft}`,
+            cursor: 'pointer',
+            font: '600 13px/1 var(--font-sans)',
+            display: 'flex', alignItems: 'center', gap: 2,
+            transition: 'all .12s',
+          }}>
+            {sort.replace('순', '')}
+            <PawIcon
+              name={sortOpen ? 'chevron-up' : 'chevron-down'}
+              size={14}
+              color={PawColors.labelHint}
+              style={{ transition: 'transform .15s' }}
+            />
+          </button>
+
+          {/* 구분선 */}
+          <div style={{ width: 1, height: 16, background: PawColors.lineSoft, flexShrink: 0 }} />
+
+          {COMMUNITY_CATS.map(c => {
+            const on = c === cat;
+            return (
+              <button key={c} onClick={() => setCat(c)} style={{
+                flexShrink: 0, height: 32, padding: '0 14px', borderRadius: 999,
+                background: on ? PawColors.labelStrong : PawColors.bg,
+                color: on ? PawColors.surface : PawColors.label,
+                border: 'none', cursor: 'pointer',
+                font: `${on ? 700 : 500} 13px/1 var(--font-sans)`,
+                transition: 'all .12s',
+              }}>{c}</button>
+            );
+          })}
+        </div>
+
+        {/* 정렬 드롭다운 메뉴 */}
+        {sortOpen && (
+          <>
+            <div onClick={() => setSortOpen(false)} style={{
+              position: 'fixed', inset: 0, zIndex: 10,
+            }} />
+            <div style={{
+              position: 'absolute', top: 'calc(100% + 4px)', left: 16, zIndex: 11,
+              background: PawColors.surface,
+              border: `1px solid ${PawColors.lineSoft}`,
+              borderRadius: 10,
+              boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
+              overflow: 'hidden', minWidth: 96,
+            }}>
+              {SORT_OPTIONS.map((opt, i) => (
+                <button key={opt} onClick={() => { setSort(opt); setSortOpen(false); }} style={{
+                  display: 'block', width: '100%', padding: '12px 16px',
+                  background: 'transparent', border: 'none', cursor: 'pointer',
+                  font: `${sort === opt ? 700 : 500} 14px/1 var(--font-sans)`,
+                  color: sort === opt ? PawColors.brand : PawColors.label,
+                  textAlign: 'left',
+                  borderTop: i > 0 ? `1px solid ${PawColors.lineSoft}` : 'none',
+                }}>
+                  {opt}
+                  {sort === opt && (
+                    <PawIcon name="check" size={14} color={PawColors.brand} style={{ float: 'right', marginTop: 1 }} />
+                  )}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* 게시글 목록 */}
+      <div style={{ flex: 1, overflowY: 'auto', background: PawColors.surface }}>
+        {posts.map((post, i) => (
+          <div key={post.id}>
+            <div style={{ padding: '16px 20px', cursor: 'pointer' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                <span style={{
+                  display: 'inline-block', padding: '3px 8px', borderRadius: 6,
+                  background: PawColors.bg,
+                  font: '700 11px/1 var(--font-sans)', color: PawColors.label,
+                }}>{post.category}</span>
+                <span style={{ font: '400 12px/1 var(--font-sans)', color: PawColors.label }}>{post.time}</span>
+              </div>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    font: '700 15px/1.4 var(--font-sans)', color: PawColors.labelStrong,
+                    letterSpacing: '-0.012em', marginBottom: 6,
+                    overflow: 'hidden', display: '-webkit-box',
+                    WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+                  }}>{post.title}</div>
+                  <div style={{
+                    font: '400 13px/1.5 var(--font-sans)', color: PawColors.label,
+                    marginBottom: 12,
+                    overflow: 'hidden', display: '-webkit-box',
+                    WebkitLineClamp: post.image ? 1 : 2, WebkitBoxOrient: 'vertical',
+                  }}>{post.body}</div>
+                </div>
+                {post.image && (
+                  <img
+                    src={`https://images.unsplash.com/photo-${post.image}?w=160&h=160&fit=crop&q=80`}
+                    alt=""
+                    style={{ width: 72, height: 72, borderRadius: 8, objectFit: 'cover', flexShrink: 0 }}
+                  />
+                )}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <PawAvatar name={post.authorReal} size={20} />
+                  <span style={{ font: '500 12px/1 var(--font-sans)', color: PawColors.label }}>{post.author}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 3, font: '500 12px/1 var(--font-sans)', color: PawColors.label }}>
+                    <PawIcon name="heart" size={13} color={PawColors.label} />{post.likes}
+                  </span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 3, font: '500 12px/1 var(--font-sans)', color: PawColors.label }}>
+                    <PawIcon name="bubble" size={13} color={PawColors.label} />{post.comments}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {i < posts.length - 1 && <div style={{ height: 1, background: PawColors.lineSoft, margin: '0 20px' }} />}
+          </div>
+        ))}
+      </div>
+
+      <PawTabBar active="noti" />
+    </div>
+  );
+}
+
+function CommunityPostScreen({ postIndex = 0 }) {
+  const { COMMUNITY_POSTS } = PETS_DATA;
+  const post = COMMUNITY_POSTS[postIndex];
+  const [liked, setLiked] = React.useState(false);
+  const [viewerOpen, setViewerOpen] = React.useState(false);
+  const [viewerIdx, setViewerIdx] = React.useState(0);
+  const imgs = post.images || (post.image ? [post.image] : []);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.surface }}>
+
+      <PawTopBar variant="title" title="" onBack={() => {}} right={
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <PawIconBtn name="bell" iconSize={20} />
+          <PawIconBtn name="share" iconSize={20} />
+          <PawIconBtn name="more-vertical" iconSize={26} />
+        </div>
+      } />
+
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+
+        {/* 게시글 본문 */}
+        <div style={{ padding: '20px 20px 16px', borderBottom: `1px solid ${PawColors.lineSoft}` }}>
+          <span style={{
+            display: 'inline-block', padding: '3px 8px', borderRadius: 6, marginBottom: 12,
+            background: PawColors.bg,
+            font: '700 11px/1 var(--font-sans)', color: PawColors.label,
+          }}>{post.category}</span>
+
+          <div style={{ font: '800 18px/1.4 var(--font-sans)', color: PawColors.labelStrong, letterSpacing: '-0.02em', marginBottom: 14 }}>
+            {post.title}
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <PawAvatar name={post.authorReal} size={32} ring />
+            <div>
+              <div style={{ font: '600 13px/1 var(--font-sans)', color: PawColors.labelStrong }}>{post.author}</div>
+              <div style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.label, marginTop: 3 }}>{post.time}</div>
+            </div>
+          </div>
+
+          <div style={{ font: '400 15px/1.7 var(--font-sans)', color: PawColors.label, letterSpacing: '-0.005em', marginBottom: post.image ? 16 : 20 }}>
+            {post.body}
+          </div>
+
+          {imgs.length > 0 && (
+            <div style={{ marginBottom: 16 }}>
+              {/* 슬라이드 뷰어 — 다음 이미지 peek */}
+              <div style={{ overflow: 'hidden', borderRadius: 12 }}>
+                <div style={{
+                  display: 'flex', gap: 8,
+                  overflowX: 'auto', scrollSnapType: 'x mandatory', scrollbarWidth: 'none',
+                  paddingRight: imgs.length > 1 ? 32 : 0,
+                }}>
+                  {imgs.map((uid, i) => (
+                    <img
+                      key={i}
+                      src={`https://images.unsplash.com/photo-${uid}?w=720&h=480&fit=crop&q=80`}
+                      alt=""
+                      onClick={() => { setViewerIdx(i); setViewerOpen(true); }}
+                      style={{
+                        width: imgs.length > 1 ? 'calc(100% - 24px)' : '100%',
+                        flexShrink: 0, scrollSnapAlign: 'start',
+                        aspectRatio: '3/2', objectFit: 'cover',
+                        borderRadius: 10, cursor: 'pointer',
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* 좋아요 버튼 + 조회수 */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <button onClick={() => setLiked(l => !l)} style={{
+              display: 'flex', alignItems: 'center', gap: 4, height: 30, padding: '0 10px',
+              borderRadius: 999, border: `1px solid ${liked ? PawColors.brand : PawColors.lineSoft}`,
+              background: liked ? PawColors.brandSoft : 'transparent', cursor: 'pointer',
+              font: '600 12px/1 var(--font-sans)', color: liked ? PawColors.brand : PawColors.label,
+              transition: 'all .12s',
+            }}>
+              <PawIcon name={liked ? 'heart-fill' : 'heart'} size={13} color={liked ? PawColors.brand : PawColors.label} />
+              {post.likes + (liked ? 1 : 0)}
+            </button>
+            {post.views != null && (
+              <span style={{ display: 'flex', alignItems: 'center', gap: 4, font: '500 12px/1 var(--font-sans)', color: PawColors.label }}>
+                <PawIcon name="eye" size={14} color={PawColors.label} />
+                {post.views}명이 봤어요
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* 댓글 섹션 */}
+        <div>
+          <div style={{ padding: '14px 20px 10px', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ font: '700 14px/1 var(--font-sans)', color: PawColors.labelStrong }}>댓글</span>
+            <span style={{ font: '700 14px/1 var(--font-sans)', color: PawColors.brand }}>{post.comments}</span>
+          </div>
+          {COMMUNITY_COMMENTS.map((c, i) => (
+            <div key={c.id} style={{ padding: '12px 20px', borderTop: `1px solid ${PawColors.lineSoft}` }}>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <PawAvatar name={c.authorReal} size={32} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
+                    <span style={{ font: '600 13px/1 var(--font-sans)', color: PawColors.labelStrong }}>{c.author}</span>
+                    <span style={{ font: '400 11px/1 var(--font-sans)', color: PawColors.label }}>{c.time}</span>
+                  </div>
+                  <div style={{ font: '400 14px/1.5 var(--font-sans)', color: PawColors.label, marginBottom: 8 }}>{c.text}</div>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, font: '500 11px/1 var(--font-sans)', color: PawColors.label }}>
+                    <PawIcon name="heart" size={12} color={PawColors.label} />{c.likes}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 댓글 입력 바 */}
+      <div style={{
+        borderTop: `1px solid ${PawColors.lineSoft}`,
+        padding: '10px 16px 24px',
+        background: PawColors.surface,
+        display: 'flex', alignItems: 'center', gap: 10,
+      }}>
+        <PawAvatar name="김지원" size={32} />
+        <div style={{
+          flex: 1, height: 38, borderRadius: 999,
+          background: PawColors.bg,
+          display: 'flex', alignItems: 'center', padding: '0 14px',
+        }}>
+          <span style={{ font: '400 14px/1 var(--font-sans)', color: PawColors.labelHint }}>댓글을 남겨보세요</span>
+        </div>
+        <button style={{
+          width: 38, height: 38, borderRadius: 999,
+          background: PawColors.brand, border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 4px 10px rgba(255,107,61,0.3)',
+        }}>
+          <PawIcon name="send" size={16} color="#fff" />
+        </button>
+      </div>
+
+      {/* 사진 뷰어 오버레이 */}
+      {viewerOpen && (
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 100,
+          background: '#000',
+          display: 'flex', flexDirection: 'column',
+        }}>
+          {/* 상단 바 */}
+          <div style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '52px 8px 12px',
+          }}>
+            <div style={{ width: 40 }} />
+            {imgs.length > 1 && (
+              <span style={{ font: '600 14px/1 var(--font-sans)', color: 'rgba(255,255,255,0.7)' }}>
+                {viewerIdx + 1} / {imgs.length}
+              </span>
+            )}
+            <button onClick={() => setViewerOpen(false)} style={{
+              background: 'transparent', border: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: 40, height: 40,
+            }}>
+              <PawIcon name="close" size={16} color="#fff" />
+            </button>
+          </div>
+
+          {/* 이미지 */}
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+            <div style={{
+              display: 'flex', width: '100%', height: '100%',
+              transform: `translateX(-${viewerIdx * 100}%)`,
+              transition: 'transform .25s ease',
+            }}>
+              {imgs.map((uid, i) => (
+                <div key={i} style={{ width: '100%', flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+                  <img
+                    src={`https://images.unsplash.com/photo-${uid}?w=1080&q=90&fit=crop`}
+                    alt=""
+                    style={{ width: '100%', objectFit: 'contain' }}
+                  />
+                </div>
+              ))}
+            </div>
+            {imgs.length > 1 && viewerIdx > 0 && (
+              <button onClick={() => setViewerIdx(i => i - 1)} style={{
+                position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
+                width: 36, height: 36, borderRadius: 999, border: 'none', cursor: 'pointer',
+                background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <PawIcon name="chevron-left" size={18} color="#fff" />
+              </button>
+            )}
+            {imgs.length > 1 && viewerIdx < imgs.length - 1 && (
+              <button onClick={() => setViewerIdx(i => i + 1)} style={{
+                position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                width: 36, height: 36, borderRadius: 999, border: 'none', cursor: 'pointer',
+                background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <PawIcon name="chevron-right" size={18} color="#fff" />
+              </button>
+            )}
+          </div>
+
+          {/* 하단 닷 인디케이터 */}
+          {imgs.length > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 6, padding: '20px 0 40px' }}>
+              {imgs.map((_, i) => (
+                <button key={i} onClick={() => setViewerIdx(i)} style={{
+                  width: i === viewerIdx ? 18 : 6, height: 6, borderRadius: 999,
+                  border: 'none', cursor: 'pointer', padding: 0, transition: 'all .2s',
+                  background: i === viewerIdx ? '#fff' : 'rgba(255,255,255,0.3)',
+                }} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CommunityPostViewerScreen() {
+  const { COMMUNITY_POSTS } = PETS_DATA;
+  const post = COMMUNITY_POSTS[3];
+  const imgs = post.images || [];
+  const [viewerIdx, setViewerIdx] = React.useState(0);
+
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100%', background: '#000', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '52px 8px 12px' }}>
+        <div style={{ width: 40 }} />
+        <span style={{ font: '600 14px/1 var(--font-sans)', color: 'rgba(255,255,255,0.7)' }}>
+          {viewerIdx + 1} / {imgs.length}
+        </span>
+        <button style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40 }}>
+          <PawIcon name="close" size={16} color="#fff" />
+        </button>
+      </div>
+
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', width: '100%', height: '100%', transform: `translateX(-${viewerIdx * 100}%)`, transition: 'transform .25s ease' }}>
+          {imgs.map((uid, i) => (
+            <div key={i} style={{ width: '100%', flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+              <img src={`https://images.unsplash.com/photo-${uid}?w=1080&q=90&fit=crop`} alt="" style={{ width: '100%', objectFit: 'contain' }} />
+            </div>
+          ))}
+        </div>
+        {viewerIdx > 0 && (
+          <button onClick={() => setViewerIdx(i => i - 1)} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', width: 36, height: 36, borderRadius: 999, border: 'none', cursor: 'pointer', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <PawIcon name="chevron-left" size={18} color="#fff" />
+          </button>
+        )}
+        {viewerIdx < imgs.length - 1 && (
+          <button onClick={() => setViewerIdx(i => i + 1)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', width: 36, height: 36, borderRadius: 999, border: 'none', cursor: 'pointer', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <PawIcon name="chevron-right" size={18} color="#fff" />
+          </button>
+        )}
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 6, padding: '20px 0 40px' }}>
+        {imgs.map((_, i) => (
+          <button key={i} onClick={() => setViewerIdx(i)} style={{ width: i === viewerIdx ? 18 : 6, height: 6, borderRadius: 999, border: 'none', cursor: 'pointer', padding: 0, transition: 'all .2s', background: i === viewerIdx ? '#fff' : 'rgba(255,255,255,0.3)' }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function HomeScreen() {
   const { PHOTOS } = PETS_DATA;
   const [liked, setLiked] = React.useState(new Set());
@@ -3112,6 +3558,7 @@ const NAV_SECTIONS = [
   { id: 'my-profile-other',label: '⑤-B 타유저 프로필' },
   { id: 'my-profile-etc',  label: '⑤-C 비로그인·설정' },
   { id: 'photo-upload',    label: '⑥ 사진 등록' },
+  { id: 'community',       label: '⑦ 커뮤니티' },
 ];
 
 function AppInner() {
@@ -3365,6 +3812,25 @@ function AppInner() {
             </DCArtboard>
             <DCArtboard id="photo-form-3" label="S17-C · 입력 완료" width={W} height={H}>
               <Phone><PhotoPostFormScreen variant="filled" /></Phone>
+            </DCArtboard>
+          </DCSection>
+
+          <DCSection id="community" title="⑦ 커뮤니티"
+            subtitle="게시글 목록 · 게시글 상세">
+            <DCArtboard id="community-main" label="S18 · 커뮤니티" width={W} height={H}>
+              <Phone><CommunityScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="community-post" label="S18-A · 게시글 상세" width={W} height={H}>
+              <Phone><CommunityPostScreen postIndex={1} /></Phone>
+            </DCArtboard>
+            <DCArtboard id="community-post-image" label="S18-B · 게시글 상세 (사진 첨부)" width={W} height={H}>
+              <Phone><CommunityPostScreen postIndex={0} /></Phone>
+            </DCArtboard>
+            <DCArtboard id="community-post-images" label="S18-C · 게시글 상세 (사진 여러장)" width={W} height={H}>
+              <Phone><CommunityPostScreen postIndex={3} /></Phone>
+            </DCArtboard>
+            <DCArtboard id="community-post-viewer" label="S18-D · 사진 뷰어" width={W} height={H}>
+              <Phone><CommunityPostViewerScreen /></Phone>
             </DCArtboard>
           </DCSection>
 
