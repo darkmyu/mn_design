@@ -3879,6 +3879,81 @@ function MongnyangDesignSystem() {
   );
 }
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = React.useState(() => window.innerWidth < 768);
+  React.useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return isMobile;
+}
+
+const MOBILE_SCREENS = [
+  { section: '① 로그인', screens: [
+    { id: 'welcome-1',       label: 'S01 · 로그인',             render: () => <WelcomeScreen /> },
+    { id: 'welcome-terms',   label: 'S02 · 이용약관',           render: () => <TermsScreen /> },
+    { id: 'welcome-privacy', label: 'S03 · 개인정보처리방침',   render: () => <PrivacyScreen /> },
+  ]},
+  { section: '② 온보딩 1단계 · 반려동물 유무', screens: [
+    { id: 'welcome-2', label: 'S04 · 반려동물 유무 선택', render: () => <OnboardingHasPet /> },
+  ]},
+  { section: '③-A 반려동물 정보 입력', screens: [
+    { id: 'welcome-3a-1',  label: 'S05 · 이름',                render: () => <PetInfoStep1_Name /> },
+    { id: 'welcome-3a-2',  label: 'S06 · 품종',                render: () => <PetInfoStep2_Breed /> },
+    { id: 'welcome-3a-3',  label: 'S07 · 생년월일',            render: () => <PetInfoStep3_Birth /> },
+    { id: 'welcome-3a-4',  label: 'S08 · 성별',                render: () => <PetInfoStep4_Gender /> },
+    { id: 'welcome-3a-5',  label: 'S09 · 사진 업로드 · 정보 확인', render: () => <PetInfoStep5_Photo /> },
+    { id: 'welcome-3a-5b', label: 'S09-B · 사진 선택 완료',    render: () => <PetInfoStep5_Photo withPhoto /> },
+  ]},
+  { section: '③-B 프로필 설정', screens: [
+    { id: 'welcome-3b', label: 'S10 · 프로필 설정', render: () => <OnboardingNoPetProfile /> },
+  ]},
+  { section: '④ 홈 피드', screens: [
+    { id: 'home-1',   label: 'S11 · 홈 피드',          render: () => <HomeScreen /> },
+    { id: 'home-2',   label: 'S16 · 사진 상세',         render: () => <PhotoDetailScreen /> },
+    { id: 'home-2-e', label: 'S16-E · 댓글 답글',       render: () => <PhotoReplyScreen /> },
+    { id: 'home-2-f', label: 'S16-F · 댓글 답글 입력',  render: () => <PhotoReplyScreen initialReplyingTo={{ user: PHOTO_DETAIL_COMMENTS[0].replies[0].user, text: PHOTO_DETAIL_COMMENTS[0].replies[0].text }} initialKbOpen={true} /> },
+  ]},
+  { section: '⑤-A MY 프로필 (로그인)', screens: [
+    { id: 'my-1',            label: 'S12 · MY 프로필',            render: () => <MyScreen /> },
+    { id: 'my-1b',           label: 'S12-B · 반려동물 없음',      render: () => <MyScreen emptyPets /> },
+    { id: 'my-1c',           label: 'S12-C · 사진 없음',          render: () => <MyScreen emptyPhotos /> },
+    { id: 'pet-viewer',      label: 'S12-D · 반려동물 정보 (타유저)', render: () => <PetViewerScreen /> },
+    { id: 'pet-viewer-mine', label: 'S12-D-A · 반려동물 정보 (나)', render: () => <PetViewerScreen isMine /> },
+    { id: 'pet-edit',        label: 'S12-F · 반려동물 수정',       render: () => <PetEditScreen /> },
+    { id: 'pet-photo-grid',  label: 'S12-E · 반려동물 사진 전체', render: () => <PetPhotoGridScreen /> },
+    { id: 'profile-edit',      label: 'S12-G · 프로필 편집',      render: () => <ProfileEditScreen /> },
+    { id: 'profile-edit-name', label: 'S12-G-A · 이름 편집',      render: () => <ProfileEditNameScreen /> },
+    { id: 'profile-edit-bio',  label: 'S12-G-B · 소개 편집',      render: () => <ProfileEditBioScreen /> },
+  ]},
+  { section: '⑤-B 타유저 프로필', screens: [
+    { id: 'my-2',  label: 'S13 · 타유저 프로필',       render: () => <OtherUserProfileScreen /> },
+    { id: 'my-2b', label: 'S13-B · 반려동물 없음',     render: () => <OtherUserProfileScreen emptyPets /> },
+    { id: 'my-2c', label: 'S13-C · 사진 없음',         render: () => <OtherUserProfileScreen emptyPhotos /> },
+  ]},
+  { section: '⑤-C 비로그인 · 설정', screens: [
+    { id: 'my-3', label: 'S14 · MY (비로그인)', render: () => <MyGuestScreen /> },
+    { id: 'my-4', label: 'S15 · 설정',          render: () => <SettingsScreen /> },
+  ]},
+  { section: '⑥ 사진 등록', screens: [
+    { id: 'photo-form-alert', label: 'S17-0 · 반려동물 없음 알럿',      render: () => <PhotoUploadNoPetAlertScreen /> },
+    { id: 'photo-form-0',     label: 'S17-A · 갤러리 사진 선택',        render: () => <PhotoPickerScreen /> },
+    { id: 'photo-form-1',     label: 'S17 · 사진 등록 (기본)',           render: () => <PhotoPostFormScreen variant="form" /> },
+    { id: 'photo-form-2',     label: 'S17-B · 반려동물 선택 (바텀시트)', render: () => <PhotoPostFormScreen variant="sheet" /> },
+    { id: 'photo-form-3',     label: 'S17-C · 입력 완료',               render: () => <PhotoPostFormScreen variant="filled" /> },
+  ]},
+  { section: '⑦ 커뮤니티', screens: [
+    { id: 'community-main',            label: 'S18 · 커뮤니티',                  render: () => <CommunityScreen /> },
+    { id: 'community-post',            label: 'S18-A · 게시글 상세',             render: () => <CommunityPostScreen postIndex={1} /> },
+    { id: 'community-comment-reply',   label: 'S18-E · 댓글 답글',              render: () => <CommentReplyScreen /> },
+    { id: 'community-comment-reply-input', label: 'S18-F · 댓글 답글 입력',     render: () => <CommentReplyScreen initialReplyTarget={{ author: COMMUNITY_COMMENTS[0].replies[0].author, text: COMMUNITY_COMMENTS[0].replies[0].text }} initialKbOpen={true} /> },
+    { id: 'community-post-image',      label: 'S18-B · 게시글 상세 (사진 첨부)', render: () => <CommunityPostScreen postIndex={0} /> },
+    { id: 'community-post-images',     label: 'S18-C · 게시글 상세 (사진 여러장)', render: () => <CommunityPostScreen postIndex={3} /> },
+    { id: 'community-post-viewer',     label: 'S18-D · 사진 뷰어',              render: () => <CommunityPostViewerScreen /> },
+  ]},
+];
+
 const NAV_SECTIONS = [
   { id: 'welcome-login',    label: '① 로그인' },
   { id: 'welcome-step1',   label: '② 반려동물 유무' },
@@ -3897,12 +3972,59 @@ function AppInner() {
   const [page, setPage] = React.useState(() => localStorage.getItem('mn-page') || 'canvas');
   const handleSetPage = (id) => { setPage(id); localStorage.setItem('mn-page', id); };
   const navigateTo = (sectionId) => window.dispatchEvent(new CustomEvent('dc-navigate', { detail: { sectionId } }));
+  const isMobile = useIsMobile();
+  const [mobilePreview, setMobilePreview] = React.useState(null);
 
   const topBg       = 'var(--color-bg-default)';
   const topBorder   = 'var(--color-border-default)';
   const textStrong  = 'var(--color-text-strong)';
   const textSubtle  = 'var(--color-text-subtle)';
   const activeTabBg = 'var(--color-bg-subtle)';
+
+  if (isMobile) {
+    return (
+      <div style={{ minHeight: '100dvh', background: 'var(--color-bg-default)', color: 'var(--color-text-default)' }}>
+        {/* 모바일 상단 바 */}
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 48, zIndex: 9999, background: topBg, borderBottom: `1px solid ${topBorder}`, display: 'flex', alignItems: 'center', padding: '0 16px' }}>
+          <span style={{ font: '900 16px/1 var(--font-sans)', letterSpacing: '-0.04em', color: textStrong, flex: 1 }}>
+            몽냥<span style={{ color: 'var(--color-brand-default)' }}>.</span>
+          </span>
+          <button onClick={() => setDark(d => !d)} style={{ height: 30, padding: '0 12px', borderRadius: 999, border: `1px solid ${topBorder}`, background: 'transparent', color: textStrong, font: '500 12px/1 var(--font-sans)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 13 }}>{dark ? '☀' : '☾'}</span>
+          </button>
+        </div>
+
+        {/* 화면 목록 */}
+        <div style={{ paddingTop: 56, paddingBottom: 40 }}>
+          {MOBILE_SCREENS.map(group => (
+            <div key={group.section}>
+              <div style={{ padding: '16px 16px 8px', font: '700 11px/1 var(--font-sans)', color: 'var(--color-text-subtle)', letterSpacing: '0.04em', textTransform: 'uppercase', borderBottom: `1px solid ${topBorder}` }}>
+                {group.section}
+              </div>
+              {group.screens.map(screen => (
+                <button key={screen.id} onClick={() => setMobilePreview(screen)} style={{ width: '100%', padding: '14px 16px', background: 'none', border: 'none', borderBottom: `1px solid ${topBorder}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', textAlign: 'left' }}>
+                  <span style={{ font: '500 14px/1 var(--font-sans)', color: textStrong }}>{screen.label}</span>
+                  <span style={{ font: '400 18px/1 var(--font-sans)', color: 'var(--color-text-subtle)' }}>›</span>
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* 전체화면 프리뷰 */}
+        {mobilePreview && (
+          <div style={{ position: 'fixed', inset: 0, zIndex: 99999 }} data-theme={dark ? 'dark' : ''}>
+            <div style={{ height: '100dvh', position: 'relative', overflow: 'hidden', background: 'var(--color-bg-default)' }}>
+              {mobilePreview.render()}
+            </div>
+            <button onClick={() => setMobilePreview(null)} style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 100000, height: 36, padding: '0 20px', borderRadius: 999, border: 'none', background: 'rgba(0,0,0,0.6)', color: '#fff', font: '600 13px/1 var(--font-sans)', cursor: 'pointer', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
+              ← 목록으로
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <>
