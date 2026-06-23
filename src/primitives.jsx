@@ -8,6 +8,7 @@ const PawColors = {
   lineSoft:    'var(--color-border-default)',
   label:       'var(--color-text-default)',
   labelStrong: 'var(--color-text-strong)',
+  labelSubtle: 'var(--color-text-subtle)',
   labelHint:   'var(--color-text-placeholder)',
   labelDis:    'var(--color-text-disabled)',
   brand:       'var(--color-brand-default)',
