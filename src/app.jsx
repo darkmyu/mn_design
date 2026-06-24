@@ -2544,7 +2544,7 @@ function MyScreen({ emptyPets, emptyPhotos }) {
           </div>
 
           {/* 프로필 편집 */}
-          <PawButton variant="secondary" full>프로필 편집</PawButton>
+          <PawButton variant="secondary" size="md" full>프로필 편집</PawButton>
         </div>
 
         {/* ── 반려동물 카드 ── */}
@@ -2708,7 +2708,7 @@ function PetViewerScreen({ isMine = false }) {
           ))}
           {isMine && (
             <div style={{ paddingTop: 12, paddingBottom: 16 }}>
-              <PawButton variant="secondary" full>정보 수정</PawButton>
+              <PawButton variant="secondary" size="md" full>정보 수정</PawButton>
             </div>
           )}
           {!isMine && <div style={{ height: 6 }} />}
