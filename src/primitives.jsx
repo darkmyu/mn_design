@@ -32,21 +32,24 @@ function PawIcon({ name, size = 24, color, style }) {
   );
 }
 
-function PawButton({ variant = 'primary', size = 'md', icon, iconTrailing, full, disabled, onClick, children, style }) {
+function PawButton({ variant = 'solid', size = 'xlarge', icon, iconTrailing, display = 'inline', full, block, disabled, loading, onClick, children, style }) {
+  const sizeMap = { small: 'sm', medium: 'md', large: 'lg', xlarge: 'xl', sm: 'sm', md: 'md', lg: 'lg', xl: 'xl' };
   const sizes = {
-    sm: { h: 32, px: 14, font: 13, radius: 999 },
-    md: { h: 44, px: 18, font: 14, radius: 12 },
-    lg: { h: 52, px: 22, font: 15, radius: 14 },
+    sm: { h: 32, px: 14, font: 13, radius: 9 },
+    md: { h: 38, px: 16, font: 13, radius: 10 },
+    lg: { h: 48, px: 20, font: 15, radius: 13 },
+    xl: { h: 56, px: 26, font: 16, radius: 15 },
   };
-  const s = sizes[size];
+  const s = sizes[sizeMap[size] || 'md'];
+  const variantMap = { solid: 'primary', outline: 'secondary', text: 'tertiary', primary: 'primary', primaryDark: 'primaryDark', secondary: 'secondary', tertiary: 'tertiary', soft: 'soft' };
   const variants = {
-    primary:   { bg: PawColors.brand,    color: '#fff',                   border: 'none' },
-    primaryDark:{bg: PawColors.labelStrong,color:'#fff',                  border: 'none' },
-    secondary: { bg: PawColors.surface,  color: PawColors.label,          border: `1px solid ${PawColors.line}` },
-    tertiary:  { bg: 'transparent',      color: PawColors.label,          border: 'none' },
-    soft:      { bg: PawColors.brandSoft,color: PawColors.brand,          border: 'none' },
+    primary:    { bg: PawColors.brand,       color: '#fff',           border: 'none' },
+    primaryDark:{ bg: PawColors.labelStrong, color: '#fff',           border: 'none' },
+    secondary:  { bg: PawColors.surface,     color: PawColors.label,  border: `1px solid ${PawColors.lineSoft}` },
+    tertiary:   { bg: 'transparent',         color: PawColors.label,  border: 'none' },
+    soft:       { bg: PawColors.brandSoft,   color: PawColors.brand,  border: 'none' },
   };
-  const v = variants[variant];
+  const v = variants[variantMap[variant] || 'primary'];
   return (
     <button
       onClick={disabled ? undefined : onClick}
@@ -58,16 +61,24 @@ function PawButton({ variant = 'primary', size = 'md', icon, iconTrailing, full,
         border: v.border,
         font: `700 ${s.font}px/1 var(--font-sans)`,
         letterSpacing: '-0.005em',
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+        display: (display === 'block' || block) ? 'flex' : 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
         cursor: disabled ? 'not-allowed' : 'pointer',
-        width: full ? '100%' : 'auto',
+        width: (display === 'full' || display === 'block' || full || block) ? '100%' : 'auto',
         transition: 'background-color .12s ease-out, color .12s ease-out, transform .08s',
         ...style,
       }}
     >
-      {icon && <PawIcon name={icon} size={s.font + 4} />}
-      {children}
-      {iconTrailing && <PawIcon name={iconTrailing} size={s.font + 4} />}
+      {loading ? (
+        [0, 1, 2].map(i => (
+          <span key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor', display: 'inline-block', animation: `paw-dot 1.2s ease-in-out infinite`, animationDelay: `${i * 0.2}s` }} />
+        ))
+      ) : (
+        <>
+          {icon && <PawIcon name={icon} size={s.font + 4} />}
+          {children}
+          {iconTrailing && <PawIcon name={iconTrailing} size={s.font + 4} />}
+        </>
+      )}
     </button>
   );
 }
@@ -214,6 +225,7 @@ if (typeof document !== 'undefined' && !document.getElementById('paw-shimmer-kf'
     @keyframes paw-pop { 0% { transform: scale(.7); opacity: 0; } 60% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
     @keyframes paw-heart { 0% { transform: scale(.6); opacity: 0 } 30% { opacity: 1 } 100% { transform: scale(1.8); opacity: 0 } }
     @keyframes paw-shimmer-cover { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+    @keyframes paw-dot { 0%, 60%, 100% { opacity: 0.25; transform: scale(0.8); } 30% { opacity: 1; transform: scale(1); } }
   `;
   document.head.appendChild(st);
 }

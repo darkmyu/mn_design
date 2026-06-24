@@ -3831,9 +3831,166 @@ function DSTypography() {
   );
 }
 
+function DSButton() {
+  const rowBorder  = 'var(--color-bg-subtle)';
+  const textStrong = 'var(--color-text-strong)';
+  const textSubtle = 'var(--color-text-subtle)';
+
+  return (
+    <div>
+      <div style={{ marginBottom: 32 }}>
+        <div style={{ font: '800 28px/1 var(--font-sans)', letterSpacing: '-0.03em', color: textStrong }}>Button</div>
+      </div>
+
+      <div style={{ font: '600 14px/1 var(--font-sans)', color: textStrong, marginTop: 28, marginBottom: 14 }}>크기</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <PawButton variant="primary" size="sm">Small</PawButton>
+        <PawButton variant="primary" size="md">Medium</PawButton>
+        <PawButton variant="primary" size="lg">Large</PawButton>
+        <PawButton variant="primary" size="xl">XLarge</PawButton>
+      </div>
+      <div style={{ marginTop: 16, padding: '16px 20px', borderRadius: 10, background: '#1e1e2e', font: '400 12px/2 "SF Mono","JetBrains Mono",monospace', display: 'flex', flexDirection: 'column' }}>
+        {['small', 'medium', 'large', 'xlarge'].map(s => (
+          <span key={s}>
+            <span style={{ color: '#636da6' }}>{'<'}</span>
+            <span style={{ color: '#89b4fa' }}>Button</span>
+            <span style={{ color: '#cba6f7' }}> size</span>
+            <span style={{ color: '#636da6' }}>{'='}</span>
+            <span style={{ color: '#a6e3a1' }}>{`"${s}"`}</span>
+            <span style={{ color: '#636da6' }}>{' />'}</span>
+          </span>
+        ))}
+      </div>
+      <div style={{ borderTop: `1px solid var(--color-border-default)`, marginTop: 56 }} />
+      <div style={{ font: '600 14px/1 var(--font-sans)', color: textStrong, marginTop: 32, marginBottom: 14 }}>종류</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <PawButton variant="primary" size="xlarge" style={{ width: 140 }}>Button</PawButton>
+        <PawButton variant="secondary" size="xlarge" style={{ width: 140 }}>Button</PawButton>
+        <PawButton variant="tertiary" size="xlarge" style={{ width: 140 }}>Button</PawButton>
+      </div>
+      <div style={{ marginTop: 16, padding: '16px 20px', borderRadius: 10, background: '#1e1e2e', font: '400 12px/2 "SF Mono","JetBrains Mono",monospace', display: 'flex', flexDirection: 'column' }}>
+        {[
+          { variant: 'primary',   label: 'solid' },
+          { variant: 'secondary', label: 'outline' },
+          { variant: 'tertiary',  label: 'text' },
+        ].map(({ variant, label }) => (
+          <span key={variant}>
+            <span style={{ color: '#636da6' }}>{'<'}</span>
+            <span style={{ color: '#89b4fa' }}>Button</span>
+            <span style={{ color: '#cba6f7' }}> variant</span>
+            <span style={{ color: '#636da6' }}>{'='}</span>
+            <span style={{ color: '#a6e3a1' }}>{`"${label}"`}</span>
+            <span style={{ color: '#636da6' }}>{' />'}</span>
+          </span>
+        ))}
+      </div>
+
+      <div style={{ borderTop: `1px solid var(--color-border-default)`, marginTop: 56 }} />
+      <div style={{ font: '600 14px/1 var(--font-sans)', color: textStrong, marginTop: 32, marginBottom: 14 }}>형태</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <div style={{ width: 80, font: '400 12px/1.4 var(--font-sans)', color: textSubtle, flexShrink: 0 }}>inline</div>
+          <PawButton variant="primary" size="xlarge" display="inline">Button</PawButton>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <div style={{ width: 80, font: '400 12px/1.4 var(--font-sans)', color: textSubtle, flexShrink: 0 }}>block</div>
+          <div style={{ width: 320 }}><PawButton variant="primary" size="xlarge" display="block">Button</PawButton></div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <div style={{ width: 80, font: '400 12px/1.4 var(--font-sans)', color: textSubtle, flexShrink: 0 }}>full</div>
+          <div style={{ flex: 1 }}><PawButton variant="primary" size="xlarge" display="full">Button</PawButton></div>
+        </div>
+      </div>
+      <div style={{ marginTop: 16, padding: '16px 20px', borderRadius: 10, background: '#1e1e2e', font: '400 12px/2 "SF Mono","JetBrains Mono",monospace', display: 'flex', flexDirection: 'column' }}>
+        {['inline', 'block', 'full'].map((d) => (
+          <span key={d}>
+            <span style={{ color: '#636da6' }}>{'<'}</span>
+            <span style={{ color: '#89b4fa' }}>Button</span>
+            <span style={{ color: '#cba6f7' }}> display</span>
+            <span style={{ color: '#636da6' }}>{'='}</span>
+            <span style={{ color: '#a6e3a1' }}>{`"${d}"`}</span>
+            <span style={{ color: '#636da6' }}>{' />'}</span>
+          </span>
+        ))}
+      </div>
+
+      <div style={{ borderTop: `1px solid var(--color-border-default)`, marginTop: 56 }} />
+      <div style={{ font: '600 14px/1 var(--font-sans)', color: textStrong, marginTop: 32, marginBottom: 14 }}>로딩</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <PawButton variant="solid" size="xlarge" loading style={{ width: 140 }}>Button</PawButton>
+      </div>
+      <div style={{ marginTop: 16, padding: '16px 20px', borderRadius: 10, background: '#1e1e2e', font: '400 12px/2 "SF Mono","JetBrains Mono",monospace', display: 'flex', flexDirection: 'column' }}>
+        <span>
+          <span style={{ color: '#636da6' }}>{'<'}</span>
+          <span style={{ color: '#89b4fa' }}>Button</span>
+          <span style={{ color: '#cba6f7' }}> loading</span>
+          <span style={{ color: '#636da6' }}>{' />'}</span>
+        </span>
+      </div>
+
+      <div style={{ borderTop: `1px solid var(--color-border-default)`, marginTop: 56 }} />
+      <div style={{ font: '600 14px/1 var(--font-sans)', color: textStrong, marginTop: 32, marginBottom: 14 }}>비활성화</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <PawButton variant="solid" size="xlarge" disabled style={{ width: 140 }}>Button</PawButton>
+      </div>
+      <div style={{ marginTop: 16, padding: '16px 20px', borderRadius: 10, background: '#1e1e2e', font: '400 12px/2 "SF Mono","JetBrains Mono",monospace', display: 'flex', flexDirection: 'column' }}>
+        <span>
+          <span style={{ color: '#636da6' }}>{'<'}</span>
+          <span style={{ color: '#89b4fa' }}>Button</span>
+          <span style={{ color: '#cba6f7' }}> disabled</span>
+          <span style={{ color: '#636da6' }}>{' />'}</span>
+        </span>
+      </div>
+
+      <div style={{ borderTop: `1px solid var(--color-border-default)`, marginTop: 56 }} />
+      <div style={{ font: '600 14px/1 var(--font-sans)', color: textStrong, marginTop: 32, marginBottom: 14 }}>인터페이스</div>
+      <div style={{ border: `1px solid var(--color-border-default)`, borderRadius: 10, overflow: 'hidden' }}>
+        {/* 헤더 */}
+        <div style={{ display: 'grid', gridTemplateColumns: '140px 120px 1fr', background: 'var(--color-bg-subtle)', borderBottom: `1px solid var(--color-border-default)`, padding: '10px 20px' }}>
+          {['속성', '기본값', '설명'].map(h => (
+            <div key={h} style={{ font: '600 11px/1 var(--font-sans)', color: textSubtle, letterSpacing: '0.06em', textTransform: 'uppercase' }}>{h}</div>
+          ))}
+        </div>
+        {[
+          { prop: 'variant',  default: '"solid"',  desc: '버튼의 스타일 종류',  values: '"solid" | "outline" | "text"' },
+          { prop: 'size',     default: '"xlarge"', desc: '버튼의 크기',          values: '"small" | "medium" | "large" | "xlarge"' },
+          { prop: 'display',  default: '"inline"', desc: '버튼의 너비 형태',     values: '"inline" | "block" | "full"' },
+          { prop: 'loading',  default: 'false',    desc: '로딩 상태',            values: 'true | false' },
+          { prop: 'disabled', default: 'false',    desc: '비활성화 상태',        values: 'true | false' },
+        ].map((row, i, arr) => (
+          <div key={row.prop} style={{ display: 'grid', gridTemplateColumns: '140px 120px 1fr', padding: '14px 20px', borderBottom: i < arr.length - 1 ? `1px solid var(--color-border-default)` : 'none', alignItems: 'start' }}>
+            <div style={{ font: `500 12px/1 "SF Mono","JetBrains Mono",monospace`, color: 'var(--color-brand-default)', paddingTop: 2 }}>{row.prop}</div>
+            <div style={{ font: `400 11px/1 "SF Mono","JetBrains Mono",monospace`, color: textSubtle, paddingTop: 2 }}>{row.default}</div>
+            <div>
+              <div style={{ font: '400 12px/1 var(--font-sans)', color: textSubtle }}>{row.desc}</div>
+              <div style={{ font: `400 11px/1.6 "SF Mono","JetBrains Mono",monospace`, color: textSubtle, opacity: 0.6, marginTop: 6 }}>{row.values}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function MongnyangDesignSystem() {
-  const [nav, setNav] = React.useState('color');
+  const getNavFromHash = () => {
+    const m = window.location.hash.match(/^#ds\/(.+)$/);
+    return m ? m[1] : 'color';
+  };
+
+  const [nav, setNav] = React.useState(getNavFromHash);
   const [colorTab, setColorTab] = React.useState('primitive');
+
+  const handleNav = (id) => {
+    setNav(id);
+    window.history.pushState(null, '', `#ds/${id}`);
+  };
+
+  React.useEffect(() => {
+    const handler = () => setNav(getNavFromHash());
+    window.addEventListener('hashchange', handler);
+    return () => window.removeEventListener('hashchange', handler);
+  }, []);
 
   const bg           = 'var(--color-bg-default)';
   const sidebarBg    = 'var(--color-bg-subtle)';
@@ -3845,6 +4002,9 @@ function MongnyangDesignSystem() {
   const NAV_ITEMS = [
     { group: 'Foundation', items: [
       { id: 'color', label: 'DS01 · Color' },
+    ]},
+    { group: 'Components', items: [
+      { id: 'button', label: 'DS02 · Button' },
     ]},
   ];
 
@@ -3858,7 +4018,7 @@ function MongnyangDesignSystem() {
               {g.group}
             </div>
             {g.items.map(item => (
-              <button key={item.id} onClick={() => setNav(item.id)} style={{
+              <button key={item.id} onClick={() => handleNav(item.id)} style={{
                 display: 'block', width: 'calc(100% - 16px)', margin: '0 8px 2px',
                 padding: '8px 10px', textAlign: 'left', border: 'none', cursor: 'pointer',
                 borderRadius: 6,
@@ -3874,6 +4034,7 @@ function MongnyangDesignSystem() {
       {/* Main content */}
       <main style={{ flex: 1, overflowY: 'auto', padding: '40px 56px 80px', background: bg }}>
         {nav === 'color' && <DSColor colorTab={colorTab} setColorTab={setColorTab} />}
+        {nav === 'button' && <DSButton />}
       </main>
     </div>
   );
