@@ -55,7 +55,7 @@ function PawButton({ variant = 'solid', size = 'xlarge', icon, iconTrailing, dis
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       style={{
-        height: s.h, padding: `0 ${s.px}px`, borderRadius: s.radius,
+        height: s.h, padding: `0 ${s.px}px`, borderRadius: (display === 'full' || full) ? 0 : s.radius,
         background: disabled ? 'var(--color-bg-subtle)' : v.bg,
         color: disabled ? PawColors.labelDis : v.color,
         border: v.border,
