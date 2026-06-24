@@ -7,7 +7,7 @@ const PawColors = {
   line:        'var(--color-border-subtle)',
   lineSoft:    'var(--color-border-default)',
   label:       'var(--color-text-default)',
-  labelStrong: 'var(--color-text-strong)',
+  labelStrong: 'var(--color-text-default)',
   labelSubtle: 'var(--color-text-subtle)',
   labelHint:   'var(--color-text-placeholder)',
   labelDis:    'var(--color-text-disabled)',
