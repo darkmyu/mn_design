@@ -54,13 +54,12 @@ function PawTabBar({ active = 'home', onChange, onUpload }) {
   const tabs = [
     { id: 'home',     icon: 'home',    iconOn: 'home-fill',    label: '홈' },
     { id: 'discover', icon: 'search',  iconOn: 'search-thick', label: '검색' },
-    { id: 'upload',   icon: 'plus',    iconOn: 'plus',         label: '업로드', center: true },
     { id: 'noti',     icon: 'bubble',  iconOn: 'bubble-fill',  label: '커뮤니티' },
     { id: 'me',       icon: 'person',  iconOn: 'person-fill',  label: 'MY' },
   ];
   return (
     <div style={{
-      display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)',
+      display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
       background: 'var(--color-bg-default)',
       borderTop: '1px solid var(--color-border-default)',
       paddingBottom: 6, paddingTop: 4,

@@ -1810,12 +1810,21 @@ function CommunityScreen() {
   const [cat, setCat] = React.useState('전체');
   const [sort, setSort] = React.useState('추천순');
   const [sortOpen, setSortOpen] = React.useState(false);
+  const [fabCollapsed, setFabCollapsed] = React.useState(false);
+  const lastScrollY = React.useRef(0);
+
+  const handleScroll = (e) => {
+    const cur = e.target.scrollTop;
+    if (cur > lastScrollY.current && cur > 40) setFabCollapsed(true);
+    else if (cur < lastScrollY.current) setFabCollapsed(false);
+    lastScrollY.current = cur;
+  };
 
   const filtered = cat === '전체' ? COMMUNITY_POSTS : COMMUNITY_POSTS.filter(p => p.category === cat);
   const posts = sort === '최신순' ? [...filtered].reverse() : filtered;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg, position: 'relative' }}>
 
       <PawTopBar variant="title" title="커뮤니티" right={
         <PawIconBtn name="search" iconSize={22} />
@@ -1902,7 +1911,7 @@ function CommunityScreen() {
       </div>
 
       {/* 게시글 목록 */}
-      <div style={{ flex: 1, overflowY: 'auto', background: PawColors.surface }}>
+      <div style={{ flex: 1, overflowY: 'auto', background: PawColors.surface }} onScroll={handleScroll}>
         {posts.map((post, i) => (
           <div key={post.id}>
             <div style={{ padding: '16px 20px', cursor: 'pointer' }}>
@@ -1956,6 +1965,30 @@ function CommunityScreen() {
           </div>
         ))}
       </div>
+
+      {/* 플로팅 글쓰기 버튼 */}
+      <button style={{
+        position: 'absolute', right: 20, bottom: 72,
+        height: 48,
+        padding: fabCollapsed ? '0 14px' : '0 20px 0 16px',
+        borderRadius: 999,
+        background: PawColors.brand,
+        border: 'none', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', gap: fabCollapsed ? 0 : 6,
+        boxShadow: '0 4px 16px rgba(255,107,61,0.45)',
+        color: '#fff',
+        transition: 'padding 0.25s ease, gap 0.25s ease',
+        overflow: 'hidden',
+      }}>
+        <PawIcon name="plus" size={20} color="#fff" />
+        <span style={{
+          font: '700 15px/1 var(--font-sans)', letterSpacing: '-0.01em',
+          maxWidth: fabCollapsed ? 0 : 48,
+          opacity: fabCollapsed ? 0 : 1,
+          overflow: 'hidden', whiteSpace: 'nowrap',
+          transition: 'max-width 0.25s ease, opacity 0.15s ease',
+        }}>글쓰기</span>
+      </button>
 
       <PawTabBar active="noti" />
     </div>
@@ -2422,6 +2455,8 @@ function HomeScreen() {
   const { PHOTOS } = PETS_DATA;
   const [liked, setLiked] = React.useState(new Set());
   const [detail, setDetail] = React.useState(null);
+  const [fabCollapsed, setFabCollapsed] = React.useState(false);
+  const lastScrollY = React.useRef(0);
 
   const toggleLike = id => setLiked(prev => {
     const n = new Set(prev);
@@ -2429,12 +2464,19 @@ function HomeScreen() {
     return n;
   });
 
+  const handleScroll = (e) => {
+    const cur = e.target.scrollTop;
+    if (cur > lastScrollY.current && cur > 40) setFabCollapsed(true);
+    else if (cur < lastScrollY.current) setFabCollapsed(false);
+    lastScrollY.current = cur;
+  };
+
   if (detail) {
     return <PhotoDetailScreen photo={detail} onBack={() => setDetail(null)} />;
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg, position: 'relative' }}>
 
       {/* TopBar */}
       <PawTopBar variant="home" right={
@@ -2445,10 +2487,34 @@ function HomeScreen() {
       } />
 
       {/* 스크롤 영역 */}
-      <div style={{ flex: 1, overflowY: 'auto' }}>
+      <div style={{ flex: 1, overflowY: 'auto' }} onScroll={handleScroll}>
         <PawMasonry items={PHOTOS} onTap={setDetail} onLike={toggleLike} likedSet={liked} gap={6} bare />
-        <div style={{ height: 16 }} />
+        <div style={{ height: 80 }} />
       </div>
+
+      {/* 플로팅 사진 등록 버튼 */}
+      <button style={{
+        position: 'absolute', right: 20, bottom: 72,
+        height: 48,
+        padding: fabCollapsed ? '0 14px' : '0 20px 0 16px',
+        borderRadius: 999,
+        background: PawColors.brand,
+        border: 'none', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', gap: fabCollapsed ? 0 : 6,
+        boxShadow: '0 4px 16px rgba(255,107,61,0.45)',
+        color: '#fff',
+        transition: 'padding 0.25s ease, gap 0.25s ease',
+        overflow: 'hidden',
+      }}>
+        <PawIcon name="plus" size={20} color="#fff" />
+        <span style={{
+          font: '700 15px/1 var(--font-sans)', letterSpacing: '-0.01em',
+          maxWidth: fabCollapsed ? 0 : 64,
+          opacity: fabCollapsed ? 0 : 1,
+          overflow: 'hidden', whiteSpace: 'nowrap',
+          transition: 'max-width 0.25s ease, opacity 0.15s ease',
+        }}>사진 등록</span>
+      </button>
 
       {/* TabBar */}
       <PawTabBar active="home" />
