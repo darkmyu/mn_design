@@ -2488,8 +2488,9 @@ function HomeScreen() {
 
       {/* 스크롤 영역 */}
       <div style={{ flex: 1, overflowY: 'auto' }} onScroll={handleScroll}>
-        <PawMasonry items={PHOTOS} onTap={setDetail} onLike={toggleLike} likedSet={liked} gap={6} bare />
-        <div style={{ height: 80 }} />
+        <div style={{ padding: '8px 8px 80px' }}>
+          <PawMasonry items={PHOTOS} onTap={setDetail} onLike={toggleLike} likedSet={liked} gap={6} bare />
+        </div>
       </div>
 
       {/* 플로팅 사진 등록 버튼 */}
