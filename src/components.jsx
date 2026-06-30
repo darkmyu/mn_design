@@ -20,7 +20,7 @@ function PawTopBar({ variant = 'home', title, sub, onBack, right, left, dark }) 
           padding: '0 12px',
           font: '900 22px/1 var(--font-sans)',
           letterSpacing: '-0.03em',
-          color: 'var(--color-text-strong)',
+          color: 'var(--color-text-default)',
         }}>몽냥<span style={{color:'var(--color-brand-default)',marginLeft:1}}>.</span></span>
         <div style={{ flex: 1 }} />
         {right}
@@ -41,7 +41,7 @@ function PawTopBar({ variant = 'home', title, sub, onBack, right, left, dark }) 
     <div style={wrap}>
       {onBack ? <PawIconBtn name="chevron-left" onClick={onBack} /> : <div style={{ width: 40 }} />}
       <div style={{ flex: 1, textAlign: 'center', overflow: 'hidden' }}>
-        {title && <div style={{ font: '700 16px/1.3 var(--font-sans)', letterSpacing: '-0.012em', color: 'var(--color-text-strong)', textOverflow:'ellipsis', overflow:'hidden', whiteSpace:'nowrap' }}>{title}</div>}
+        {title && <div style={{ font: '700 16px/1.3 var(--font-sans)', letterSpacing: '-0.012em', color: 'var(--color-text-default)', textOverflow:'ellipsis', overflow:'hidden', whiteSpace:'nowrap' }}>{title}</div>}
         {sub && <div style={{ font: '500 11px/1.2 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 2 }}>{sub}</div>}
       </div>
       <div style={{ minWidth: 40, display: 'flex', justifyContent: 'flex-end' }}>{right}</div>
@@ -90,7 +90,7 @@ function PawTabBar({ active = 'home', onChange, onUpload }) {
             background: 'transparent', border: 'none', cursor: 'pointer',
             padding: '8px 0 4px',
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
-            color: on ? 'var(--color-text-strong)' : 'var(--color-text-subtle)',
+            color: on ? 'var(--color-text-default)' : 'var(--color-text-subtle)',
             position: 'relative',
           }}>
             <span style={{ position: 'relative' }}>
@@ -127,7 +127,7 @@ function PawSpeciesTabs({ active, onChange, items }) {
         const on = t.id === active;
         return (
           <button key={t.id} onClick={() => onChange?.(t.id)} style={{
-            background: on ? 'var(--color-text-strong)' : 'var(--color-bg-subtle)',
+            background: on ? 'var(--color-text-default)' : 'var(--color-bg-subtle)',
             color: on ? '#fff' : 'var(--color-text-subtle)',
             border: 'none',
             height: 32, padding: '0 14px', borderRadius: 999,
@@ -237,7 +237,7 @@ function PawSectionHeader({ title, sub, action, onAction }) {
           margin: 0,
           font: '800 17px/1.3 var(--font-sans)',
           letterSpacing: '-0.018em',
-          color: 'var(--color-text-strong)',
+          color: 'var(--color-text-default)',
         }}>{title}</h3>
         {sub && <p style={{
           margin: '2px 0 0',
