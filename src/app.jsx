@@ -3285,7 +3285,7 @@ function OtherUserProfileScreen({ emptyPets, emptyPhotos }) {
           </div>
         ) : null}
 
-        {/* ── 탭 (사진 / 태그됨) ── */}
+        {/* ── 탭 (사진 / 좋아요) ── */}
         <div style={{
           display: 'flex',
           background: PawColors.surface,
@@ -3295,7 +3295,7 @@ function OtherUserProfileScreen({ emptyPets, emptyPhotos }) {
         }}>
           {[
             { id: 'mine', label: '사진' },
-            { id: 'tagged', label: '태그됨' },
+            { id: 'tagged', label: '좋아요' },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id)} style={{
               flex: 1, height: 44, background: 'transparent', border: 'none',
@@ -3319,7 +3319,7 @@ function OtherUserProfileScreen({ emptyPets, emptyPhotos }) {
               </div>
               <span style={{ font: '700 15px/1.3 var(--font-sans)', color: PawColors.labelStrong }}>아직 게시물이 없어요</span>
               <span style={{ font: '400 13px/1.5 var(--font-sans)', color: PawColors.labelHint, textAlign: 'center' }}>
-                {tab === 'mine' ? '아직 올린 사진이 없어요' : '태그된 사진이 없어요'}
+                {tab === 'mine' ? '아직 올린 사진이 없어요' : '좋아요한 사진이 없어요'}
               </span>
             </div>
           )}
