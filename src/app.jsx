@@ -1,22 +1,13 @@
-const DarkModeCtx = React.createContext({ dark: false, setDark: () => {} });
+const DarkModeCtx = React.createContext({ dark: false, setDark: () => {}, theme: 'system', setTheme: () => {} });
 function useDarkMode() { return React.useContext(DarkModeCtx); }
 function DarkModeProvider({ children }) {
-  const [dark, setDark] = React.useState(() => {
-    const saved = localStorage.getItem('mn-theme');
-    if (saved !== null) return saved === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
-  const setDarkPersist = (v) => {
-    setDark(prev => {
-      const next = typeof v === 'function' ? v(prev) : v;
-      localStorage.setItem('mn-theme', next ? 'dark' : 'light');
-      return next;
-    });
-  };
-  React.useEffect(() => {
-    document.documentElement.dataset.theme = dark ? 'dark' : '';
-  }, [dark]);
-  return <DarkModeCtx.Provider value={{ dark, setDark: setDarkPersist }}>{children}</DarkModeCtx.Provider>;
+  const [theme, setThemeState] = React.useState(() => localStorage.getItem('mn-theme') || 'system');
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const dark = theme === 'dark' || (theme === 'system' && systemDark);
+  const setTheme = (t) => { setThemeState(t); localStorage.setItem('mn-theme', t); };
+  const setDark = (v) => { const next = typeof v === 'function' ? v(dark) : v; setTheme(next ? 'dark' : 'light'); };
+  React.useEffect(() => { document.documentElement.dataset.theme = dark ? 'dark' : ''; }, [dark]);
+  return <DarkModeCtx.Provider value={{ dark, setDark, theme, setTheme }}>{children}</DarkModeCtx.Provider>;
 }
 
 const W = 360;
@@ -3275,9 +3266,8 @@ function OtherUserProfileScreen({ emptyPets, emptyPhotos }) {
 }
 
 function MyGuestScreen() {
-  const { dark, setDark } = useDarkMode();
   const settingsItems = [
-    { label: '공지사항',        icon: 'bell' },
+    { label: '공지사항',        icon: 'megaphone' },
     { label: '고객센터',        icon: 'bubble' },
     { label: '이용약관',        icon: 'document' },
     { label: '개인정보처리방침', icon: 'lock' },
@@ -3317,21 +3307,10 @@ function MyGuestScreen() {
 
         {/* ── 화면 ── */}
         <div style={{ background: PawColors.surface, marginTop: 8 }}>
-          <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 52, gap: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 52, gap: 14, cursor: 'pointer' }}>
             <PawIcon name="eye" size={20} color={PawColors.labelHint} />
-            <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>다크 모드</span>
-            <div onClick={() => setDark(d => !d)} style={{
-              width: 46, height: 26, borderRadius: 999, flexShrink: 0,
-              background: dark ? PawColors.brand : 'var(--color-surface-track)',
-              position: 'relative', cursor: 'pointer', transition: 'background .2s',
-            }}>
-              <div style={{
-                position: 'absolute', top: 3, left: dark ? 23 : 3,
-                width: 20, height: 20, borderRadius: 999,
-                background: 'var(--color-atomic-common-50)', boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                transition: 'left .2s',
-              }} />
-            </div>
+            <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>화면 테마</span>
+            <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
           </div>
         </div>
 
@@ -3363,9 +3342,89 @@ function MyGuestScreen() {
     </div>
   );
 }
-function SettingsScreen() {
+function DisplaySettingsScreen() {
+  const { theme, setTheme } = useDarkMode();
+  const options = [
+    { id: 'light',  label: '밝은 모드',   icon: 'sun' },
+    { id: 'dark',   label: '어두운 모드', icon: 'moon' },
+    { id: 'system', label: '시스템 설정과 같이', icon: 'monitor' },
+  ];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+      <PawTopBar variant="title" title="화면 테마" onBack={() => {}} />
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        <div style={{ background: PawColors.surface }}>
+          {options.map((opt, i) => (
+            <React.Fragment key={opt.id}>
+              {i > 0 && <div style={{ height: 1, background: 'var(--color-border-subtle)', marginLeft: 54 }} />}
+              <div onClick={() => setTheme(opt.id)} style={{
+                display: 'flex', alignItems: 'center', padding: '0 20px', height: 52, gap: 14, cursor: 'pointer',
+              }}>
+                <PawIcon name={opt.icon} size={20} color={PawColors.labelHint} />
+                <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>{opt.label}</span>
+                {theme === opt.id && <PawIcon name="check" size={20} color={PawColors.brand} />}
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NotificationSettingsScreen() {
   const [noti, setNoti] = React.useState({ like: true, comment: true, follow: false });
-  const { dark, setDark } = useDarkMode();
+
+  function Toggle({ on, onToggle }) {
+    return (
+      <div onClick={onToggle} style={{
+        width: 46, height: 26, borderRadius: 999, flexShrink: 0,
+        background: on ? PawColors.brand : 'var(--color-surface-track)',
+        position: 'relative', cursor: 'pointer', transition: 'background .2s',
+      }}>
+        <div style={{
+          position: 'absolute', top: 3, left: on ? 23 : 3,
+          width: 20, height: 20, borderRadius: 999,
+          background: 'var(--color-atomic-common-50)',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.2)', transition: 'left .2s',
+        }} />
+      </div>
+    );
+  }
+
+  function SettingRow({ icon, label, right }) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', height: 52, gap: 14 }}>
+        <PawIcon name={icon} size={20} color={PawColors.labelHint} />
+        <span style={{ flex: 1, font: '500 15px/1 var(--font-sans)', letterSpacing: '-0.01em', color: PawColors.labelStrong }}>{label}</span>
+        {right}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+      <PawTopBar variant="title" title="알림" onBack={() => {}} />
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        <div style={{ background: PawColors.surface }}>
+          <SettingRow icon="heart" label="좋아요 알림" right={
+            <Toggle on={noti.like} onToggle={() => setNoti(n => ({ ...n, like: !n.like }))} />
+          } />
+          <div style={{ height: 1, background: 'var(--color-border-subtle)', marginLeft: 54 }} />
+          <SettingRow icon="bubble" label="댓글 알림" right={
+            <Toggle on={noti.comment} onToggle={() => setNoti(n => ({ ...n, comment: !n.comment }))} />
+          } />
+          <div style={{ height: 1, background: 'var(--color-border-subtle)', marginLeft: 54 }} />
+          <SettingRow icon="person" label="팔로우 알림" right={
+            <Toggle on={noti.follow} onToggle={() => setNoti(n => ({ ...n, follow: !n.follow }))} />
+          } />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SettingsScreen() {
 
   function Toggle({ on, onToggle }) {
     return (
@@ -3422,28 +3481,23 @@ function SettingsScreen() {
 
         {/* ── 알림 ── */}
         <div style={{ background: PawColors.surface }}>
-          <SettingRow icon="heart" label="좋아요 알림" right={
-            <Toggle on={noti.like} onToggle={() => setNoti(n => ({ ...n, like: !n.like }))} />
-          } />
-          <SettingRow icon="bubble" label="댓글 알림" right={
-            <Toggle on={noti.comment} onToggle={() => setNoti(n => ({ ...n, comment: !n.comment }))} />
-          } />
-          <SettingRow icon="person" label="팔로우 알림" right={
-            <Toggle on={noti.follow} onToggle={() => setNoti(n => ({ ...n, follow: !n.follow }))} />
+          <SettingRow icon="bell" label="알림" onTap={() => {}} right={
+            <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
           } />
         </div>
 
         {/* ── 화면 ── */}
-        <div style={{ background: PawColors.surface, marginTop: 8 }}>
-          <SettingRow icon="eye" label="다크 모드" right={
-            <Toggle on={dark} onToggle={() => setDark(d => !d)} />
+        <div style={{ background: PawColors.surface }}>
+          <div style={{ height: 1, background: 'var(--color-border-subtle)', marginLeft: 54 }} />
+          <SettingRow icon="eye" label="화면 테마" onTap={() => {}} right={
+            <PawIcon name="chevron-right" size={18} color={PawColors.labelHint} />
           } />
         </div>
 
         {/* ── 앱 정보 ── */}
         <div style={{ background: PawColors.surface, marginTop: 8 }}>
           {[
-            { icon: 'bell',     label: '공지사항' },
+            { icon: 'megaphone', label: '공지사항' },
             { icon: 'bubble',   label: '고객센터' },
             { icon: 'document', label: '이용약관' },
             { icon: 'lock',     label: '개인정보처리방침' },
@@ -4129,8 +4183,10 @@ const MOBILE_SCREENS = [
   ]},
   { section: '⑤-C 비로그인 · 설정', screens: [
     { id: 'my-3', label: 'S14 · MY (비로그인)', render: () => <MyGuestScreen /> },
-    { id: 'my-4',   label: 'S15 · 설정',     render: () => <SettingsScreen /> },
-    { id: 'my-4a',  label: 'S15-A · 라이선스', render: () => <LicenseScreen /> },
+    { id: 'my-4',   label: 'S15 · 설정',        render: () => <SettingsScreen /> },
+    { id: 'my-4b',  label: 'S15-B · 알림 설정', render: () => <NotificationSettingsScreen /> },
+    { id: 'my-4c',  label: 'S15-C · 화면 설정', render: () => <DisplaySettingsScreen /> },
+    { id: 'my-4a',  label: 'S15-A · 라이선스',  render: () => <LicenseScreen /> },
   ]},
   { section: '⑥ 사진 등록', screens: [
     { id: 'photo-form-alert', label: 'S17-0 · 반려동물 없음 알럿',      render: () => <PhotoUploadNoPetAlertScreen /> },
@@ -4443,6 +4499,12 @@ function AppInner() {
             </DCArtboard>
             <DCArtboard id="my-4" label="S15 · 설정" width={W} height={H}>
               <Phone><SettingsScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="my-4b" label="S15-B · 알림 설정" width={W} height={H}>
+              <Phone><NotificationSettingsScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="my-4c" label="S15-C · 화면 설정" width={W} height={H}>
+              <Phone><DisplaySettingsScreen /></Phone>
             </DCArtboard>
             <DCArtboard id="my-4a" label="S15-A · 라이선스" width={W} height={H}>
               <Phone><LicenseScreen /></Phone>
