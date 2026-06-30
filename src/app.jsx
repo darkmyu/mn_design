@@ -406,43 +406,39 @@ function PetInfoStep5_Photo({ withPhoto = false }) {
           정보를 확인해주세요
         </h1>
 
-        {/* 프로필 카드 */}
-        <div style={{ borderRadius: 22, overflow: 'hidden', border: '1px solid var(--color-border-default)' }}>
-
-          {/* 사진 업로드 헤더 */}
-          {picked ? (
-            <button onClick={() => setPicked(false)} style={{
-              display: 'block', width: '100%', height: 180, border: 'none', cursor: 'pointer', padding: 0, position: 'relative',
-              backgroundImage: 'url("https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=600&q=80&auto=format&fit=crop")',
-              backgroundSize: 'cover', backgroundPosition: 'center',
-            }}>
+        {/* 프로필 사진 */}
+        <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0 24px' }}>
+          <div style={{ position: 'relative' }}>
+            {picked ? (
               <div style={{
-                position: 'absolute', bottom: 10, right: 12,
-                height: 28, padding: '0 10px',
-                background: 'rgba(0,0,0,0.45)', borderRadius: 999,
-                display: 'flex', alignItems: 'center', gap: 5,
+                width: 96, height: 96, borderRadius: 999, overflow: 'hidden',
+                backgroundImage: 'url("https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=200&q=80&auto=format&fit=crop")',
+                backgroundSize: 'cover', backgroundPosition: 'center',
+              }} />
+            ) : (
+              <div style={{
+                width: 96, height: 96, borderRadius: 999,
+                background: 'var(--color-surface-track)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                  <circle cx="12" cy="13" r="4"/>
-                </svg>
-                <span style={{ font: '500 11px/1 var(--font-sans)', color: '#fff' }}>변경</span>
+                <PawIcon name="person" size={44} color="var(--color-text-subtle)" />
               </div>
+            )}
+            <button onClick={() => setPicked(!picked)} style={{
+              position: 'absolute', right: 0, bottom: 0,
+              width: 32, height: 32, borderRadius: 999,
+              background: PawColors.brand, color: '#fff',
+              border: '2.5px solid var(--color-bg-default)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', boxShadow: '0 4px 10px rgba(255,107,61,0.35)',
+            }}>
+              <PawIcon name="plus" size={16} />
             </button>
-          ) : (
-            <div style={{ padding: '36px 20px 32px', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'var(--color-bg-subtle)' }}>
-              <button onClick={() => setPicked(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-subtle)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                  <circle cx="12" cy="13" r="4"/>
-                </svg>
-                <span style={{ font: '500 10px/1 var(--font-sans)', color: 'var(--color-text-subtle)' }}>프로필 사진 추가</span>
-              </button>
-            </div>
-          )}
+          </div>
+        </div>
 
-          {/* 정보 목록 */}
-          <div style={{ background: PawColors.surface }}>
+        {/* 정보 카드 */}
+        <div style={{ borderRadius: 22, overflow: 'hidden', border: '1px solid var(--color-border-default)', background: PawColors.surface }}>
             {rows.map((row, i) => (
               <div key={i} style={{
                 display: 'flex', alignItems: 'center', padding: '14px 20px',
@@ -459,7 +455,6 @@ function PetInfoStep5_Photo({ withPhoto = false }) {
                 </button>
               </div>
             ))}
-          </div>
         </div>
 
         <p style={{ margin: '14px 0 0', font: '500 12px/1.5 var(--font-sans)', color: 'var(--color-text-placeholder)', textAlign: 'center' }}>
