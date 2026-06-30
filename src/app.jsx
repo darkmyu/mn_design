@@ -3281,6 +3281,7 @@ function MyGuestScreen() {
     { label: '고객센터',        icon: 'bubble' },
     { label: '이용약관',        icon: 'document' },
     { label: '개인정보처리방침', icon: 'lock' },
+    { label: '라이선스',        icon: 'document' },
   ];
 
   return (
@@ -3446,6 +3447,7 @@ function SettingsScreen() {
             { icon: 'bubble',   label: '고객센터' },
             { icon: 'document', label: '이용약관' },
             { icon: 'lock',     label: '개인정보처리방침' },
+            { icon: 'document', label: '라이선스' },
           ].map((item, i, arr) => (
             <React.Fragment key={item.label}>
               <SettingRow icon={item.icon} label={item.label} onTap={() => {}} right={
@@ -3484,6 +3486,61 @@ function SettingsScreen() {
         <div style={{ height: 32 }} />
       </div>
 
+    </div>
+  );
+}
+
+function LicenseScreen() {
+  const licenses = [
+    { name: '@expo/vector-icons',               version: '14.0.0',  license: 'MIT' },
+    { name: '@react-navigation/bottom-tabs',     version: '6.5.11',  license: 'MIT' },
+    { name: '@react-navigation/native',          version: '6.1.9',   license: 'MIT' },
+    { name: '@react-navigation/stack',           version: '6.3.20',  license: 'MIT' },
+    { name: 'axios',                             version: '1.6.7',   license: 'MIT' },
+    { name: 'expo',                              version: '50.0.0',  license: 'MIT' },
+    { name: 'expo-camera',                       version: '14.0.3',  license: 'MIT' },
+    { name: 'expo-constants',                    version: '15.4.5',  license: 'MIT' },
+    { name: 'expo-font',                         version: '11.10.3', license: 'MIT' },
+    { name: 'expo-image',                        version: '1.11.0',  license: 'MIT' },
+    { name: 'expo-image-picker',                 version: '14.7.1',  license: 'MIT' },
+    { name: 'expo-linking',                      version: '6.2.2',   license: 'MIT' },
+    { name: 'expo-router',                       version: '3.4.6',   license: 'MIT' },
+    { name: 'expo-splash-screen',                version: '0.26.4',  license: 'MIT' },
+    { name: 'expo-status-bar',                   version: '1.11.1',  license: 'MIT' },
+    { name: 'react',                             version: '18.2.0',  license: 'MIT' },
+    { name: 'react-native',                      version: '0.73.4',  license: 'MIT' },
+    { name: 'react-native-gesture-handler',      version: '2.15.0',  license: 'MIT' },
+    { name: 'react-native-reanimated',           version: '3.7.2',   license: 'MIT' },
+    { name: 'react-native-safe-area-context',    version: '4.8.2',   license: 'MIT' },
+    { name: 'react-native-screens',              version: '3.29.0',  license: 'MIT' },
+    { name: 'zustand',                           version: '4.5.1',   license: 'MIT' },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: PawColors.bg }}>
+      <PawTopBar variant="title" title="라이선스" onBack={() => {}} />
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        <div style={{ background: PawColors.surface }}>
+          {licenses.map((item, i) => (
+            <React.Fragment key={item.name}>
+              {i > 0 && <div style={{ height: 1, background: 'var(--color-border-subtle)', marginLeft: 20 }} />}
+              <div style={{ display: 'flex', alignItems: 'center', padding: '0 20px', minHeight: 52, gap: 12 }}>
+                <div style={{ flex: 1, minWidth: 0, padding: '14px 0' }}>
+                  <div style={{ font: '500 14px/1.3 var(--font-sans)', color: PawColors.labelStrong, letterSpacing: '-0.01em', wordBreak: 'break-all' }}>{item.name}</div>
+                  <div style={{ font: '400 12px/1 var(--font-sans)', color: PawColors.labelHint, marginTop: 3 }}>v{item.version}</div>
+                </div>
+                <span style={{
+                  height: 22, padding: '0 8px', borderRadius: 6,
+                  background: 'var(--color-bg-subtle)',
+                  font: '600 11px/22px var(--font-sans)', color: PawColors.labelSubtle,
+                  flexShrink: 0,
+                }}>{item.license}</span>
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
+        <div style={{ height: 32 }} />
+      </div>
     </div>
   );
 }
@@ -4072,7 +4129,8 @@ const MOBILE_SCREENS = [
   ]},
   { section: '⑤-C 비로그인 · 설정', screens: [
     { id: 'my-3', label: 'S14 · MY (비로그인)', render: () => <MyGuestScreen /> },
-    { id: 'my-4', label: 'S15 · 설정',          render: () => <SettingsScreen /> },
+    { id: 'my-4',   label: 'S15 · 설정',     render: () => <SettingsScreen /> },
+    { id: 'my-4a',  label: 'S15-A · 라이선스', render: () => <LicenseScreen /> },
   ]},
   { section: '⑥ 사진 등록', screens: [
     { id: 'photo-form-alert', label: 'S17-0 · 반려동물 없음 알럿',      render: () => <PhotoUploadNoPetAlertScreen /> },
@@ -4385,6 +4443,9 @@ function AppInner() {
             </DCArtboard>
             <DCArtboard id="my-4" label="S15 · 설정" width={W} height={H}>
               <Phone><SettingsScreen /></Phone>
+            </DCArtboard>
+            <DCArtboard id="my-4a" label="S15-A · 라이선스" width={W} height={H}>
+              <Phone><LicenseScreen /></Phone>
             </DCArtboard>
           </DCSection>
 
