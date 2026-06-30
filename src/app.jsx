@@ -80,7 +80,7 @@ function PetInfoStep1_Name() {
               background: 'var(--color-bg-subtle)',
               border: 'none',
               borderRadius: 16, outline: 'none', boxSizing: 'border-box',
-              font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-default)',
+              font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-default)',
             }}
           />
         </div>
@@ -146,7 +146,7 @@ function PetInfoStep2_Breed() {
           borderRadius: 16, cursor: 'pointer', boxSizing: 'border-box',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <span style={{ font: `${breed ? 600 : 500} 16px/1 var(--font-sans)`, color: breed ? 'var(--color-text-default)' : 'var(--color-text-placeholder)' }}>
+          <span style={{ font: '500 15px/1 var(--font-sans)', color: breed ? 'var(--color-text-default)' : 'var(--color-text-placeholder)' }}>
             {breed || '품종을 선택해주세요'}
           </span>
           <PawIcon name="chevron-down" size={18} color="var(--color-text-subtle)" />
@@ -288,7 +288,7 @@ function PetInfoStep3_Birth() {
           borderRadius: 16, cursor: 'pointer', boxSizing: 'border-box',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
-          <span style={{ font: `${ok ? 600 : 500} 16px/1 var(--font-sans)`, color: ok ? 'var(--color-text-default)' : 'var(--color-text-placeholder)' }}>
+          <span style={{ font: '500 15px/1 var(--font-sans)', color: ok ? 'var(--color-text-default)' : 'var(--color-text-placeholder)' }}>
             {ok ? `${year}년 ${month}월 ${day}일` : '생년월일 선택'}
           </span>
           <PawIcon name="chevron-down" size={18} color="var(--color-text-subtle)" />
@@ -573,7 +573,7 @@ function OnboardingPetInfo() {
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             transition: 'border-color .12s',
           }}>
-            <span style={{ font: `${breed ? 600 : 500} 15px/1 var(--font-sans)`, color: breed ? 'var(--color-text-default)' : 'var(--color-text-placeholder)' }}>
+            <span style={{ font: '500 15px/1 var(--font-sans)', color: breed ? 'var(--color-text-default)' : 'var(--color-text-placeholder)' }}>
               {breed || '품종을 선택해주세요'}
             </span>
             <PawIcon name="chevron-down" size={16} color="var(--color-text-subtle)" />
@@ -648,7 +648,7 @@ function OnboardingPetInfo() {
                   background: 'var(--color-bg-subtle)',
                   border: `1.5px solid ${f.val.length === f.max ? PawColors.brand : 'transparent'}`,
                   borderRadius: 14, outline: 'none', boxSizing: 'border-box',
-                  font: '600 15px/1 var(--font-sans)', color: 'var(--color-text-default)',
+                  font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-default)',
                   transition: 'border-color .12s',
                 }}
               />
@@ -790,7 +790,7 @@ function OnboardingNoPetProfile() {
                 background: 'var(--color-bg-subtle)',
                 border: `2px solid ${nickname.length > 0 && !nicknameValid ? 'var(--color-status-error)' : 'transparent'}`,
                 borderRadius: 16, outline: 'none', boxSizing: 'border-box',
-                font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-default)',
+                font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-default)',
                 transition: 'border-color .12s',
               }}
             />
@@ -815,7 +815,7 @@ function OnboardingNoPetProfile() {
           <div style={{ position: 'relative' }}>
             <span style={{
               position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-              font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-subtle)',
+              font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-subtle)',
               pointerEvents: 'none',
             }}>@</span>
             <input
@@ -828,7 +828,7 @@ function OnboardingNoPetProfile() {
                 background: 'var(--color-bg-subtle)',
                 border: `2px solid ${handle.length > 0 && !handleOk ? 'var(--color-status-error)' : 'transparent'}`,
                 borderRadius: 16, outline: 'none', boxSizing: 'border-box',
-                font: '600 16px/1 var(--font-sans)', color: 'var(--color-text-default)',
+                font: '500 15px/1 var(--font-sans)', color: 'var(--color-text-default)',
                 letterSpacing: '0.005em',
                 transition: 'border-color .12s',
               }}
@@ -3060,7 +3060,7 @@ function PetEditScreen() {
             borderRadius: 14, cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           }}>
-            <span style={{ font: `${dateOk ? 600 : 500} 15px/1 var(--font-sans)`, color: dateOk ? 'var(--color-text-default)' : 'var(--color-text-placeholder)' }}>
+            <span style={{ font: '500 15px/1 var(--font-sans)', color: dateOk ? 'var(--color-text-default)' : 'var(--color-text-placeholder)' }}>
               {dateOk ? `${birthYear}년 ${birthMonth}월 ${birthDay}일` : '생년월일 선택'}
             </span>
             <PawIcon name="chevron-down" size={16} color="var(--color-text-subtle)" />
