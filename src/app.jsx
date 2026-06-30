@@ -108,26 +108,38 @@ function PetInfoStep2_Breed() {
         </h1>
 
         {/* 종 선택 */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 20 }}>
-          {[{ id: 'dog', label: '강아지', emoji: '🐶' }, { id: 'cat', label: '고양이', emoji: '🐱' }].map(s => {
+        <div style={{
+          display: 'flex', padding: 4, marginBottom: 20,
+          background: 'var(--color-bg-subtle)', borderRadius: 14,
+          position: 'relative',
+        }}>
+          {/* 슬라이딩 인디케이터 */}
+          <div style={{
+            position: 'absolute', top: 4, bottom: 4,
+            left: species === 'cat' ? '50%' : 4, width: 'calc(50% - 4px)',
+            borderRadius: 10,
+            background: PawColors.surface,
+            border: `1px solid ${PawColors.lineSoft}`,
+            transition: 'left 0.22s ease',
+          }} />
+          {[{ id: 'dog', label: '강아지' }, { id: 'cat', label: '고양이' }].map(s => {
             const on = species === s.id;
             return (
               <button key={s.id} onClick={() => { setSpecies(s.id); setBreed(''); }} style={{
-                padding: '20px 0', borderRadius: 18, cursor: 'pointer',
-                background: 'var(--color-bg-subtle)',
-                border: `2px solid ${on ? PawColors.brand : 'transparent'}`,
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
-                transition: 'all .12s',
-              }}>
-                <span style={{ font: '40px/1 -apple-system, "Segoe UI Emoji"' }}>{s.emoji}</span>
-                <span style={{ font: `${on ? 800 : 700} 14px/1 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--color-text-default)' }}>{s.label}</span>
-              </button>
+                flex: 1, height: 44, borderRadius: 10, cursor: 'pointer', border: 'none',
+                background: 'transparent',
+                font: `${on ? 700 : 500} 15px/1 var(--font-sans)`,
+                color: on ? 'var(--color-text-default)' : PawColors.labelHint,
+                letterSpacing: '-0.01em',
+                position: 'relative', zIndex: 1,
+                transition: 'color 0.22s ease, font-weight 0s',
+              }}>{s.label}</button>
             );
           })}
         </div>
 
-        {/* 품종 선택 버튼 */}
-        <button onClick={() => setSheetOpen(true)} style={{
+        {/* 품종 선택 버튼 — 종 선택 후에만 표시 */}
+        {species && <button onClick={() => setSheetOpen(true)} style={{
           width: '100%', height: 56, padding: '0 18px',
           background: 'var(--color-bg-subtle)',
           border: 'none',
@@ -138,7 +150,7 @@ function PetInfoStep2_Breed() {
             {breed || '품종을 선택해주세요'}
           </span>
           <PawIcon name="chevron-down" size={18} color="var(--color-text-subtle)" />
-        </button>
+        </button>}
       </div>
 
       {/* 품종 바텀시트 */}
@@ -320,20 +332,12 @@ function PetInfoStep3_Birth() {
 
 /* ── 2-4: 성별 ── */
 function PetInfoStep4_Gender() {
-  const [gender, setGender] = React.useState(null);
+  const [gender, setGender] = React.useState('male');
   const options = [
-    { id: 'male',   label: '남아', desc: '수컷이에요', accent: 'var(--color-gender-male)', soft: 'var(--color-gender-male-surface)',
-      icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="10" cy="14" r="6"/><line x1="14.9" y1="9.1" x2="21" y2="3"/><polyline points="17 3 21 3 21 7"/>
-        </svg>
-      )},
-    { id: 'female', label: '여아', desc: '암컷이에요', accent: 'var(--color-gender-female)', soft: 'var(--color-gender-female-surface)',
-      icon: (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/>
-        </svg>
-      )},
+    { id: 'male',   label: '남아', color: 'var(--color-gender-male)',
+      icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-gender-male)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="14" r="6"/><line x1="14.9" y1="9.1" x2="21" y2="3"/><polyline points="17 3 21 3 21 7"/></svg> },
+    { id: 'female', label: '여아', color: 'var(--color-gender-female)',
+      icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-gender-female)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg> },
   ];
   return (
     <PetInfoShell subStep={4} canNext={!!gender}>
@@ -342,43 +346,34 @@ function PetInfoStep4_Gender() {
         <h1 style={{ margin: '0 0 32px', font: '800 24px/1.35 var(--font-sans)', letterSpacing: '-0.024em', color: 'var(--color-text-default)' }}>
           성별이 무엇인가요?
         </h1>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{
+          display: 'flex', padding: 4,
+          background: 'var(--color-bg-subtle)', borderRadius: 14,
+          position: 'relative',
+        }}>
+          <div style={{
+            position: 'absolute', top: 4, bottom: 4,
+            left: gender === 'female' ? '50%' : 4, width: 'calc(50% - 4px)',
+            borderRadius: 10,
+            background: PawColors.surface,
+            border: `1px solid ${PawColors.lineSoft}`,
+            transition: 'left 0.22s ease',
+          }} />
           {options.map(g => {
             const on = gender === g.id;
             return (
               <button key={g.id} onClick={() => setGender(g.id)} style={{
-                width: '100%', padding: '18px 20px',
-                borderRadius: 20, cursor: 'pointer',
-                background: on ? g.soft : 'var(--color-bg-subtle)',
-                border: `2px solid ${on ? g.accent : 'transparent'}`,
-                display: 'flex', alignItems: 'center', gap: 16,
-                transition: 'all .15s', textAlign: 'left',
+                flex: 1, height: 44, borderRadius: 10, cursor: 'pointer', border: 'none',
+                background: 'transparent',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                font: `${on ? 700 : 500} 15px/1 var(--font-sans)`,
+                color: on ? 'var(--color-text-default)' : PawColors.labelHint,
+                letterSpacing: '-0.01em',
+                position: 'relative', zIndex: 1,
+                transition: 'color 0.22s ease',
               }}>
-                {/* 아이콘 박스 */}
-                <span style={{
-                  width: 52, height: 52, borderRadius: 16, flexShrink: 0,
-                  background: on ? g.accent : PawColors.surface,
-                  border: `1.5px solid ${on ? 'transparent' : 'var(--color-border-default)'}`,
-                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  color: on ? '#fff' : g.accent,
-                  boxShadow: on ? `0 4px 14px ${g.accent}44` : 'none',
-                  transition: 'all .15s',
-                }}>{g.icon}</span>
-                {/* 텍스트 */}
-                <div style={{ flex: 1 }}>
-                  <div style={{ font: '800 18px/1 var(--font-sans)', letterSpacing: '-0.018em', color: 'var(--color-text-default)' }}>{g.label}</div>
-                  <div style={{ font: '500 13px/1 var(--font-sans)', color: 'var(--color-text-subtle)', marginTop: 5 }}>{g.desc}</div>
-                </div>
-                {/* 라디오 */}
-                <span style={{
-                  width: 22, height: 22, borderRadius: 999, flexShrink: 0,
-                  border: `2px solid ${on ? g.accent : 'var(--color-border-default)'}`,
-                  background: on ? g.accent : 'transparent',
-                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  transition: 'all .15s',
-                }}>
-                  {on && <span style={{ width: 8, height: 8, borderRadius: 999, background: PawColors.surface }} />}
-                </span>
+                {g.icon}
+                {g.label}
               </button>
             );
           })}
@@ -2975,22 +2970,25 @@ function PetEditScreen() {
           <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-default)', letterSpacing: '-0.012em' }}>
             종류 <span style={{ color: PawColors.brand }}>*</span>
           </label>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            {[{ id: 'dog', label: '강아지', emoji: '🐶' }, { id: 'cat', label: '고양이', emoji: '🐱' }].map(s => {
+          <div style={{ display: 'flex', padding: 4, background: 'var(--color-bg-subtle)', borderRadius: 14, position: 'relative' }}>
+            <div style={{
+              position: 'absolute', top: 4, bottom: 4, left: species === 'cat' ? '50%' : 4, width: 'calc(50% - 4px)',
+              borderRadius: 10, background: PawColors.surface,
+              border: `1px solid ${PawColors.lineSoft}`,
+              transition: 'left 0.22s ease',
+            }} />
+            {[{ id: 'dog', label: '강아지' }, { id: 'cat', label: '고양이' }].map(s => {
               const on = species === s.id;
               return (
                 <button key={s.id} onClick={() => { setSpecies(s.id); setBreed(''); }} style={{
-                  padding: '16px 0', borderRadius: 14, cursor: 'pointer',
-                  background: 'var(--color-bg-subtle)',
-                  border: `2px solid ${on ? PawColors.brand : 'transparent'}`,
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                  transition: 'all .12s',
-                }}>
-                  <span style={{ font: '28px/1 -apple-system, "Segoe UI Emoji"' }}>{s.emoji}</span>
-                  <span style={{ font: `${on ? 800 : 700} 13px/1 var(--font-sans)`, color: on ? PawColors.brandInk : 'var(--color-text-default)', letterSpacing: '-0.012em' }}>
-                    {s.label}
-                  </span>
-                </button>
+                  flex: 1, height: 44, borderRadius: 10, cursor: 'pointer', border: 'none',
+                  background: 'transparent',
+                  font: `${on ? 700 : 500} 15px/1 var(--font-sans)`,
+                  color: on ? 'var(--color-text-default)' : PawColors.labelHint,
+                  letterSpacing: '-0.01em',
+                  position: 'relative', zIndex: 1,
+                  transition: 'color 0.22s ease',
+                }}>{s.label}</button>
               );
             })}
           </div>
@@ -3020,23 +3018,30 @@ function PetEditScreen() {
           <label style={{ display: 'block', marginBottom: 8, font: '700 13px/1 var(--font-sans)', color: 'var(--color-text-default)', letterSpacing: '-0.012em' }}>
             성별 <span style={{ color: PawColors.brand }}>*</span>
           </label>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+          <div style={{ display: 'flex', padding: 4, background: 'var(--color-bg-subtle)', borderRadius: 14, position: 'relative' }}>
+            <div style={{
+              position: 'absolute', top: 4, bottom: 4, left: gender === 'female' ? '50%' : 4, width: 'calc(50% - 4px)',
+              borderRadius: 10, background: PawColors.surface,
+              border: `1px solid ${PawColors.lineSoft}`,
+              transition: 'left 0.22s ease',
+            }} />
             {[
-              { id: 'male',   label: '남아', emoji: '♂', accent: 'var(--color-gender-male)',   soft: 'var(--color-gender-male-surface)' },
-              { id: 'female', label: '여아', emoji: '♀', accent: 'var(--color-gender-female)', soft: 'var(--color-gender-female-surface)' },
+              { id: 'male',   label: '남아', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-gender-male)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="14" r="6"/><line x1="14.9" y1="9.1" x2="21" y2="3"/><polyline points="17 3 21 3 21 7"/></svg> },
+              { id: 'female', label: '여아', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-gender-female)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"/><line x1="12" y1="14" x2="12" y2="21"/><line x1="9" y1="18" x2="15" y2="18"/></svg> },
             ].map(g => {
               const on = gender === g.id;
               return (
                 <button key={g.id} onClick={() => setGender(g.id)} style={{
-                  height: 52, borderRadius: 14, cursor: 'pointer',
-                  background: on ? g.soft : 'var(--color-bg-subtle)',
-                  border: `2px solid ${on ? g.accent : 'transparent'}`,
-                  color: on ? g.accent : 'var(--color-text-default)',
-                  font: `${on ? 700 : 600} 15px/1 var(--font-sans)`,
+                  flex: 1, height: 44, borderRadius: 10, cursor: 'pointer', border: 'none',
+                  background: 'transparent',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                  transition: 'all .12s',
+                  font: `${on ? 700 : 500} 15px/1 var(--font-sans)`,
+                  color: on ? 'var(--color-text-default)' : PawColors.labelHint,
+                  letterSpacing: '-0.01em',
+                  position: 'relative', zIndex: 1,
+                  transition: 'color 0.22s ease',
                 }}>
-                  <span style={{ font: '16px/1 -apple-system, "Segoe UI Emoji"' }}>{g.emoji}</span>
+                  {g.icon}
                   {g.label}
                 </button>
               );
